@@ -10,4 +10,11 @@
       <ProjectReference Include="..\SharpBukkit.Core\SharpBukkit.Core.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Remove="config.toml" />
+      <Content Include="config.toml">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+    </ItemGroup>
+
 </Project>
