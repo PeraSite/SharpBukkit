@@ -4,8 +4,8 @@ public enum ProtocolType {
 	Tcp
 }
 
-public record NetworkConfig(
-	ProtocolType Protocol,
-	string Host,
-	int Port
-);
+public record NetworkConfig {
+	public ProtocolType Protocol { get; init; }
+	public string Host { get; init; }
+	public int Port { get; init; }
+}
