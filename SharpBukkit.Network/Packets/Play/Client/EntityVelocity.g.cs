@@ -18,7 +18,7 @@ public record PlayClientEntityVelocity : IPacket {
     public short VelocityZ { get; private set; }
 
     public PlayClientEntityVelocity(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayClientEntityVelocity(
@@ -33,14 +33,14 @@ public record PlayClientEntityVelocity : IPacket {
 		VelocityZ = velocityZ;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		EntityId = reader.ReadVarInt();
         VelocityX = reader.ReadShort();
         VelocityY = reader.ReadShort();
         VelocityZ = reader.ReadShort();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteVarInt(EntityId);
         writer.WriteShort(VelocityX);
         writer.WriteShort(VelocityY);

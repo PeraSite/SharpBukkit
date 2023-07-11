@@ -18,7 +18,7 @@ public record PlayClientMapChunk : IPacket {
     public bool TrustEdges { get; private set; }
 
     public PlayClientMapChunk(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayClientMapChunk(
@@ -33,14 +33,14 @@ public record PlayClientMapChunk : IPacket {
 		TrustEdges = trustEdges;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		X = reader.ReadInt();
         Z = reader.ReadInt();
         Heightmaps = reader.ReadNbt<Heightmaps>();
         TrustEdges = reader.ReadBool();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteInt(X);
         writer.WriteInt(Z);
         writer.WriteNbt<Heightmaps>(Heightmaps);

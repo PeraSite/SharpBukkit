@@ -23,7 +23,7 @@ public record PlayClientUnlockRecipes : IPacket {
     public bool FilteringSmoker { get; private set; }
 
     public PlayClientUnlockRecipes(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayClientUnlockRecipes(
@@ -48,7 +48,7 @@ public record PlayClientUnlockRecipes : IPacket {
 		FilteringSmoker = filteringSmoker;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		Action = reader.ReadVarInt();
         CraftingBookOpen = reader.ReadBool();
         FilteringCraftable = reader.ReadBool();
@@ -60,7 +60,7 @@ public record PlayClientUnlockRecipes : IPacket {
         FilteringSmoker = reader.ReadBool();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteVarInt(Action);
         writer.WriteBool(CraftingBookOpen);
         writer.WriteBool(FilteringCraftable);

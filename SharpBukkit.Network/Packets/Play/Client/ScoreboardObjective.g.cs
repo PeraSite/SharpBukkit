@@ -16,7 +16,7 @@ public record PlayClientScoreboardObjective : IPacket {
     public sbyte Action { get; private set; }
 
     public PlayClientScoreboardObjective(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayClientScoreboardObjective(
@@ -27,12 +27,12 @@ public record PlayClientScoreboardObjective : IPacket {
 		Action = action;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		Name = reader.ReadString();
         Action = reader.ReadSByte();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteString(Name);
         writer.WriteSByte(Action);
 	}

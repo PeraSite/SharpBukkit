@@ -17,7 +17,7 @@ public record PlayClientCraftProgressBar : IPacket {
     public short Value { get; private set; }
 
     public PlayClientCraftProgressBar(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayClientCraftProgressBar(
@@ -30,13 +30,13 @@ public record PlayClientCraftProgressBar : IPacket {
 		Value = value;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		WindowId = reader.ReadByte();
         Property = reader.ReadShort();
         Value = reader.ReadShort();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteByte(WindowId);
         writer.WriteShort(Property);
         writer.WriteShort(Value);

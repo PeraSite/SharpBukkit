@@ -17,7 +17,7 @@ public record PlayClientBlockBreakAnimation : IPacket {
     public sbyte DestroyStage { get; private set; }
 
     public PlayClientBlockBreakAnimation(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayClientBlockBreakAnimation(
@@ -30,13 +30,13 @@ public record PlayClientBlockBreakAnimation : IPacket {
 		DestroyStage = destroyStage;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		EntityId = reader.ReadVarInt();
         Location = reader.ReadPosition();
         DestroyStage = reader.ReadSByte();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteVarInt(EntityId);
         writer.WritePosition(Location);
         writer.WriteSByte(DestroyStage);

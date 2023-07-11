@@ -16,7 +16,7 @@ public record PlayClientEntityHeadRotation : IPacket {
     public sbyte HeadYaw { get; private set; }
 
     public PlayClientEntityHeadRotation(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayClientEntityHeadRotation(
@@ -27,12 +27,12 @@ public record PlayClientEntityHeadRotation : IPacket {
 		HeadYaw = headYaw;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		EntityId = reader.ReadVarInt();
         HeadYaw = reader.ReadSByte();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteVarInt(EntityId);
         writer.WriteSByte(HeadYaw);
 	}

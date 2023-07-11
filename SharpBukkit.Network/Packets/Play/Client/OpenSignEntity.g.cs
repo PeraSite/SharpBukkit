@@ -15,7 +15,7 @@ public record PlayClientOpenSignEntity : IPacket {
     public Vector3 Location { get; private set; }
 
     public PlayClientOpenSignEntity(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayClientOpenSignEntity(
@@ -24,11 +24,11 @@ public record PlayClientOpenSignEntity : IPacket {
 		Location = location;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		Location = reader.ReadPosition();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WritePosition(Location);
 	}
 }

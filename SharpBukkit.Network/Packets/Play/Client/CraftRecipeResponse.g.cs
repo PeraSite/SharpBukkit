@@ -16,7 +16,7 @@ public record PlayClientCraftRecipeResponse : IPacket {
     public string Recipe { get; private set; }
 
     public PlayClientCraftRecipeResponse(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayClientCraftRecipeResponse(
@@ -27,12 +27,12 @@ public record PlayClientCraftRecipeResponse : IPacket {
 		Recipe = recipe;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		WindowId = reader.ReadSByte();
         Recipe = reader.ReadString();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteSByte(WindowId);
         writer.WriteString(Recipe);
 	}

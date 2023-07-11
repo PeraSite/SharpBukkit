@@ -16,7 +16,7 @@ public record PlayServerEnchantItem : IPacket {
     public sbyte Enchantment { get; private set; }
 
     public PlayServerEnchantItem(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayServerEnchantItem(
@@ -27,12 +27,12 @@ public record PlayServerEnchantItem : IPacket {
 		Enchantment = enchantment;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		WindowId = reader.ReadSByte();
         Enchantment = reader.ReadSByte();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteSByte(WindowId);
         writer.WriteSByte(Enchantment);
 	}

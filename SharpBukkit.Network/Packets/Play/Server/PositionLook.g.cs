@@ -20,7 +20,7 @@ public record PlayServerPositionLook : IPacket {
     public bool OnGround { get; private set; }
 
     public PlayServerPositionLook(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayServerPositionLook(
@@ -39,7 +39,7 @@ public record PlayServerPositionLook : IPacket {
 		OnGround = onGround;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		X = reader.ReadDouble();
         Y = reader.ReadDouble();
         Z = reader.ReadDouble();
@@ -48,7 +48,7 @@ public record PlayServerPositionLook : IPacket {
         OnGround = reader.ReadBool();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteDouble(X);
         writer.WriteDouble(Y);
         writer.WriteDouble(Z);

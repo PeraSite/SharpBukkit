@@ -15,7 +15,7 @@ public record PlayServerArmAnimation : IPacket {
     public int Hand { get; private set; }
 
     public PlayServerArmAnimation(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayServerArmAnimation(
@@ -24,11 +24,11 @@ public record PlayServerArmAnimation : IPacket {
 		Hand = hand;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		Hand = reader.ReadVarInt();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteVarInt(Hand);
 	}
 }

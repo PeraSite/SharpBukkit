@@ -17,7 +17,7 @@ public record PlayClientUpdateLight : IPacket {
     public bool TrustEdges { get; private set; }
 
     public PlayClientUpdateLight(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayClientUpdateLight(
@@ -30,13 +30,13 @@ public record PlayClientUpdateLight : IPacket {
 		TrustEdges = trustEdges;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		ChunkX = reader.ReadVarInt();
         ChunkZ = reader.ReadVarInt();
         TrustEdges = reader.ReadBool();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteVarInt(ChunkX);
         writer.WriteVarInt(ChunkZ);
         writer.WriteBool(TrustEdges);

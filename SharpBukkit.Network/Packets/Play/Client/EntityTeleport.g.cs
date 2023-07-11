@@ -21,7 +21,7 @@ public record PlayClientEntityTeleport : IPacket {
     public bool OnGround { get; private set; }
 
     public PlayClientEntityTeleport(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayClientEntityTeleport(
@@ -42,7 +42,7 @@ public record PlayClientEntityTeleport : IPacket {
 		OnGround = onGround;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		EntityId = reader.ReadVarInt();
         X = reader.ReadDouble();
         Y = reader.ReadDouble();
@@ -52,7 +52,7 @@ public record PlayClientEntityTeleport : IPacket {
         OnGround = reader.ReadBool();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteVarInt(EntityId);
         writer.WriteDouble(X);
         writer.WriteDouble(Y);

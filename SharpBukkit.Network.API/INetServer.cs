@@ -1,11 +1,13 @@
 using System.Net;
-using SharpBukkit.API;
 
 namespace SharpBukkit.Network.API;
 
-public interface INetServer : IServer {
-
+public interface INetServer {
 	Dictionary<EndPoint, IClientConnection> Connections { get; }
+
+	void Start();
+
+	void Stop();
 
 	void OnClientConnected(IClientConnection connection);
 

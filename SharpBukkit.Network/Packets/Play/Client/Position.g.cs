@@ -22,7 +22,7 @@ public record PlayClientPosition : IPacket {
     public bool DismountVehicle { get; private set; }
 
     public PlayClientPosition(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayClientPosition(
@@ -45,7 +45,7 @@ public record PlayClientPosition : IPacket {
 		DismountVehicle = dismountVehicle;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		X = reader.ReadDouble();
         Y = reader.ReadDouble();
         Z = reader.ReadDouble();
@@ -56,7 +56,7 @@ public record PlayClientPosition : IPacket {
         DismountVehicle = reader.ReadBool();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteDouble(X);
         writer.WriteDouble(Y);
         writer.WriteDouble(Z);

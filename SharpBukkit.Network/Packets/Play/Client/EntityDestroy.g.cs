@@ -15,7 +15,7 @@ public record PlayClientEntityDestroy : IPacket {
     
 
     public PlayClientEntityDestroy(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayClientEntityDestroy(
@@ -24,11 +24,11 @@ public record PlayClientEntityDestroy : IPacket {
 		
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		
 	}
 }

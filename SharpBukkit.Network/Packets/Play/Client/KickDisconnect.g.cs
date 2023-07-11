@@ -15,7 +15,7 @@ public record PlayClientKickDisconnect : IPacket {
     public string Reason { get; private set; }
 
     public PlayClientKickDisconnect(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayClientKickDisconnect(
@@ -24,11 +24,11 @@ public record PlayClientKickDisconnect : IPacket {
 		Reason = reason;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		Reason = reader.ReadString();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteString(Reason);
 	}
 }

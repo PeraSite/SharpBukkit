@@ -19,7 +19,7 @@ public record PlayClientTradeList : IPacket {
     public bool CanRestock { get; private set; }
 
     public PlayClientTradeList(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayClientTradeList(
@@ -36,7 +36,7 @@ public record PlayClientTradeList : IPacket {
 		CanRestock = canRestock;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		WindowId = reader.ReadVarInt();
         VillagerLevel = reader.ReadVarInt();
         Experience = reader.ReadVarInt();
@@ -44,7 +44,7 @@ public record PlayClientTradeList : IPacket {
         CanRestock = reader.ReadBool();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteVarInt(WindowId);
         writer.WriteVarInt(VillagerLevel);
         writer.WriteVarInt(Experience);

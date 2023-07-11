@@ -16,7 +16,7 @@ public record PlayClientEndCombatEvent : IPacket {
     public int EntityId { get; private set; }
 
     public PlayClientEndCombatEvent(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayClientEndCombatEvent(
@@ -27,12 +27,12 @@ public record PlayClientEndCombatEvent : IPacket {
 		EntityId = entityId;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		Duration = reader.ReadVarInt();
         EntityId = reader.ReadInt();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteVarInt(Duration);
         writer.WriteInt(EntityId);
 	}

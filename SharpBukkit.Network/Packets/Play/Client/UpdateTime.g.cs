@@ -16,7 +16,7 @@ public record PlayClientUpdateTime : IPacket {
     public long Time { get; private set; }
 
     public PlayClientUpdateTime(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayClientUpdateTime(
@@ -27,12 +27,12 @@ public record PlayClientUpdateTime : IPacket {
 		Time = time;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		Age = reader.ReadLong();
         Time = reader.ReadLong();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteLong(Age);
         writer.WriteLong(Time);
 	}

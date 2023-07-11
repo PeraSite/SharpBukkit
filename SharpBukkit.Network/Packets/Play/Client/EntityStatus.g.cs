@@ -16,7 +16,7 @@ public record PlayClientEntityStatus : IPacket {
     public sbyte EntityStatus { get; private set; }
 
     public PlayClientEntityStatus(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayClientEntityStatus(
@@ -27,12 +27,12 @@ public record PlayClientEntityStatus : IPacket {
 		EntityStatus = entityStatus;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		EntityId = reader.ReadInt();
         EntityStatus = reader.ReadSByte();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteInt(EntityId);
         writer.WriteSByte(EntityStatus);
 	}

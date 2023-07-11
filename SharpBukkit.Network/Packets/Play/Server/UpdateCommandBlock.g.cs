@@ -18,7 +18,7 @@ public record PlayServerUpdateCommandBlock : IPacket {
     public byte Flags { get; private set; }
 
     public PlayServerUpdateCommandBlock(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayServerUpdateCommandBlock(
@@ -33,14 +33,14 @@ public record PlayServerUpdateCommandBlock : IPacket {
 		Flags = flags;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		Location = reader.ReadPosition();
         Command = reader.ReadString();
         Mode = reader.ReadVarInt();
         Flags = reader.ReadByte();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WritePosition(Location);
         writer.WriteString(Command);
         writer.WriteVarInt(Mode);

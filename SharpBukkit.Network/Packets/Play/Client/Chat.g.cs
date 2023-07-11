@@ -17,7 +17,7 @@ public record PlayClientChat : IPacket {
     public Guid Sender { get; private set; }
 
     public PlayClientChat(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayClientChat(
@@ -30,13 +30,13 @@ public record PlayClientChat : IPacket {
 		Sender = sender;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		Message = reader.ReadString();
         Position = reader.ReadSByte();
         Sender = reader.ReadUuid();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteString(Message);
         writer.WriteSByte(Position);
         writer.WriteUuid(Sender);

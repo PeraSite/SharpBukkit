@@ -15,7 +15,7 @@ public record PlayServerChat : IPacket {
     public string Message { get; private set; }
 
     public PlayServerChat(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayServerChat(
@@ -24,11 +24,11 @@ public record PlayServerChat : IPacket {
 		Message = message;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		Message = reader.ReadString();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteString(Message);
 	}
 }

@@ -15,7 +15,7 @@ public record PlayClientDeclareRecipes : IPacket {
     
 
     public PlayClientDeclareRecipes(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayClientDeclareRecipes(
@@ -24,11 +24,11 @@ public record PlayClientDeclareRecipes : IPacket {
 		
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		
 	}
 }

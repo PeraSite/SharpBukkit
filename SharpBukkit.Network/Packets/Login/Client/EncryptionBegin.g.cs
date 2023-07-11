@@ -15,7 +15,7 @@ public record LoginClientEncryptionBegin : IPacket {
     public string ServerId { get; private set; }
 
     public LoginClientEncryptionBegin(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public LoginClientEncryptionBegin(
@@ -24,11 +24,11 @@ public record LoginClientEncryptionBegin : IPacket {
 		ServerId = serverId;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		ServerId = reader.ReadString();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteString(ServerId);
 	}
 }

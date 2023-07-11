@@ -20,7 +20,7 @@ public record PlayServerWindowClick : IPacket {
     public ISlotData CursorItem { get; private set; }
 
     public PlayServerWindowClick(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayServerWindowClick(
@@ -39,7 +39,7 @@ public record PlayServerWindowClick : IPacket {
 		CursorItem = cursorItem;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		WindowId = reader.ReadByte();
         StateId = reader.ReadVarInt();
         Slot = reader.ReadShort();
@@ -48,7 +48,7 @@ public record PlayServerWindowClick : IPacket {
         CursorItem = reader.ReadSlot();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteByte(WindowId);
         writer.WriteVarInt(StateId);
         writer.WriteShort(Slot);

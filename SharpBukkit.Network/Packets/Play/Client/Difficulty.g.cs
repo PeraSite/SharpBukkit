@@ -16,7 +16,7 @@ public record PlayClientDifficulty : IPacket {
     public bool DifficultyLocked { get; private set; }
 
     public PlayClientDifficulty(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayClientDifficulty(
@@ -27,12 +27,12 @@ public record PlayClientDifficulty : IPacket {
 		DifficultyLocked = difficultyLocked;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		Difficulty = reader.ReadByte();
         DifficultyLocked = reader.ReadBool();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteByte(Difficulty);
         writer.WriteBool(DifficultyLocked);
 	}

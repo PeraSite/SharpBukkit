@@ -21,7 +21,7 @@ public record PlayServerBlockPlace : IPacket {
     public bool InsideBlock { get; private set; }
 
     public PlayServerBlockPlace(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayServerBlockPlace(
@@ -42,7 +42,7 @@ public record PlayServerBlockPlace : IPacket {
 		InsideBlock = insideBlock;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		Hand = reader.ReadVarInt();
         Location = reader.ReadPosition();
         Direction = reader.ReadVarInt();
@@ -52,7 +52,7 @@ public record PlayServerBlockPlace : IPacket {
         InsideBlock = reader.ReadBool();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteVarInt(Hand);
         writer.WritePosition(Location);
         writer.WriteVarInt(Direction);

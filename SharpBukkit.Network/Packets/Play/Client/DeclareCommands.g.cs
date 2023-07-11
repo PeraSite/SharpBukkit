@@ -15,7 +15,7 @@ public record PlayClientDeclareCommands : IPacket {
     public int RootIndex { get; private set; }
 
     public PlayClientDeclareCommands(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayClientDeclareCommands(
@@ -24,11 +24,11 @@ public record PlayClientDeclareCommands : IPacket {
 		RootIndex = rootIndex;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		RootIndex = reader.ReadVarInt();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteVarInt(RootIndex);
 	}
 }

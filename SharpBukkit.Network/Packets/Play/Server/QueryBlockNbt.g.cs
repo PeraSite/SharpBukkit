@@ -16,7 +16,7 @@ public record PlayServerQueryBlockNbt : IPacket {
     public Vector3 Location { get; private set; }
 
     public PlayServerQueryBlockNbt(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayServerQueryBlockNbt(
@@ -27,12 +27,12 @@ public record PlayServerQueryBlockNbt : IPacket {
 		Location = location;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		TransactionId = reader.ReadVarInt();
         Location = reader.ReadPosition();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteVarInt(TransactionId);
         writer.WritePosition(Location);
 	}

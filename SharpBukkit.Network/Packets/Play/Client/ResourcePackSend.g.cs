@@ -17,7 +17,7 @@ public record PlayClientResourcePackSend : IPacket {
     public bool Forced { get; private set; }
 
     public PlayClientResourcePackSend(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayClientResourcePackSend(
@@ -30,13 +30,13 @@ public record PlayClientResourcePackSend : IPacket {
 		Forced = forced;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		Url = reader.ReadString();
         Hash = reader.ReadString();
         Forced = reader.ReadBool();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteString(Url);
         writer.WriteString(Hash);
         writer.WriteBool(Forced);

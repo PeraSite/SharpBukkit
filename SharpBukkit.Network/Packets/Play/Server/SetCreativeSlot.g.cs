@@ -16,7 +16,7 @@ public record PlayServerSetCreativeSlot : IPacket {
     public ISlotData Item { get; private set; }
 
     public PlayServerSetCreativeSlot(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayServerSetCreativeSlot(
@@ -27,12 +27,12 @@ public record PlayServerSetCreativeSlot : IPacket {
 		Item = item;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		Slot = reader.ReadShort();
         Item = reader.ReadSlot();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteShort(Slot);
         writer.WriteSlot(Item);
 	}

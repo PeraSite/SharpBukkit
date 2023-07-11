@@ -17,7 +17,7 @@ public record PlayClientTileEntityData : IPacket {
     public CompoundTag? NbtData { get; private set; }
 
     public PlayClientTileEntityData(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayClientTileEntityData(
@@ -30,13 +30,13 @@ public record PlayClientTileEntityData : IPacket {
 		NbtData = nbtData;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		Location = reader.ReadPosition();
         Action = reader.ReadVarInt();
         NbtData = reader.ReadOptNbtTag();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WritePosition(Location);
         writer.WriteVarInt(Action);
         writer.WriteOptNbtTag(NbtData);

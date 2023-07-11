@@ -16,7 +16,7 @@ public record PlayClientRemoveEntityEffect : IPacket {
     public int EffectId { get; private set; }
 
     public PlayClientRemoveEntityEffect(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayClientRemoveEntityEffect(
@@ -27,12 +27,12 @@ public record PlayClientRemoveEntityEffect : IPacket {
 		EffectId = effectId;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		EntityId = reader.ReadVarInt();
         EffectId = reader.ReadVarInt();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteVarInt(EntityId);
         writer.WriteVarInt(EffectId);
 	}

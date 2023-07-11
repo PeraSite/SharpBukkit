@@ -16,7 +16,7 @@ public record PlayClientEntityMetadata : IPacket {
     public byte[] Metadata { get; private set; }
 
     public PlayClientEntityMetadata(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayClientEntityMetadata(
@@ -27,12 +27,12 @@ public record PlayClientEntityMetadata : IPacket {
 		Metadata = metadata;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		EntityId = reader.ReadVarInt();
         Metadata = reader.ReadMetadata();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteVarInt(EntityId);
         writer.WriteMetadata(Metadata);
 	}

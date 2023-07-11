@@ -9,8 +9,4 @@
     <ItemGroup>
         <PackageReference Include="SharpNBT" Version="1.2.0" />
     </ItemGroup>
-    
-    <ItemGroup>
-      <ProjectReference Include="..\SharpBukkit.API\SharpBukkit.API.csproj" />
-    </ItemGroup>
 </Project>

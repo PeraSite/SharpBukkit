@@ -15,7 +15,7 @@ public record PlayClientWorldBorderWarningDelay : IPacket {
     public int WarningTime { get; private set; }
 
     public PlayClientWorldBorderWarningDelay(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayClientWorldBorderWarningDelay(
@@ -24,11 +24,11 @@ public record PlayClientWorldBorderWarningDelay : IPacket {
 		WarningTime = warningTime;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		WarningTime = reader.ReadVarInt();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteVarInt(WarningTime);
 	}
 }

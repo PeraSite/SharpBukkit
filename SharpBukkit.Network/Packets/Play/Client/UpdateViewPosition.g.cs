@@ -16,7 +16,7 @@ public record PlayClientUpdateViewPosition : IPacket {
     public int ChunkZ { get; private set; }
 
     public PlayClientUpdateViewPosition(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayClientUpdateViewPosition(
@@ -27,12 +27,12 @@ public record PlayClientUpdateViewPosition : IPacket {
 		ChunkZ = chunkZ;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		ChunkX = reader.ReadVarInt();
         ChunkZ = reader.ReadVarInt();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteVarInt(ChunkX);
         writer.WriteVarInt(ChunkZ);
 	}

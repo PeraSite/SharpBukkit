@@ -19,7 +19,7 @@ public record PlayServerUpdateSign : IPacket {
     public string Text4 { get; private set; }
 
     public PlayServerUpdateSign(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayServerUpdateSign(
@@ -36,7 +36,7 @@ public record PlayServerUpdateSign : IPacket {
 		Text4 = text4;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		Location = reader.ReadPosition();
         Text1 = reader.ReadString();
         Text2 = reader.ReadString();
@@ -44,7 +44,7 @@ public record PlayServerUpdateSign : IPacket {
         Text4 = reader.ReadString();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WritePosition(Location);
         writer.WriteString(Text1);
         writer.WriteString(Text2);

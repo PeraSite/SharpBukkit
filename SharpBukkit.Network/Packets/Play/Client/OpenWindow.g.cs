@@ -17,7 +17,7 @@ public record PlayClientOpenWindow : IPacket {
     public string WindowTitle { get; private set; }
 
     public PlayClientOpenWindow(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayClientOpenWindow(
@@ -30,13 +30,13 @@ public record PlayClientOpenWindow : IPacket {
 		WindowTitle = windowTitle;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		WindowId = reader.ReadVarInt();
         InventoryType = reader.ReadVarInt();
         WindowTitle = reader.ReadString();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteVarInt(WindowId);
         writer.WriteVarInt(InventoryType);
         writer.WriteString(WindowTitle);

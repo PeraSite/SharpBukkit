@@ -15,7 +15,7 @@ public record PlayClientHeldItemSlot : IPacket {
     public sbyte Slot { get; private set; }
 
     public PlayClientHeldItemSlot(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayClientHeldItemSlot(
@@ -24,11 +24,11 @@ public record PlayClientHeldItemSlot : IPacket {
 		Slot = slot;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		Slot = reader.ReadSByte();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteSByte(Slot);
 	}
 }

@@ -15,7 +15,7 @@ public record PlayServerFlying : IPacket {
     public bool OnGround { get; private set; }
 
     public PlayServerFlying(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayServerFlying(
@@ -24,11 +24,11 @@ public record PlayServerFlying : IPacket {
 		OnGround = onGround;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		OnGround = reader.ReadBool();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteBool(OnGround);
 	}
 }

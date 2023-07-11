@@ -30,7 +30,7 @@ public record PlayServerUpdateStructureBlock : IPacket {
     public byte Flags { get; private set; }
 
     public PlayServerUpdateStructureBlock(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayServerUpdateStructureBlock(
@@ -69,7 +69,7 @@ public record PlayServerUpdateStructureBlock : IPacket {
 		Flags = flags;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		Location = reader.ReadPosition();
         Action = reader.ReadVarInt();
         Mode = reader.ReadVarInt();
@@ -88,7 +88,7 @@ public record PlayServerUpdateStructureBlock : IPacket {
         Flags = reader.ReadByte();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WritePosition(Location);
         writer.WriteVarInt(Action);
         writer.WriteVarInt(Mode);

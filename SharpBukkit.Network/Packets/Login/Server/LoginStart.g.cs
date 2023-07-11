@@ -15,7 +15,7 @@ public record LoginServerLoginStart : IPacket {
     public string Username { get; private set; }
 
     public LoginServerLoginStart(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public LoginServerLoginStart(
@@ -24,11 +24,11 @@ public record LoginServerLoginStart : IPacket {
 		Username = username;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		Username = reader.ReadString();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteString(Username);
 	}
 }

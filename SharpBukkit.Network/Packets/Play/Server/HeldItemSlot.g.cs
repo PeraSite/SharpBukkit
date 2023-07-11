@@ -15,7 +15,7 @@ public record PlayServerHeldItemSlot : IPacket {
     public short SlotId { get; private set; }
 
     public PlayServerHeldItemSlot(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayServerHeldItemSlot(
@@ -24,11 +24,11 @@ public record PlayServerHeldItemSlot : IPacket {
 		SlotId = slotId;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		SlotId = reader.ReadShort();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteShort(SlotId);
 	}
 }

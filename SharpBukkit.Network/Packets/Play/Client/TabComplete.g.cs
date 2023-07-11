@@ -17,7 +17,7 @@ public record PlayClientTabComplete : IPacket {
     public int Length { get; private set; }
 
     public PlayClientTabComplete(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayClientTabComplete(
@@ -30,13 +30,13 @@ public record PlayClientTabComplete : IPacket {
 		Length = length;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		TransactionId = reader.ReadVarInt();
         Start = reader.ReadVarInt();
         Length = reader.ReadVarInt();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteVarInt(TransactionId);
         writer.WriteVarInt(Start);
         writer.WriteVarInt(Length);

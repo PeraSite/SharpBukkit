@@ -24,7 +24,7 @@ public record PlayClientWorldParticles : IPacket {
     public int Particles { get; private set; }
 
     public PlayClientWorldParticles(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayClientWorldParticles(
@@ -51,7 +51,7 @@ public record PlayClientWorldParticles : IPacket {
 		Particles = particles;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		ParticleId = reader.ReadInt();
         LongDistance = reader.ReadBool();
         X = reader.ReadDouble();
@@ -64,7 +64,7 @@ public record PlayClientWorldParticles : IPacket {
         Particles = reader.ReadInt();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteInt(ParticleId);
         writer.WriteBool(LongDistance);
         writer.WriteDouble(X);

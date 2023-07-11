@@ -17,7 +17,7 @@ public record PlayServerUseEntity : IPacket {
     public bool Sneaking { get; private set; }
 
     public PlayServerUseEntity(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayServerUseEntity(
@@ -30,13 +30,13 @@ public record PlayServerUseEntity : IPacket {
 		Sneaking = sneaking;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		Target = reader.ReadVarInt();
         Mouse = reader.ReadVarInt();
         Sneaking = reader.ReadBool();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteVarInt(Target);
         writer.WriteVarInt(Mouse);
         writer.WriteBool(Sneaking);

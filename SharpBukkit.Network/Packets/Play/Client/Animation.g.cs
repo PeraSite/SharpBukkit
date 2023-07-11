@@ -16,7 +16,7 @@ public record PlayClientAnimation : IPacket {
     public byte Animation { get; private set; }
 
     public PlayClientAnimation(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayClientAnimation(
@@ -27,12 +27,12 @@ public record PlayClientAnimation : IPacket {
 		Animation = animation;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		EntityId = reader.ReadVarInt();
         Animation = reader.ReadByte();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteVarInt(EntityId);
         writer.WriteByte(Animation);
 	}

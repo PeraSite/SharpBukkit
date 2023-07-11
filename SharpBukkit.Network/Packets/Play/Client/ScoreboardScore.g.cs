@@ -17,7 +17,7 @@ public record PlayClientScoreboardScore : IPacket {
     public string ScoreName { get; private set; }
 
     public PlayClientScoreboardScore(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayClientScoreboardScore(
@@ -30,13 +30,13 @@ public record PlayClientScoreboardScore : IPacket {
 		ScoreName = scoreName;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		ItemName = reader.ReadString();
         Action = reader.ReadVarInt();
         ScoreName = reader.ReadString();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteString(ItemName);
         writer.WriteVarInt(Action);
         writer.WriteString(ScoreName);

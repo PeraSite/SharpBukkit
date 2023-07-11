@@ -15,7 +15,7 @@ public record LoginServerEncryptionBegin : IPacket {
     
 
     public LoginServerEncryptionBegin(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public LoginServerEncryptionBegin(
@@ -24,11 +24,11 @@ public record LoginServerEncryptionBegin : IPacket {
 		
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		
 	}
 }

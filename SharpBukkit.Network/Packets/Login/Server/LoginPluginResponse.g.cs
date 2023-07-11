@@ -15,7 +15,7 @@ public record LoginServerLoginPluginResponse : IPacket {
     public int MessageId { get; private set; }
 
     public LoginServerLoginPluginResponse(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public LoginServerLoginPluginResponse(
@@ -24,11 +24,11 @@ public record LoginServerLoginPluginResponse : IPacket {
 		MessageId = messageId;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		MessageId = reader.ReadVarInt();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteVarInt(MessageId);
 	}
 }

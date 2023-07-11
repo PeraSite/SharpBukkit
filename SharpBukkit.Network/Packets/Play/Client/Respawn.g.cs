@@ -22,7 +22,7 @@ public record PlayClientRespawn : IPacket {
     public bool CopyMetadata { get; private set; }
 
     public PlayClientRespawn(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayClientRespawn(
@@ -45,7 +45,7 @@ public record PlayClientRespawn : IPacket {
 		CopyMetadata = copyMetadata;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		Dimension = reader.ReadNbt<Dimension>();
         WorldName = reader.ReadString();
         HashedSeed = reader.ReadLong();
@@ -56,7 +56,7 @@ public record PlayClientRespawn : IPacket {
         CopyMetadata = reader.ReadBool();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteNbt<Dimension>(Dimension);
         writer.WriteString(WorldName);
         writer.WriteLong(HashedSeed);

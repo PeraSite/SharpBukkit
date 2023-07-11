@@ -15,7 +15,7 @@ public record PlayClientWorldBorderWarningReach : IPacket {
     public int WarningBlocks { get; private set; }
 
     public PlayClientWorldBorderWarningReach(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayClientWorldBorderWarningReach(
@@ -24,11 +24,11 @@ public record PlayClientWorldBorderWarningReach : IPacket {
 		WarningBlocks = warningBlocks;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		WarningBlocks = reader.ReadVarInt();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteVarInt(WarningBlocks);
 	}
 }

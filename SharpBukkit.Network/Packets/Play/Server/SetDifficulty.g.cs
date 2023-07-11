@@ -15,7 +15,7 @@ public record PlayServerSetDifficulty : IPacket {
     public byte NewDifficulty { get; private set; }
 
     public PlayServerSetDifficulty(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayServerSetDifficulty(
@@ -24,11 +24,11 @@ public record PlayServerSetDifficulty : IPacket {
 		NewDifficulty = newDifficulty;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		NewDifficulty = reader.ReadByte();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteByte(NewDifficulty);
 	}
 }

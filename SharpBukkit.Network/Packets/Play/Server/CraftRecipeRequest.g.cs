@@ -17,7 +17,7 @@ public record PlayServerCraftRecipeRequest : IPacket {
     public bool MakeAll { get; private set; }
 
     public PlayServerCraftRecipeRequest(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayServerCraftRecipeRequest(
@@ -30,13 +30,13 @@ public record PlayServerCraftRecipeRequest : IPacket {
 		MakeAll = makeAll;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		WindowId = reader.ReadSByte();
         Recipe = reader.ReadString();
         MakeAll = reader.ReadBool();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteSByte(WindowId);
         writer.WriteString(Recipe);
         writer.WriteBool(MakeAll);

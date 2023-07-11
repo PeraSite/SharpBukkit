@@ -15,7 +15,7 @@ public record PlayClientSimulationDistance : IPacket {
     public int Distance { get; private set; }
 
     public PlayClientSimulationDistance(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayClientSimulationDistance(
@@ -24,11 +24,11 @@ public record PlayClientSimulationDistance : IPacket {
 		Distance = distance;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		Distance = reader.ReadVarInt();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteVarInt(Distance);
 	}
 }

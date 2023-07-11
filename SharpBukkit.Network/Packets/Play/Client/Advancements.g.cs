@@ -15,7 +15,7 @@ public record PlayClientAdvancements : IPacket {
     public bool Reset { get; private set; }
 
     public PlayClientAdvancements(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayClientAdvancements(
@@ -24,11 +24,11 @@ public record PlayClientAdvancements : IPacket {
 		Reset = reset;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		Reset = reader.ReadBool();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteBool(Reset);
 	}
 }

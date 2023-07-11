@@ -15,7 +15,7 @@ public record PlayClientTags : IPacket {
     
 
     public PlayClientTags(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayClientTags(
@@ -24,11 +24,11 @@ public record PlayClientTags : IPacket {
 		
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		
 	}
 }

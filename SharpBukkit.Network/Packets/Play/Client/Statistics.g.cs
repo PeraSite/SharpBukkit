@@ -15,7 +15,7 @@ public record PlayClientStatistics : IPacket {
     
 
     public PlayClientStatistics(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayClientStatistics(
@@ -24,11 +24,11 @@ public record PlayClientStatistics : IPacket {
 		
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		
 	}
 }

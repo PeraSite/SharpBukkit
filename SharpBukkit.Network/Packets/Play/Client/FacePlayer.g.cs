@@ -19,7 +19,7 @@ public record PlayClientFacePlayer : IPacket {
     public bool IsEntity { get; private set; }
 
     public PlayClientFacePlayer(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayClientFacePlayer(
@@ -36,7 +36,7 @@ public record PlayClientFacePlayer : IPacket {
 		IsEntity = isEntity;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		FeetEyes = reader.ReadVarInt();
         X = reader.ReadDouble();
         Y = reader.ReadDouble();
@@ -44,7 +44,7 @@ public record PlayClientFacePlayer : IPacket {
         IsEntity = reader.ReadBool();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteVarInt(FeetEyes);
         writer.WriteDouble(X);
         writer.WriteDouble(Y);

@@ -15,7 +15,7 @@ public record StatusClientPing : IPacket {
     public long Time { get; private set; }
 
     public StatusClientPing(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public StatusClientPing(
@@ -24,11 +24,11 @@ public record StatusClientPing : IPacket {
 		Time = time;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		Time = reader.ReadLong();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteLong(Time);
 	}
 }

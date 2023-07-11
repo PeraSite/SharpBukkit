@@ -15,7 +15,7 @@ public record PlayServerPong : IPacket {
     public int Id { get; private set; }
 
     public PlayServerPong(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayServerPong(
@@ -24,11 +24,11 @@ public record PlayServerPong : IPacket {
 		Id = id;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		Id = reader.ReadInt();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteInt(Id);
 	}
 }

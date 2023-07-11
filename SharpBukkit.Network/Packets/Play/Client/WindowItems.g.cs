@@ -17,7 +17,7 @@ public record PlayClientWindowItems : IPacket {
     public ISlotData CarriedItem { get; private set; }
 
     public PlayClientWindowItems(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayClientWindowItems(
@@ -30,13 +30,13 @@ public record PlayClientWindowItems : IPacket {
 		CarriedItem = carriedItem;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		WindowId = reader.ReadByte();
         StateId = reader.ReadVarInt();
         CarriedItem = reader.ReadSlot();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteByte(WindowId);
         writer.WriteVarInt(StateId);
         writer.WriteSlot(CarriedItem);

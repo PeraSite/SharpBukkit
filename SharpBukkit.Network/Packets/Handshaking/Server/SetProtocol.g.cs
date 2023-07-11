@@ -18,7 +18,7 @@ public record HandshakingServerSetProtocol : IPacket {
     public int NextState { get; private set; }
 
     public HandshakingServerSetProtocol(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public HandshakingServerSetProtocol(
@@ -33,14 +33,14 @@ public record HandshakingServerSetProtocol : IPacket {
 		NextState = nextState;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		ProtocolVersion = reader.ReadVarInt();
         ServerHost = reader.ReadString();
         ServerPort = reader.ReadUShort();
         NextState = reader.ReadVarInt();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteVarInt(ProtocolVersion);
         writer.WriteString(ServerHost);
         writer.WriteUShort(ServerPort);

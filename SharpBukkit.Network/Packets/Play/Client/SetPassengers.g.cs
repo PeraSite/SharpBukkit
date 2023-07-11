@@ -15,7 +15,7 @@ public record PlayClientSetPassengers : IPacket {
     public int EntityId { get; private set; }
 
     public PlayClientSetPassengers(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayClientSetPassengers(
@@ -24,11 +24,11 @@ public record PlayClientSetPassengers : IPacket {
 		EntityId = entityId;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		EntityId = reader.ReadVarInt();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteVarInt(EntityId);
 	}
 }

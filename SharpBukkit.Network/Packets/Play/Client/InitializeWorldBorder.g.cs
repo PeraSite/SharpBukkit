@@ -22,7 +22,7 @@ public record PlayClientInitializeWorldBorder : IPacket {
     public int WarningTime { get; private set; }
 
     public PlayClientInitializeWorldBorder(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayClientInitializeWorldBorder(
@@ -45,7 +45,7 @@ public record PlayClientInitializeWorldBorder : IPacket {
 		WarningTime = warningTime;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		X = reader.ReadDouble();
         Z = reader.ReadDouble();
         OldDiameter = reader.ReadDouble();
@@ -56,7 +56,7 @@ public record PlayClientInitializeWorldBorder : IPacket {
         WarningTime = reader.ReadVarInt();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteDouble(X);
         writer.WriteDouble(Z);
         writer.WriteDouble(OldDiameter);

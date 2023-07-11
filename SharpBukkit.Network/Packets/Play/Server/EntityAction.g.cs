@@ -17,7 +17,7 @@ public record PlayServerEntityAction : IPacket {
     public int JumpBoost { get; private set; }
 
     public PlayServerEntityAction(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayServerEntityAction(
@@ -30,13 +30,13 @@ public record PlayServerEntityAction : IPacket {
 		JumpBoost = jumpBoost;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		EntityId = reader.ReadVarInt();
         ActionId = reader.ReadVarInt();
         JumpBoost = reader.ReadVarInt();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteVarInt(EntityId);
         writer.WriteVarInt(ActionId);
         writer.WriteVarInt(JumpBoost);

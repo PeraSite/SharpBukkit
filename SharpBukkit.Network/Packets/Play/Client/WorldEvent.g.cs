@@ -18,7 +18,7 @@ public record PlayClientWorldEvent : IPacket {
     public bool Global { get; private set; }
 
     public PlayClientWorldEvent(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayClientWorldEvent(
@@ -33,14 +33,14 @@ public record PlayClientWorldEvent : IPacket {
 		Global = global;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		EffectId = reader.ReadInt();
         Location = reader.ReadPosition();
         Data = reader.ReadInt();
         Global = reader.ReadBool();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteInt(EffectId);
         writer.WritePosition(Location);
         writer.WriteInt(Data);

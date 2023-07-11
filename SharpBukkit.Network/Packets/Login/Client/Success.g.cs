@@ -16,7 +16,7 @@ public record LoginClientSuccess : IPacket {
     public string Username { get; private set; }
 
     public LoginClientSuccess(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public LoginClientSuccess(
@@ -27,12 +27,12 @@ public record LoginClientSuccess : IPacket {
 		Username = username;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		Uuid = reader.ReadUuid();
         Username = reader.ReadString();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteUuid(Uuid);
         writer.WriteString(Username);
 	}

@@ -19,7 +19,7 @@ public record PlayClientVehicleMove : IPacket {
     public float Pitch { get; private set; }
 
     public PlayClientVehicleMove(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayClientVehicleMove(
@@ -36,7 +36,7 @@ public record PlayClientVehicleMove : IPacket {
 		Pitch = pitch;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		X = reader.ReadDouble();
         Y = reader.ReadDouble();
         Z = reader.ReadDouble();
@@ -44,7 +44,7 @@ public record PlayClientVehicleMove : IPacket {
         Pitch = reader.ReadFloat();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteDouble(X);
         writer.WriteDouble(Y);
         writer.WriteDouble(Z);

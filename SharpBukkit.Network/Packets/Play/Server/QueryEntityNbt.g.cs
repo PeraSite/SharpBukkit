@@ -16,7 +16,7 @@ public record PlayServerQueryEntityNbt : IPacket {
     public int EntityId { get; private set; }
 
     public PlayServerQueryEntityNbt(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayServerQueryEntityNbt(
@@ -27,12 +27,12 @@ public record PlayServerQueryEntityNbt : IPacket {
 		EntityId = entityId;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		TransactionId = reader.ReadVarInt();
         EntityId = reader.ReadVarInt();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteVarInt(TransactionId);
         writer.WriteVarInt(EntityId);
 	}

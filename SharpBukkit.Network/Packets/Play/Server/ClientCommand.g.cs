@@ -15,7 +15,7 @@ public record PlayServerClientCommand : IPacket {
     public int ActionId { get; private set; }
 
     public PlayServerClientCommand(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayServerClientCommand(
@@ -24,11 +24,11 @@ public record PlayServerClientCommand : IPacket {
 		ActionId = actionId;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		ActionId = reader.ReadVarInt();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteVarInt(ActionId);
 	}
 }

@@ -15,7 +15,7 @@ public record PlayClientWorldBorderSize : IPacket {
     public double Diameter { get; private set; }
 
     public PlayClientWorldBorderSize(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayClientWorldBorderSize(
@@ -24,11 +24,11 @@ public record PlayClientWorldBorderSize : IPacket {
 		Diameter = diameter;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		Diameter = reader.ReadDouble();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteDouble(Diameter);
 	}
 }

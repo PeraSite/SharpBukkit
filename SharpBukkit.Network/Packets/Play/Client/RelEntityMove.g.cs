@@ -19,7 +19,7 @@ public record PlayClientRelEntityMove : IPacket {
     public bool OnGround { get; private set; }
 
     public PlayClientRelEntityMove(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayClientRelEntityMove(
@@ -36,7 +36,7 @@ public record PlayClientRelEntityMove : IPacket {
 		OnGround = onGround;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		EntityId = reader.ReadVarInt();
         DX = reader.ReadShort();
         DY = reader.ReadShort();
@@ -44,7 +44,7 @@ public record PlayClientRelEntityMove : IPacket {
         OnGround = reader.ReadBool();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteVarInt(EntityId);
         writer.WriteShort(DX);
         writer.WriteShort(DY);

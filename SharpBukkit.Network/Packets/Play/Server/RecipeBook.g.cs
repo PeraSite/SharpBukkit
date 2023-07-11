@@ -17,7 +17,7 @@ public record PlayServerRecipeBook : IPacket {
     public bool FilterActive { get; private set; }
 
     public PlayServerRecipeBook(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayServerRecipeBook(
@@ -30,13 +30,13 @@ public record PlayServerRecipeBook : IPacket {
 		FilterActive = filterActive;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		BookId = reader.ReadVarInt();
         BookOpen = reader.ReadBool();
         FilterActive = reader.ReadBool();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteVarInt(BookId);
         writer.WriteBool(BookOpen);
         writer.WriteBool(FilterActive);

@@ -15,7 +15,7 @@ public record LoginClientDisconnect : IPacket {
     public string Reason { get; private set; }
 
     public LoginClientDisconnect(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public LoginClientDisconnect(
@@ -24,11 +24,11 @@ public record LoginClientDisconnect : IPacket {
 		Reason = reason;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		Reason = reader.ReadString();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteString(Reason);
 	}
 }

@@ -17,7 +17,7 @@ public record PlayClientUpdateHealth : IPacket {
     public float FoodSaturation { get; private set; }
 
     public PlayClientUpdateHealth(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayClientUpdateHealth(
@@ -30,13 +30,13 @@ public record PlayClientUpdateHealth : IPacket {
 		FoodSaturation = foodSaturation;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		Health = reader.ReadFloat();
         Food = reader.ReadVarInt();
         FoodSaturation = reader.ReadFloat();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteFloat(Health);
         writer.WriteVarInt(Food);
         writer.WriteFloat(FoodSaturation);

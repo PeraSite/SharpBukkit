@@ -18,7 +18,7 @@ public record PlayClientEntityLook : IPacket {
     public bool OnGround { get; private set; }
 
     public PlayClientEntityLook(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayClientEntityLook(
@@ -33,14 +33,14 @@ public record PlayClientEntityLook : IPacket {
 		OnGround = onGround;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		EntityId = reader.ReadVarInt();
         Yaw = reader.ReadSByte();
         Pitch = reader.ReadSByte();
         OnGround = reader.ReadBool();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteVarInt(EntityId);
         writer.WriteSByte(Yaw);
         writer.WriteSByte(Pitch);

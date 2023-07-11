@@ -16,7 +16,7 @@ public record PlayClientGameStateChange : IPacket {
     public float GameMode { get; private set; }
 
     public PlayClientGameStateChange(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayClientGameStateChange(
@@ -27,12 +27,12 @@ public record PlayClientGameStateChange : IPacket {
 		GameMode = gameMode;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		Reason = reader.ReadByte();
         GameMode = reader.ReadFloat();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteByte(Reason);
         writer.WriteFloat(GameMode);
 	}

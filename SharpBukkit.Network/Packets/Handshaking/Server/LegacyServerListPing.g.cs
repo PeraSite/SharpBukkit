@@ -15,7 +15,7 @@ public record HandshakingServerLegacyServerListPing : IPacket {
     public byte Payload { get; private set; }
 
     public HandshakingServerLegacyServerListPing(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public HandshakingServerLegacyServerListPing(
@@ -24,11 +24,11 @@ public record HandshakingServerLegacyServerListPing : IPacket {
 		Payload = payload;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		Payload = reader.ReadByte();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteByte(Payload);
 	}
 }

@@ -16,7 +16,7 @@ public record PlayClientScoreboardDisplayObjective : IPacket {
     public string Name { get; private set; }
 
     public PlayClientScoreboardDisplayObjective(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayClientScoreboardDisplayObjective(
@@ -27,12 +27,12 @@ public record PlayClientScoreboardDisplayObjective : IPacket {
 		Name = name;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		Position = reader.ReadSByte();
         Name = reader.ReadString();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteSByte(Position);
         writer.WriteString(Name);
 	}

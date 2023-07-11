@@ -15,7 +15,7 @@ public record PlayServerSpectate : IPacket {
     public Guid Target { get; private set; }
 
     public PlayServerSpectate(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayServerSpectate(
@@ -24,11 +24,11 @@ public record PlayServerSpectate : IPacket {
 		Target = target;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		Target = reader.ReadUuid();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteUuid(Target);
 	}
 }

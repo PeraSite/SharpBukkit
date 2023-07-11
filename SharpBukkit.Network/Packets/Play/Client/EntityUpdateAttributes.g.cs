@@ -15,7 +15,7 @@ public record PlayClientEntityUpdateAttributes : IPacket {
     public int EntityId { get; private set; }
 
     public PlayClientEntityUpdateAttributes(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayClientEntityUpdateAttributes(
@@ -24,11 +24,11 @@ public record PlayClientEntityUpdateAttributes : IPacket {
 		EntityId = entityId;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		EntityId = reader.ReadVarInt();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteVarInt(EntityId);
 	}
 }

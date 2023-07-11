@@ -19,7 +19,7 @@ public record PlayClientEntitySoundEffect : IPacket {
     public float Pitch { get; private set; }
 
     public PlayClientEntitySoundEffect(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayClientEntitySoundEffect(
@@ -36,7 +36,7 @@ public record PlayClientEntitySoundEffect : IPacket {
 		Pitch = pitch;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		SoundId = reader.ReadVarInt();
         SoundCategory = reader.ReadVarInt();
         EntityId = reader.ReadVarInt();
@@ -44,7 +44,7 @@ public record PlayClientEntitySoundEffect : IPacket {
         Pitch = reader.ReadFloat();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteVarInt(SoundId);
         writer.WriteVarInt(SoundCategory);
         writer.WriteVarInt(EntityId);

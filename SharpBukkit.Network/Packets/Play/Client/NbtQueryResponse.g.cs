@@ -16,7 +16,7 @@ public record PlayClientNbtQueryResponse : IPacket {
     public CompoundTag? Nbt { get; private set; }
 
     public PlayClientNbtQueryResponse(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayClientNbtQueryResponse(
@@ -27,12 +27,12 @@ public record PlayClientNbtQueryResponse : IPacket {
 		Nbt = nbt;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		TransactionId = reader.ReadVarInt();
         Nbt = reader.ReadOptNbtTag();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteVarInt(TransactionId);
         writer.WriteOptNbtTag(Nbt);
 	}

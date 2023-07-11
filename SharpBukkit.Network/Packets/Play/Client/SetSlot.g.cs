@@ -18,7 +18,7 @@ public record PlayClientSetSlot : IPacket {
     public ISlotData Item { get; private set; }
 
     public PlayClientSetSlot(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayClientSetSlot(
@@ -33,14 +33,14 @@ public record PlayClientSetSlot : IPacket {
 		Item = item;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		WindowId = reader.ReadSByte();
         StateId = reader.ReadVarInt();
         Slot = reader.ReadShort();
         Item = reader.ReadSlot();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteSByte(WindowId);
         writer.WriteVarInt(StateId);
         writer.WriteShort(Slot);

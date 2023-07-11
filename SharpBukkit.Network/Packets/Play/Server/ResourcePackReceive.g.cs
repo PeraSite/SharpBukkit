@@ -15,7 +15,7 @@ public record PlayServerResourcePackReceive : IPacket {
     public int Result { get; private set; }
 
     public PlayServerResourcePackReceive(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayServerResourcePackReceive(
@@ -24,11 +24,11 @@ public record PlayServerResourcePackReceive : IPacket {
 		Result = result;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		Result = reader.ReadVarInt();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteVarInt(Result);
 	}
 }

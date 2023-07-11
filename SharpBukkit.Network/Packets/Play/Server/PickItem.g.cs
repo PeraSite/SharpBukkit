@@ -15,7 +15,7 @@ public record PlayServerPickItem : IPacket {
     public int Slot { get; private set; }
 
     public PlayServerPickItem(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayServerPickItem(
@@ -24,11 +24,11 @@ public record PlayServerPickItem : IPacket {
 		Slot = slot;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		Slot = reader.ReadVarInt();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteVarInt(Slot);
 	}
 }

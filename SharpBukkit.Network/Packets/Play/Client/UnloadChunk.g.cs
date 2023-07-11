@@ -16,7 +16,7 @@ public record PlayClientUnloadChunk : IPacket {
     public int ChunkZ { get; private set; }
 
     public PlayClientUnloadChunk(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayClientUnloadChunk(
@@ -27,12 +27,12 @@ public record PlayClientUnloadChunk : IPacket {
 		ChunkZ = chunkZ;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		ChunkX = reader.ReadInt();
         ChunkZ = reader.ReadInt();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteInt(ChunkX);
         writer.WriteInt(ChunkZ);
 	}

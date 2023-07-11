@@ -16,7 +16,7 @@ public record PlayServerTabComplete : IPacket {
     public string Text { get; private set; }
 
     public PlayServerTabComplete(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayServerTabComplete(
@@ -27,12 +27,12 @@ public record PlayServerTabComplete : IPacket {
 		Text = text;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		TransactionId = reader.ReadVarInt();
         Text = reader.ReadString();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteVarInt(TransactionId);
         writer.WriteString(Text);
 	}

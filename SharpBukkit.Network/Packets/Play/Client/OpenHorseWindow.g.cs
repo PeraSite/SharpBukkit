@@ -17,7 +17,7 @@ public record PlayClientOpenHorseWindow : IPacket {
     public int EntityId { get; private set; }
 
     public PlayClientOpenHorseWindow(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayClientOpenHorseWindow(
@@ -30,13 +30,13 @@ public record PlayClientOpenHorseWindow : IPacket {
 		EntityId = entityId;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		WindowId = reader.ReadByte();
         NbSlots = reader.ReadVarInt();
         EntityId = reader.ReadInt();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteByte(WindowId);
         writer.WriteVarInt(NbSlots);
         writer.WriteInt(EntityId);

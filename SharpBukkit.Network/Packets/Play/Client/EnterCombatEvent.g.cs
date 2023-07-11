@@ -15,7 +15,7 @@ public record PlayClientEnterCombatEvent : IPacket {
     
 
     public PlayClientEnterCombatEvent(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayClientEnterCombatEvent(
@@ -24,11 +24,11 @@ public record PlayClientEnterCombatEvent : IPacket {
 		
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		
 	}
 }

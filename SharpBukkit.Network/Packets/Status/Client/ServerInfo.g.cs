@@ -15,7 +15,7 @@ public record StatusClientServerInfo : IPacket {
     public string Response { get; private set; }
 
     public StatusClientServerInfo(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public StatusClientServerInfo(
@@ -24,11 +24,11 @@ public record StatusClientServerInfo : IPacket {
 		Response = response;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		Response = reader.ReadString();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteString(Response);
 	}
 }

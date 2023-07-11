@@ -15,7 +15,7 @@ public record PlayClientOpenBook : IPacket {
     public int Hand { get; private set; }
 
     public PlayClientOpenBook(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayClientOpenBook(
@@ -24,11 +24,11 @@ public record PlayClientOpenBook : IPacket {
 		Hand = hand;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		Hand = reader.ReadVarInt();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteVarInt(Hand);
 	}
 }

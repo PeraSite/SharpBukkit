@@ -17,7 +17,7 @@ public record LoginClientLoginPluginRequest : IPacket {
     public byte[] Data { get; private set; }
 
     public LoginClientLoginPluginRequest(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public LoginClientLoginPluginRequest(
@@ -30,13 +30,13 @@ public record LoginClientLoginPluginRequest : IPacket {
 		Data = data;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		MessageId = reader.ReadVarInt();
         Channel = reader.ReadString();
         Data = reader.ReadBuffer();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteVarInt(MessageId);
         writer.WriteString(Channel);
         writer.WriteBuffer(Data);

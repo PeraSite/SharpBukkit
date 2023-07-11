@@ -17,7 +17,7 @@ public record PlayServerLook : IPacket {
     public bool OnGround { get; private set; }
 
     public PlayServerLook(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayServerLook(
@@ -30,13 +30,13 @@ public record PlayServerLook : IPacket {
 		OnGround = onGround;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		Yaw = reader.ReadFloat();
         Pitch = reader.ReadFloat();
         OnGround = reader.ReadBool();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteFloat(Yaw);
         writer.WriteFloat(Pitch);
         writer.WriteBool(OnGround);

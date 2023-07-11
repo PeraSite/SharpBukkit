@@ -15,7 +15,7 @@ public record PlayServerAdvancementTab : IPacket {
     public int Action { get; private set; }
 
     public PlayServerAdvancementTab(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayServerAdvancementTab(
@@ -24,11 +24,11 @@ public record PlayServerAdvancementTab : IPacket {
 		Action = action;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		Action = reader.ReadVarInt();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteVarInt(Action);
 	}
 }

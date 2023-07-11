@@ -15,7 +15,7 @@ public record PlayServerNameItem : IPacket {
     public string Name { get; private set; }
 
     public PlayServerNameItem(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayServerNameItem(
@@ -24,11 +24,11 @@ public record PlayServerNameItem : IPacket {
 		Name = name;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		Name = reader.ReadString();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteString(Name);
 	}
 }

@@ -16,7 +16,7 @@ public record PlayClientTeams : IPacket {
     public sbyte Mode { get; private set; }
 
     public PlayClientTeams(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayClientTeams(
@@ -27,12 +27,12 @@ public record PlayClientTeams : IPacket {
 		Mode = mode;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		Team = reader.ReadString();
         Mode = reader.ReadSByte();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteString(Team);
         writer.WriteSByte(Mode);
 	}

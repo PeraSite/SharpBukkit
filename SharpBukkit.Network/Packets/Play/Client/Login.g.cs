@@ -29,7 +29,7 @@ public record PlayClientLogin : IPacket {
     public bool IsFlat { get; private set; }
 
     public PlayClientLogin(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayClientLogin(
@@ -66,7 +66,7 @@ public record PlayClientLogin : IPacket {
 		IsFlat = isFlat;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		EntityId = reader.ReadInt();
         IsHardcore = reader.ReadBool();
         GameMode = reader.ReadByte();
@@ -84,7 +84,7 @@ public record PlayClientLogin : IPacket {
         IsFlat = reader.ReadBool();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteInt(EntityId);
         writer.WriteBool(IsHardcore);
         writer.WriteByte(GameMode);

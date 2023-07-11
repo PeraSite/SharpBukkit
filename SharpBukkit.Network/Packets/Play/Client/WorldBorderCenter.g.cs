@@ -16,7 +16,7 @@ public record PlayClientWorldBorderCenter : IPacket {
     public double Z { get; private set; }
 
     public PlayClientWorldBorderCenter(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayClientWorldBorderCenter(
@@ -27,12 +27,12 @@ public record PlayClientWorldBorderCenter : IPacket {
 		Z = z;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		X = reader.ReadDouble();
         Z = reader.ReadDouble();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteDouble(X);
         writer.WriteDouble(Z);
 	}

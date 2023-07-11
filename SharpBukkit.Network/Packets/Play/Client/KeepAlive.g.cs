@@ -15,7 +15,7 @@ public record PlayClientKeepAlive : IPacket {
     public long KeepAliveId { get; private set; }
 
     public PlayClientKeepAlive(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayClientKeepAlive(
@@ -24,11 +24,11 @@ public record PlayClientKeepAlive : IPacket {
 		KeepAliveId = keepAliveId;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		KeepAliveId = reader.ReadLong();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteLong(KeepAliveId);
 	}
 }

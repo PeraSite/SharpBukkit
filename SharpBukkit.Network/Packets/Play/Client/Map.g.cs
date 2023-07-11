@@ -18,7 +18,7 @@ public record PlayClientMap : IPacket {
     public byte Columns { get; private set; }
 
     public PlayClientMap(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayClientMap(
@@ -33,14 +33,14 @@ public record PlayClientMap : IPacket {
 		Columns = columns;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		ItemDamage = reader.ReadVarInt();
         Scale = reader.ReadSByte();
         Locked = reader.ReadBool();
         Columns = reader.ReadByte();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteVarInt(ItemDamage);
         writer.WriteSByte(Scale);
         writer.WriteBool(Locked);

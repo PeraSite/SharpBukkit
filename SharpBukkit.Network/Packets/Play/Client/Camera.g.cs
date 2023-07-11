@@ -15,7 +15,7 @@ public record PlayClientCamera : IPacket {
     public int CameraId { get; private set; }
 
     public PlayClientCamera(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayClientCamera(
@@ -24,11 +24,11 @@ public record PlayClientCamera : IPacket {
 		CameraId = cameraId;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		CameraId = reader.ReadVarInt();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteVarInt(CameraId);
 	}
 }

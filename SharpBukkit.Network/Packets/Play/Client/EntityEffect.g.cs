@@ -19,7 +19,7 @@ public record PlayClientEntityEffect : IPacket {
     public sbyte HideParticles { get; private set; }
 
     public PlayClientEntityEffect(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayClientEntityEffect(
@@ -36,7 +36,7 @@ public record PlayClientEntityEffect : IPacket {
 		HideParticles = hideParticles;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		EntityId = reader.ReadVarInt();
         EffectId = reader.ReadVarInt();
         Amplifier = reader.ReadSByte();
@@ -44,7 +44,7 @@ public record PlayClientEntityEffect : IPacket {
         HideParticles = reader.ReadSByte();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteVarInt(EntityId);
         writer.WriteVarInt(EffectId);
         writer.WriteSByte(Amplifier);

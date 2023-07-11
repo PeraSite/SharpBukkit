@@ -15,7 +15,7 @@ public record LoginClientCompress : IPacket {
     public int Threshold { get; private set; }
 
     public LoginClientCompress(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public LoginClientCompress(
@@ -24,11 +24,11 @@ public record LoginClientCompress : IPacket {
 		Threshold = threshold;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		Threshold = reader.ReadVarInt();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteVarInt(Threshold);
 	}
 }

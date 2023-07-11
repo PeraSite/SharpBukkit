@@ -16,7 +16,7 @@ public record PlayServerSteerBoat : IPacket {
     public bool RightPaddle { get; private set; }
 
     public PlayServerSteerBoat(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayServerSteerBoat(
@@ -27,12 +27,12 @@ public record PlayServerSteerBoat : IPacket {
 		RightPaddle = rightPaddle;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		LeftPaddle = reader.ReadBool();
         RightPaddle = reader.ReadBool();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteBool(LeftPaddle);
         writer.WriteBool(RightPaddle);
 	}

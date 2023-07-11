@@ -22,7 +22,7 @@ public record PlayServerSettings : IPacket {
     public bool EnableServerListing { get; private set; }
 
     public PlayServerSettings(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayServerSettings(
@@ -45,7 +45,7 @@ public record PlayServerSettings : IPacket {
 		EnableServerListing = enableServerListing;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		Locale = reader.ReadString();
         ViewDistance = reader.ReadSByte();
         ChatFlags = reader.ReadVarInt();
@@ -56,7 +56,7 @@ public record PlayServerSettings : IPacket {
         EnableServerListing = reader.ReadBool();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteString(Locale);
         writer.WriteSByte(ViewDistance);
         writer.WriteVarInt(ChatFlags);

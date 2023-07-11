@@ -15,7 +15,7 @@ public record PlayClientCloseWindow : IPacket {
     public byte WindowId { get; private set; }
 
     public PlayClientCloseWindow(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayClientCloseWindow(
@@ -24,11 +24,11 @@ public record PlayClientCloseWindow : IPacket {
 		WindowId = windowId;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		WindowId = reader.ReadByte();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteByte(WindowId);
 	}
 }

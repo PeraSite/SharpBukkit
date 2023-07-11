@@ -16,7 +16,7 @@ public record PlayClientPlayerlistHeader : IPacket {
     public string Footer { get; private set; }
 
     public PlayClientPlayerlistHeader(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayClientPlayerlistHeader(
@@ -27,12 +27,12 @@ public record PlayClientPlayerlistHeader : IPacket {
 		Footer = footer;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		Header = reader.ReadString();
         Footer = reader.ReadString();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteString(Header);
         writer.WriteString(Footer);
 	}

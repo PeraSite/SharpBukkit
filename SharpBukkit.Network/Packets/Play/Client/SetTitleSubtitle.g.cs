@@ -15,7 +15,7 @@ public record PlayClientSetTitleSubtitle : IPacket {
     public string Text { get; private set; }
 
     public PlayClientSetTitleSubtitle(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayClientSetTitleSubtitle(
@@ -24,11 +24,11 @@ public record PlayClientSetTitleSubtitle : IPacket {
 		Text = text;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		Text = reader.ReadString();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteString(Text);
 	}
 }

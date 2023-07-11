@@ -15,7 +15,7 @@ public record PlayClientActionBar : IPacket {
     public string Text { get; private set; }
 
     public PlayClientActionBar(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayClientActionBar(
@@ -24,11 +24,11 @@ public record PlayClientActionBar : IPacket {
 		Text = text;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		Text = reader.ReadString();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteString(Text);
 	}
 }

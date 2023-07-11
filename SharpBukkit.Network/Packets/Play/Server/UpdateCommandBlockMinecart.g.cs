@@ -17,7 +17,7 @@ public record PlayServerUpdateCommandBlockMinecart : IPacket {
     public bool TrackOutput { get; private set; }
 
     public PlayServerUpdateCommandBlockMinecart(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayServerUpdateCommandBlockMinecart(
@@ -30,13 +30,13 @@ public record PlayServerUpdateCommandBlockMinecart : IPacket {
 		TrackOutput = trackOutput;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		EntityId = reader.ReadVarInt();
         Command = reader.ReadString();
         TrackOutput = reader.ReadBool();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteVarInt(EntityId);
         writer.WriteString(Command);
         writer.WriteBool(TrackOutput);

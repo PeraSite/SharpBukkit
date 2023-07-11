@@ -18,7 +18,7 @@ public record PlayClientBlockAction : IPacket {
     public int BlockId { get; private set; }
 
     public PlayClientBlockAction(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayClientBlockAction(
@@ -33,14 +33,14 @@ public record PlayClientBlockAction : IPacket {
 		BlockId = blockId;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		Location = reader.ReadPosition();
         Byte1 = reader.ReadByte();
         Byte2 = reader.ReadByte();
         BlockId = reader.ReadVarInt();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WritePosition(Location);
         writer.WriteByte(Byte1);
         writer.WriteByte(Byte2);

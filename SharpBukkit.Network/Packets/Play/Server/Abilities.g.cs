@@ -15,7 +15,7 @@ public record PlayServerAbilities : IPacket {
     public sbyte Flags { get; private set; }
 
     public PlayServerAbilities(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayServerAbilities(
@@ -24,11 +24,11 @@ public record PlayServerAbilities : IPacket {
 		Flags = flags;
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		Flags = reader.ReadSByte();
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteSByte(Flags);
 	}
 }

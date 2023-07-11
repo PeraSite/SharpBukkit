@@ -15,7 +15,7 @@ public record PlayClientSelectAdvancementTab : IPacket {
     
 
     public PlayClientSelectAdvancementTab(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public PlayClientSelectAdvancementTab(
@@ -24,11 +24,11 @@ public record PlayClientSelectAdvancementTab : IPacket {
 		
 	}
 
-	public void Serialize(IMinecraftReader reader) {
+	public void Deserialize(IMinecraftReader reader) {
 		
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
+	public void Serialize(IMinecraftWriter writer) {
 		
 	}
 }
