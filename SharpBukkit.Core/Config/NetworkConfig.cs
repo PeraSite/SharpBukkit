@@ -5,7 +5,7 @@ public enum ProtocolType {
 }
 
 public record NetworkConfig {
-	public ProtocolType Protocol { get; init; }
-	public string Host { get; init; }
-	public int Port { get; init; }
+	public ProtocolType Protocol { get; private set; }
+	public string Host { get; private set; }
+	public int Port { get; private set; }
 }
