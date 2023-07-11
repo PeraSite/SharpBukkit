@@ -1,4 +1,5 @@
 using System;
+using Serilog;
 using SharpBukkit.API;
 using SharpBukkit.API.Config;
 using SharpBukkit.Network.API;
@@ -9,19 +10,21 @@ namespace SharpBukkit.Core;
 public class MinecraftServer : IServer {
 	private readonly ServerConfig _config;
 	private readonly INetServer _netServer;
+	private readonly ILogger _logger;
 
-	public MinecraftServer(ServerConfig config, INetServer netServer) {
+	public MinecraftServer(ServerConfig config, INetServer netServer, ILogger logger) {
 		_config = config;
 		_netServer = netServer;
+		_logger = logger;
 	}
 
 	public void Start() {
-		Console.WriteLine($"Config: {_config}");
+		_logger.Information($"{_config}");
 
-		Console.WriteLine("Loading packets...");
+		_logger.Information("Loading packets...");
 		PacketFactory.Load();
 
-		Console.WriteLine("Starting server...");
+		_logger.Information("Starting server...");
 		_netServer.Start();
 	}
 

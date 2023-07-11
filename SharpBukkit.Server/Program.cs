@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using Autofac;
+using Serilog;
 using SharpBukkit.API;
 using SharpBukkit.API.Config;
 using SharpBukkit.Core;
@@ -30,6 +31,14 @@ public static class Program {
 
 		builder.RegisterType<NetServer>()
 			.As<INetServer>()
+			.SingleInstance();
+
+		using var logger = new LoggerConfiguration()
+			.WriteTo.Console()
+			.CreateLogger();
+
+		builder.RegisterInstance(logger)
+			.As<ILogger>()
 			.SingleInstance();
 
 		return builder.Build();
