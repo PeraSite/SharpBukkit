@@ -1,6 +1,6 @@
 [game]
-motd = "A Minecraft Server"
-max_player = 20
+motd = "SharpBukkit - C# Minecraft server from scratch"
+max_player = 1337
 online_mode = true
 favicon = "favicon.png"
 

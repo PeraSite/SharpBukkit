@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using Newtonsoft.Json;
 using Serilog;
 using SharpBukkit.API;
@@ -46,7 +47,7 @@ public class MinecraftServer : IServer {
 					running = false;
 					break;
 				case "list":
-					_logger.Information($"Clients: {_netServer.Connections.Count}");
+					_logger.Information("Clients: {Count}", _netServer.Connections.Count);
 					break;
 			}
 		}
@@ -77,12 +78,13 @@ public class MinecraftServer : IServer {
 				Text = _config.Game.Motd
 			}
 		};
-		// if (_.FavIcon is { } favIcon) {
-		// 	var path = Path.Combine(_env.ContentRoot, favIcon);
-		// 	var favBytes = File.ReadAllBytes(path);
-		// 	message.Favicon = $"data:image/png;base64,{Convert.ToBase64String(favBytes)}";
-		// }
-		//TODO: Load favicon
+
+		if (_config.Game.Favicon is { } faviconPath) {
+			var path = Path.Combine(AppContext.BaseDirectory, faviconPath);
+			var favBytes = File.ReadAllBytes(path);
+			serverInfo.Favicon = $"data:image/png;base64,{Convert.ToBase64String(favBytes)}";
+		}
+
 		return JsonConvert.SerializeObject(serverInfo, JsonHelper.Config);
 	}
 }

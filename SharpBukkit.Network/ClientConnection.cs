@@ -111,12 +111,11 @@ public class ClientConnection : IClientConnection {
 			}
 		}
 		catch (Exception ex) {
-			if (ex is OperationCanceledException or EndOfStreamException or IOException) {
-				_logger.Debug(ex, "Client disconnected: {@Endpoint}", _client.Client.RemoteEndPoint);
+			if (ex is OperationCanceledException or EndOfStreamException) {
 				return;
 			}
 
-			_logger.Error(ex, "An unhandled exception occurred in receive task: {@EndPoint}", _client.Client.RemoteEndPoint);
+			_logger.Error(ex, "An unhandled exception occurred in receive task from client: {EndPoint}", _client.Client.RemoteEndPoint!.ToString());
 		}
 		finally {
 			Disconnect();
