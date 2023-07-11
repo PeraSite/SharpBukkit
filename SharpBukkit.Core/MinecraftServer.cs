@@ -26,7 +26,20 @@ public class MinecraftServer : IServer {
 
 		_logger.Information("Starting server...");
 		_netServer.Start();
+
+		while (true) {
+			var command = Console.ReadLine();
+
+			// TODO: Command handling system
+			if (command == "stop") {
+				Stop();
+				break;
+			}
+		}
 	}
 
-	public void Stop() { }
+	public void Stop() {
+		_logger.Information("Stopping server...");
+		_netServer.Stop();
+	}
 }
