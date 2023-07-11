@@ -26,8 +26,8 @@ public class ClientConnection : IClientConnection {
 	}
 
 	public void Init() {
-		Task.Run(SendTask, _cancellationTokenSource.Token);
-		Task.Run(ReceiveTask, _cancellationTokenSource.Token);
+		Task.Run(SendTask, _cancellationTokenSource.Token).ConfigureAwait(false);
+		Task.Run(ReceiveTask, _cancellationTokenSource.Token).ConfigureAwait(false);
 	}
 
 	public void Disconnect() {
@@ -46,16 +46,16 @@ public class ClientConnection : IClientConnection {
 				var msg = $"Hello, {nickname}!";
 				writer.Write(msg);
 
-				_logger.Information($"Received: {nickname} => {msg}");
+				_logger.Information("Received: {Nickname} => {Msg}", nickname, msg);
 			}
 		}
 		catch (Exception ex) {
 			if (ex is OperationCanceledException or EndOfStreamException or IOException) {
-				_logger.Debug(ex, $"Client disconnected: {_client.Client.RemoteEndPoint}");
+				_logger.Debug(ex, "Client disconnected: {@Endpoint}", _client.Client.RemoteEndPoint);
 				return;
 			}
 
-			_logger.Error(ex, $"An unhandled exception occurred in receive task: {_client.Client.RemoteEndPoint}");
+			_logger.Error(ex, "An unhandled exception occurred in receive task: {@EndPoint}", _client.Client.RemoteEndPoint);
 		}
 		finally {
 			Disconnect();

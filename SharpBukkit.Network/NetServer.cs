@@ -30,7 +30,7 @@ public class NetServer : INetServer {
 	}
 
 	public void Start() {
-		_logger.Information($"Listening on {_config.Network.Host}:{_config.Network.Port}");
+		_logger.Information("Listening on {Host}:{Port}", _config.Network.Host, _config.Network.Port);
 		_tcpListener.Start(_config.Network.Backlog);
 
 		Task.Run(() => {
@@ -53,12 +53,12 @@ public class NetServer : INetServer {
 	}
 
 	public void OnClientConnected(IClientConnection connection) {
-		_logger.Information($"Client connected: {connection.Endpoint}");
+		_logger.Information("Client connected: {@Endpoint}", connection.Endpoint);
 		Connections[connection.Endpoint] = connection;
 	}
 
 	public void OnClientDisconnected(IClientConnection connection) {
-		_logger.Information($"Client disconnected: {connection.Endpoint}");
+		_logger.Information("Client disconnected: {@Endpoint}", connection.Endpoint);
 		Connections.Remove(connection.Endpoint);
 	}
 }
