@@ -36,9 +36,11 @@ public class NetServer : INetServer {
 			while (!_cancellationTokenSource.IsCancellationRequested) {
 				var client = _tcpListener.AcceptTcpClient();
 
-				var connection = new ClientConnection(client);
+				var connection = new ClientConnection(client, _logger);
 				connection.OnDisconnect += () => OnClientDisconnected(connection);
 				OnClientConnected(connection);
+
+				connection.Init();
 			}
 		}, _cancellationTokenSource.Token);
 	}
