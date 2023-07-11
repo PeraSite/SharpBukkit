@@ -9,9 +9,11 @@
     <ItemGroup>
         <PackageReference Include="Serilog" Version="3.0.1" />
         <PackageReference Include="Serilog.Sinks.Console" Version="4.1.0" />
+        <PackageReference Include="BouncyCastle.Cryptography" Version="2.2.1" />
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\SharpBukkit.API\SharpBukkit.API.csproj" />
       <ProjectReference Include="..\SharpBukkit.Network.API\SharpBukkit.Network.API.csproj" />
     </ItemGroup>
 
