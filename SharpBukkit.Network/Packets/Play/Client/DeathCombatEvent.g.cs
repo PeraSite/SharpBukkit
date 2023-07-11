@@ -3,7 +3,7 @@ using System.Numerics;
 using SharpBukkit.Network.API;
 using SharpBukkit.Network.API.Stream;
 using SharpBukkit.Network.API.Models;
-using SharpBukkit.Network.Models;
+using SharpBukkit.Network.Models.Nbt;
 using SharpNBT;
 
 namespace SharpBukkit.Packet.Play;
@@ -15,6 +15,10 @@ public record PlayClientDeathCombatEvent : IPacket {
     public int PlayerId { get; private set; }
     public int EntityId { get; private set; }
     public string Message { get; private set; }
+
+    public PlayClientDeathCombatEvent(IMinecraftReader reader) {
+	    Serialize(reader);
+    }
 
 	public PlayClientDeathCombatEvent(
 		int playerId,

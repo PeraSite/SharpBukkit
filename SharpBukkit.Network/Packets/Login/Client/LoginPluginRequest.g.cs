@@ -3,7 +3,7 @@ using System.Numerics;
 using SharpBukkit.Network.API;
 using SharpBukkit.Network.API.Stream;
 using SharpBukkit.Network.API.Models;
-using SharpBukkit.Network.Models;
+using SharpBukkit.Network.Models.Nbt;
 using SharpNBT;
 
 namespace SharpBukkit.Packet.Login;
@@ -15,6 +15,10 @@ public record LoginClientLoginPluginRequest : IPacket {
     public int MessageId { get; private set; }
     public string Channel { get; private set; }
     public byte[] Data { get; private set; }
+
+    public LoginClientLoginPluginRequest(IMinecraftReader reader) {
+	    Serialize(reader);
+    }
 
 	public LoginClientLoginPluginRequest(
 		int messageId,

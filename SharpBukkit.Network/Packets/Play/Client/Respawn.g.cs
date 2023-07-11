@@ -3,7 +3,7 @@ using System.Numerics;
 using SharpBukkit.Network.API;
 using SharpBukkit.Network.API.Stream;
 using SharpBukkit.Network.API.Models;
-using SharpBukkit.Network.Models;
+using SharpBukkit.Network.Models.Nbt;
 using SharpNBT;
 
 namespace SharpBukkit.Packet.Play;
@@ -20,6 +20,10 @@ public record PlayClientRespawn : IPacket {
     public bool IsDebug { get; private set; }
     public bool IsFlat { get; private set; }
     public bool CopyMetadata { get; private set; }
+
+    public PlayClientRespawn(IMinecraftReader reader) {
+	    Serialize(reader);
+    }
 
 	public PlayClientRespawn(
 		Dimension dimension,

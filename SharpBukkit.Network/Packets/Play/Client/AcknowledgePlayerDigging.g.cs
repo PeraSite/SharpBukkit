@@ -3,7 +3,7 @@ using System.Numerics;
 using SharpBukkit.Network.API;
 using SharpBukkit.Network.API.Stream;
 using SharpBukkit.Network.API.Models;
-using SharpBukkit.Network.Models;
+using SharpBukkit.Network.Models.Nbt;
 using SharpNBT;
 
 namespace SharpBukkit.Packet.Play;
@@ -16,6 +16,10 @@ public record PlayClientAcknowledgePlayerDigging : IPacket {
     public int Block { get; private set; }
     public int Status { get; private set; }
     public bool Successful { get; private set; }
+
+    public PlayClientAcknowledgePlayerDigging(IMinecraftReader reader) {
+	    Serialize(reader);
+    }
 
 	public PlayClientAcknowledgePlayerDigging(
 		Vector3 location,

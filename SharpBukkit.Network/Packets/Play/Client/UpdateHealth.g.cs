@@ -3,7 +3,7 @@ using System.Numerics;
 using SharpBukkit.Network.API;
 using SharpBukkit.Network.API.Stream;
 using SharpBukkit.Network.API.Models;
-using SharpBukkit.Network.Models;
+using SharpBukkit.Network.Models.Nbt;
 using SharpNBT;
 
 namespace SharpBukkit.Packet.Play;
@@ -15,6 +15,10 @@ public record PlayClientUpdateHealth : IPacket {
     public float Health { get; private set; }
     public int Food { get; private set; }
     public float FoodSaturation { get; private set; }
+
+    public PlayClientUpdateHealth(IMinecraftReader reader) {
+	    Serialize(reader);
+    }
 
 	public PlayClientUpdateHealth(
 		float health,

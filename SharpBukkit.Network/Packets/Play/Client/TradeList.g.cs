@@ -3,7 +3,7 @@ using System.Numerics;
 using SharpBukkit.Network.API;
 using SharpBukkit.Network.API.Stream;
 using SharpBukkit.Network.API.Models;
-using SharpBukkit.Network.Models;
+using SharpBukkit.Network.Models.Nbt;
 using SharpNBT;
 
 namespace SharpBukkit.Packet.Play;
@@ -17,6 +17,10 @@ public record PlayClientTradeList : IPacket {
     public int Experience { get; private set; }
     public bool IsRegularVillager { get; private set; }
     public bool CanRestock { get; private set; }
+
+    public PlayClientTradeList(IMinecraftReader reader) {
+	    Serialize(reader);
+    }
 
 	public PlayClientTradeList(
 		int windowId,

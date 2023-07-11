@@ -3,7 +3,7 @@ using System.Numerics;
 using SharpBukkit.Network.API;
 using SharpBukkit.Network.API.Stream;
 using SharpBukkit.Network.API.Models;
-using SharpBukkit.Network.Models;
+using SharpBukkit.Network.Models.Nbt;
 using SharpNBT;
 
 namespace SharpBukkit.Packet.Play;
@@ -15,6 +15,10 @@ public record PlayClientSculkVibrationSignal : IPacket {
     public Vector3 SourcePosition { get; private set; }
     public string DestinationIdentifier { get; private set; }
     public int ArrivalTicks { get; private set; }
+
+    public PlayClientSculkVibrationSignal(IMinecraftReader reader) {
+	    Serialize(reader);
+    }
 
 	public PlayClientSculkVibrationSignal(
 		Vector3 sourcePosition,

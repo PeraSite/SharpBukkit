@@ -1,7 +1,7 @@
 ﻿using SharpBukkit.Network.API.Serialization;
 using SharpNBT;
 
-namespace SharpBukkit.Network.Models;
+namespace SharpBukkit.Network.Models.Nbt;
 
 public record Heightmaps : INbtSerializable {
 	public long[]? MotionBlocking { get; set; }

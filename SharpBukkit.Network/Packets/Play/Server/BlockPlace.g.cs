@@ -3,7 +3,7 @@ using System.Numerics;
 using SharpBukkit.Network.API;
 using SharpBukkit.Network.API.Stream;
 using SharpBukkit.Network.API.Models;
-using SharpBukkit.Network.Models;
+using SharpBukkit.Network.Models.Nbt;
 using SharpNBT;
 
 namespace SharpBukkit.Packet.Play;
@@ -19,6 +19,10 @@ public record PlayServerBlockPlace : IPacket {
     public float CursorY { get; private set; }
     public float CursorZ { get; private set; }
     public bool InsideBlock { get; private set; }
+
+    public PlayServerBlockPlace(IMinecraftReader reader) {
+	    Serialize(reader);
+    }
 
 	public PlayServerBlockPlace(
 		int hand,

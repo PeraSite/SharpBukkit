@@ -3,7 +3,7 @@ using System.Numerics;
 using SharpBukkit.Network.API;
 using SharpBukkit.Network.API.Stream;
 using SharpBukkit.Network.API.Models;
-using SharpBukkit.Network.Models;
+using SharpBukkit.Network.Models.Nbt;
 using SharpNBT;
 
 namespace SharpBukkit.Packet.Play;
@@ -15,6 +15,10 @@ public record PlayClientAbilities : IPacket {
     public sbyte Flags { get; private set; }
     public float FlyingSpeed { get; private set; }
     public float WalkingSpeed { get; private set; }
+
+    public PlayClientAbilities(IMinecraftReader reader) {
+	    Serialize(reader);
+    }
 
 	public PlayClientAbilities(
 		sbyte flags,

@@ -3,7 +3,7 @@ using System.Numerics;
 using SharpBukkit.Network.API;
 using SharpBukkit.Network.API.Stream;
 using SharpBukkit.Network.API.Models;
-using SharpBukkit.Network.Models;
+using SharpBukkit.Network.Models.Nbt;
 using SharpNBT;
 
 namespace SharpBukkit.Packet.Play;
@@ -16,6 +16,10 @@ public record PlayClientWorldEvent : IPacket {
     public Vector3 Location { get; private set; }
     public int Data { get; private set; }
     public bool Global { get; private set; }
+
+    public PlayClientWorldEvent(IMinecraftReader reader) {
+	    Serialize(reader);
+    }
 
 	public PlayClientWorldEvent(
 		int effectId,

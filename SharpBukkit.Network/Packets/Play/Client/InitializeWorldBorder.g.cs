@@ -3,7 +3,7 @@ using System.Numerics;
 using SharpBukkit.Network.API;
 using SharpBukkit.Network.API.Stream;
 using SharpBukkit.Network.API.Models;
-using SharpBukkit.Network.Models;
+using SharpBukkit.Network.Models.Nbt;
 using SharpNBT;
 
 namespace SharpBukkit.Packet.Play;
@@ -20,6 +20,10 @@ public record PlayClientInitializeWorldBorder : IPacket {
     public int PortalTeleportBoundary { get; private set; }
     public int WarningBlocks { get; private set; }
     public int WarningTime { get; private set; }
+
+    public PlayClientInitializeWorldBorder(IMinecraftReader reader) {
+	    Serialize(reader);
+    }
 
 	public PlayClientInitializeWorldBorder(
 		double x,

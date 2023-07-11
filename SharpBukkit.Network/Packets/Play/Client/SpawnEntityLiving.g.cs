@@ -3,7 +3,7 @@ using System.Numerics;
 using SharpBukkit.Network.API;
 using SharpBukkit.Network.API.Stream;
 using SharpBukkit.Network.API.Models;
-using SharpBukkit.Network.Models;
+using SharpBukkit.Network.Models.Nbt;
 using SharpNBT;
 
 namespace SharpBukkit.Packet.Play;
@@ -24,6 +24,10 @@ public record PlayClientSpawnEntityLiving : IPacket {
     public short VelocityX { get; private set; }
     public short VelocityY { get; private set; }
     public short VelocityZ { get; private set; }
+
+    public PlayClientSpawnEntityLiving(IMinecraftReader reader) {
+	    Serialize(reader);
+    }
 
 	public PlayClientSpawnEntityLiving(
 		int entityId,

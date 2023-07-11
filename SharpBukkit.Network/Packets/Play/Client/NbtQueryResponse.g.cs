@@ -3,7 +3,7 @@ using System.Numerics;
 using SharpBukkit.Network.API;
 using SharpBukkit.Network.API.Stream;
 using SharpBukkit.Network.API.Models;
-using SharpBukkit.Network.Models;
+using SharpBukkit.Network.Models.Nbt;
 using SharpNBT;
 
 namespace SharpBukkit.Packet.Play;
@@ -14,6 +14,10 @@ public record PlayClientNbtQueryResponse : IPacket {
 
     public int TransactionId { get; private set; }
     public CompoundTag? Nbt { get; private set; }
+
+    public PlayClientNbtQueryResponse(IMinecraftReader reader) {
+	    Serialize(reader);
+    }
 
 	public PlayClientNbtQueryResponse(
 		int transactionId,

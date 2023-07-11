@@ -3,7 +3,7 @@ using System.Numerics;
 using SharpBukkit.Network.API;
 using SharpBukkit.Network.API.Stream;
 using SharpBukkit.Network.API.Models;
-using SharpBukkit.Network.Models;
+using SharpBukkit.Network.Models.Nbt;
 using SharpNBT;
 
 namespace SharpBukkit.Packet.Play;
@@ -15,6 +15,10 @@ public record PlayServerRecipeBook : IPacket {
     public int BookId { get; private set; }
     public bool BookOpen { get; private set; }
     public bool FilterActive { get; private set; }
+
+    public PlayServerRecipeBook(IMinecraftReader reader) {
+	    Serialize(reader);
+    }
 
 	public PlayServerRecipeBook(
 		int bookId,

@@ -3,7 +3,7 @@ using System.Numerics;
 using SharpBukkit.Network.API;
 using SharpBukkit.Network.API.Stream;
 using SharpBukkit.Network.API.Models;
-using SharpBukkit.Network.Models;
+using SharpBukkit.Network.Models.Nbt;
 using SharpNBT;
 
 namespace SharpBukkit.Packet.Play;
@@ -18,6 +18,10 @@ public record PlayServerUpdateJigsawBlock : IPacket {
     public string Pool { get; private set; }
     public string FinalState { get; private set; }
     public string JointType { get; private set; }
+
+    public PlayServerUpdateJigsawBlock(IMinecraftReader reader) {
+	    Serialize(reader);
+    }
 
 	public PlayServerUpdateJigsawBlock(
 		Vector3 location,

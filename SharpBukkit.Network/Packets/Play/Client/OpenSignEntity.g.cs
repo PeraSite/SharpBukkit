@@ -3,7 +3,7 @@ using System.Numerics;
 using SharpBukkit.Network.API;
 using SharpBukkit.Network.API.Stream;
 using SharpBukkit.Network.API.Models;
-using SharpBukkit.Network.Models;
+using SharpBukkit.Network.Models.Nbt;
 using SharpNBT;
 
 namespace SharpBukkit.Packet.Play;
@@ -13,6 +13,10 @@ public record PlayClientOpenSignEntity : IPacket {
     public byte PacketId => 0x2f;
 
     public Vector3 Location { get; private set; }
+
+    public PlayClientOpenSignEntity(IMinecraftReader reader) {
+	    Serialize(reader);
+    }
 
 	public PlayClientOpenSignEntity(
 		Vector3 location

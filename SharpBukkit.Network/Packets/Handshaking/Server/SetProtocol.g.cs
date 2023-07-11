@@ -3,7 +3,7 @@ using System.Numerics;
 using SharpBukkit.Network.API;
 using SharpBukkit.Network.API.Stream;
 using SharpBukkit.Network.API.Models;
-using SharpBukkit.Network.Models;
+using SharpBukkit.Network.Models.Nbt;
 using SharpNBT;
 
 namespace SharpBukkit.Packet.Handshaking;
@@ -16,6 +16,10 @@ public record HandshakingServerSetProtocol : IPacket {
     public string ServerHost { get; private set; }
     public ushort ServerPort { get; private set; }
     public int NextState { get; private set; }
+
+    public HandshakingServerSetProtocol(IMinecraftReader reader) {
+	    Serialize(reader);
+    }
 
 	public HandshakingServerSetProtocol(
 		int protocolVersion,

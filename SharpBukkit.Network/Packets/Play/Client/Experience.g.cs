@@ -3,7 +3,7 @@ using System.Numerics;
 using SharpBukkit.Network.API;
 using SharpBukkit.Network.API.Stream;
 using SharpBukkit.Network.API.Models;
-using SharpBukkit.Network.Models;
+using SharpBukkit.Network.Models.Nbt;
 using SharpNBT;
 
 namespace SharpBukkit.Packet.Play;
@@ -15,6 +15,10 @@ public record PlayClientExperience : IPacket {
     public float ExperienceBar { get; private set; }
     public int Level { get; private set; }
     public int TotalExperience { get; private set; }
+
+    public PlayClientExperience(IMinecraftReader reader) {
+	    Serialize(reader);
+    }
 
 	public PlayClientExperience(
 		float experienceBar,

@@ -3,7 +3,7 @@ using System.Numerics;
 using SharpBukkit.Network.API;
 using SharpBukkit.Network.API.Stream;
 using SharpBukkit.Network.API.Models;
-using SharpBukkit.Network.Models;
+using SharpBukkit.Network.Models.Nbt;
 using SharpNBT;
 
 namespace SharpBukkit.Packet.Play;
@@ -15,6 +15,10 @@ public record PlayServerEntityAction : IPacket {
     public int EntityId { get; private set; }
     public int ActionId { get; private set; }
     public int JumpBoost { get; private set; }
+
+    public PlayServerEntityAction(IMinecraftReader reader) {
+	    Serialize(reader);
+    }
 
 	public PlayServerEntityAction(
 		int entityId,

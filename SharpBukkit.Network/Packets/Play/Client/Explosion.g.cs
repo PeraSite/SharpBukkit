@@ -3,7 +3,7 @@ using System.Numerics;
 using SharpBukkit.Network.API;
 using SharpBukkit.Network.API.Stream;
 using SharpBukkit.Network.API.Models;
-using SharpBukkit.Network.Models;
+using SharpBukkit.Network.Models.Nbt;
 using SharpNBT;
 
 namespace SharpBukkit.Packet.Play;
@@ -19,6 +19,10 @@ public record PlayClientExplosion : IPacket {
     public float PlayerMotionX { get; private set; }
     public float PlayerMotionY { get; private set; }
     public float PlayerMotionZ { get; private set; }
+
+    public PlayClientExplosion(IMinecraftReader reader) {
+	    Serialize(reader);
+    }
 
 	public PlayClientExplosion(
 		float x,

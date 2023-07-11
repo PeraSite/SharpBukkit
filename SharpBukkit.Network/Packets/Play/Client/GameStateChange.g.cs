@@ -3,7 +3,7 @@ using System.Numerics;
 using SharpBukkit.Network.API;
 using SharpBukkit.Network.API.Stream;
 using SharpBukkit.Network.API.Models;
-using SharpBukkit.Network.Models;
+using SharpBukkit.Network.Models.Nbt;
 using SharpNBT;
 
 namespace SharpBukkit.Packet.Play;
@@ -14,6 +14,10 @@ public record PlayClientGameStateChange : IPacket {
 
     public byte Reason { get; private set; }
     public float GameMode { get; private set; }
+
+    public PlayClientGameStateChange(IMinecraftReader reader) {
+	    Serialize(reader);
+    }
 
 	public PlayClientGameStateChange(
 		byte reason,

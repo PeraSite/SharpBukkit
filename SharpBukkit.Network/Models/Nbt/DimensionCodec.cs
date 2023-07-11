@@ -1,7 +1,7 @@
 ﻿using SharpBukkit.Network.API.Serialization;
 using SharpNBT;
 
-namespace SharpBukkit.Network.Models;
+namespace SharpBukkit.Network.Models.Nbt;
 
 public class DimensionCodec : INbtSerializable {
 	public WorldCodec[] Realms { get; set; }

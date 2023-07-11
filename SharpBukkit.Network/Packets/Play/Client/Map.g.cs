@@ -3,7 +3,7 @@ using System.Numerics;
 using SharpBukkit.Network.API;
 using SharpBukkit.Network.API.Stream;
 using SharpBukkit.Network.API.Models;
-using SharpBukkit.Network.Models;
+using SharpBukkit.Network.Models.Nbt;
 using SharpNBT;
 
 namespace SharpBukkit.Packet.Play;
@@ -16,6 +16,10 @@ public record PlayClientMap : IPacket {
     public sbyte Scale { get; private set; }
     public bool Locked { get; private set; }
     public byte Columns { get; private set; }
+
+    public PlayClientMap(IMinecraftReader reader) {
+	    Serialize(reader);
+    }
 
 	public PlayClientMap(
 		int itemDamage,

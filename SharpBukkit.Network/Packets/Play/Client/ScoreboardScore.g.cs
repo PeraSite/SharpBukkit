@@ -3,7 +3,7 @@ using System.Numerics;
 using SharpBukkit.Network.API;
 using SharpBukkit.Network.API.Stream;
 using SharpBukkit.Network.API.Models;
-using SharpBukkit.Network.Models;
+using SharpBukkit.Network.Models.Nbt;
 using SharpNBT;
 
 namespace SharpBukkit.Packet.Play;
@@ -15,6 +15,10 @@ public record PlayClientScoreboardScore : IPacket {
     public string ItemName { get; private set; }
     public int Action { get; private set; }
     public string ScoreName { get; private set; }
+
+    public PlayClientScoreboardScore(IMinecraftReader reader) {
+	    Serialize(reader);
+    }
 
 	public PlayClientScoreboardScore(
 		string itemName,

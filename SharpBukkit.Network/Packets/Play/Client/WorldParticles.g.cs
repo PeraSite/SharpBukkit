@@ -3,7 +3,7 @@ using System.Numerics;
 using SharpBukkit.Network.API;
 using SharpBukkit.Network.API.Stream;
 using SharpBukkit.Network.API.Models;
-using SharpBukkit.Network.Models;
+using SharpBukkit.Network.Models.Nbt;
 using SharpNBT;
 
 namespace SharpBukkit.Packet.Play;
@@ -22,6 +22,10 @@ public record PlayClientWorldParticles : IPacket {
     public float OffsetZ { get; private set; }
     public float ParticleData { get; private set; }
     public int Particles { get; private set; }
+
+    public PlayClientWorldParticles(IMinecraftReader reader) {
+	    Serialize(reader);
+    }
 
 	public PlayClientWorldParticles(
 		int particleId,

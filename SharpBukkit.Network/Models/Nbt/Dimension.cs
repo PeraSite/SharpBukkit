@@ -2,7 +2,7 @@
 using SharpBukkit.Network.Extensions;
 using SharpNBT;
 
-namespace SharpBukkit.Network.Models;
+namespace SharpBukkit.Network.Models.Nbt;
 
 public record Dimension : INbtSerializable {
 	public byte PiglinSafe { get; set; }

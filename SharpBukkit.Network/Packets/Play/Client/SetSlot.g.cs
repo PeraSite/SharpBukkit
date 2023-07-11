@@ -3,7 +3,7 @@ using System.Numerics;
 using SharpBukkit.Network.API;
 using SharpBukkit.Network.API.Stream;
 using SharpBukkit.Network.API.Models;
-using SharpBukkit.Network.Models;
+using SharpBukkit.Network.Models.Nbt;
 using SharpNBT;
 
 namespace SharpBukkit.Packet.Play;
@@ -16,6 +16,10 @@ public record PlayClientSetSlot : IPacket {
     public int StateId { get; private set; }
     public short Slot { get; private set; }
     public ISlotData Item { get; private set; }
+
+    public PlayClientSetSlot(IMinecraftReader reader) {
+	    Serialize(reader);
+    }
 
 	public PlayClientSetSlot(
 		sbyte windowId,

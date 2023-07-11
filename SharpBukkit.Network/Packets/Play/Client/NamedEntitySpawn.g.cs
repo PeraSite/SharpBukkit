@@ -3,7 +3,7 @@ using System.Numerics;
 using SharpBukkit.Network.API;
 using SharpBukkit.Network.API.Stream;
 using SharpBukkit.Network.API.Models;
-using SharpBukkit.Network.Models;
+using SharpBukkit.Network.Models.Nbt;
 using SharpNBT;
 
 namespace SharpBukkit.Packet.Play;
@@ -19,6 +19,10 @@ public record PlayClientNamedEntitySpawn : IPacket {
     public double Z { get; private set; }
     public sbyte Yaw { get; private set; }
     public sbyte Pitch { get; private set; }
+
+    public PlayClientNamedEntitySpawn(IMinecraftReader reader) {
+	    Serialize(reader);
+    }
 
 	public PlayClientNamedEntitySpawn(
 		int entityId,

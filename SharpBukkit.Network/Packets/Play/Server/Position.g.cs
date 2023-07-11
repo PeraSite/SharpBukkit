@@ -3,7 +3,7 @@ using System.Numerics;
 using SharpBukkit.Network.API;
 using SharpBukkit.Network.API.Stream;
 using SharpBukkit.Network.API.Models;
-using SharpBukkit.Network.Models;
+using SharpBukkit.Network.Models.Nbt;
 using SharpNBT;
 
 namespace SharpBukkit.Packet.Play;
@@ -16,6 +16,10 @@ public record PlayServerPosition : IPacket {
     public double Y { get; private set; }
     public double Z { get; private set; }
     public bool OnGround { get; private set; }
+
+    public PlayServerPosition(IMinecraftReader reader) {
+	    Serialize(reader);
+    }
 
 	public PlayServerPosition(
 		double x,

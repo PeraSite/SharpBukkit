@@ -3,7 +3,7 @@ using System.Numerics;
 using SharpBukkit.Network.API;
 using SharpBukkit.Network.API.Stream;
 using SharpBukkit.Network.API.Models;
-using SharpBukkit.Network.Models;
+using SharpBukkit.Network.Models.Nbt;
 using SharpNBT;
 
 namespace SharpBukkit.Packet.Play;
@@ -28,6 +28,10 @@ public record PlayServerUpdateStructureBlock : IPacket {
     public float Integrity { get; private set; }
     public long Seed { get; private set; }
     public byte Flags { get; private set; }
+
+    public PlayServerUpdateStructureBlock(IMinecraftReader reader) {
+	    Serialize(reader);
+    }
 
 	public PlayServerUpdateStructureBlock(
 		Vector3 location,

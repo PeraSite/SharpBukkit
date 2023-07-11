@@ -1,7 +1,7 @@
 using SharpBukkit.Network.API.Serialization;
 using SharpNBT;
 
-namespace SharpBukkit.Network.Models;
+namespace SharpBukkit.Network.Models.Nbt;
 
 public class WorldBiome : INbtSerializable {
 	public string Name { get; set; }

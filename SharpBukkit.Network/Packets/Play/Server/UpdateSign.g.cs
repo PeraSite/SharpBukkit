@@ -3,7 +3,7 @@ using System.Numerics;
 using SharpBukkit.Network.API;
 using SharpBukkit.Network.API.Stream;
 using SharpBukkit.Network.API.Models;
-using SharpBukkit.Network.Models;
+using SharpBukkit.Network.Models.Nbt;
 using SharpNBT;
 
 namespace SharpBukkit.Packet.Play;
@@ -17,6 +17,10 @@ public record PlayServerUpdateSign : IPacket {
     public string Text2 { get; private set; }
     public string Text3 { get; private set; }
     public string Text4 { get; private set; }
+
+    public PlayServerUpdateSign(IMinecraftReader reader) {
+	    Serialize(reader);
+    }
 
 	public PlayServerUpdateSign(
 		Vector3 location,

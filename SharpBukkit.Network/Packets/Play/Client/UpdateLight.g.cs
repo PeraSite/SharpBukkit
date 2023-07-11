@@ -3,7 +3,7 @@ using System.Numerics;
 using SharpBukkit.Network.API;
 using SharpBukkit.Network.API.Stream;
 using SharpBukkit.Network.API.Models;
-using SharpBukkit.Network.Models;
+using SharpBukkit.Network.Models.Nbt;
 using SharpNBT;
 
 namespace SharpBukkit.Packet.Play;
@@ -15,6 +15,10 @@ public record PlayClientUpdateLight : IPacket {
     public int ChunkX { get; private set; }
     public int ChunkZ { get; private set; }
     public bool TrustEdges { get; private set; }
+
+    public PlayClientUpdateLight(IMinecraftReader reader) {
+	    Serialize(reader);
+    }
 
 	public PlayClientUpdateLight(
 		int chunkX,

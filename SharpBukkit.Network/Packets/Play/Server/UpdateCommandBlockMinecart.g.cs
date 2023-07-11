@@ -3,7 +3,7 @@ using System.Numerics;
 using SharpBukkit.Network.API;
 using SharpBukkit.Network.API.Stream;
 using SharpBukkit.Network.API.Models;
-using SharpBukkit.Network.Models;
+using SharpBukkit.Network.Models.Nbt;
 using SharpNBT;
 
 namespace SharpBukkit.Packet.Play;
@@ -15,6 +15,10 @@ public record PlayServerUpdateCommandBlockMinecart : IPacket {
     public int EntityId { get; private set; }
     public string Command { get; private set; }
     public bool TrackOutput { get; private set; }
+
+    public PlayServerUpdateCommandBlockMinecart(IMinecraftReader reader) {
+	    Serialize(reader);
+    }
 
 	public PlayServerUpdateCommandBlockMinecart(
 		int entityId,
