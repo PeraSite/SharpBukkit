@@ -1,13 +1,22 @@
 using System;
+using System.Collections.Generic;
+using Newtonsoft.Json;
 using Serilog;
 using SharpBukkit.API;
 using SharpBukkit.API.Config;
+using SharpBukkit.API.Meta;
+using SharpBukkit.Core.Utils;
 using SharpBukkit.Network.API;
 using SharpBukkit.Network.Packets;
 
 namespace SharpBukkit.Core;
 
 public class MinecraftServer : IServer {
+	#region Constants
+	private const int PROTOCOL_ID = 758;
+	private const string PROTOCOL_NAME = "1.18.2";
+#endregion
+
 	private readonly ServerConfig _config;
 	private readonly INetServer _netServer;
 	private readonly ILogger _logger;
@@ -19,7 +28,7 @@ public class MinecraftServer : IServer {
 	}
 
 	public void Start() {
-		_logger.Information($"{_config}");
+		_logger.Information("Config : {Config}", _config);
 
 		_logger.Information("Loading packets...");
 		PacketFactory.Load();
@@ -46,5 +55,34 @@ public class MinecraftServer : IServer {
 	public void Stop() {
 		_logger.Information("Stopping server...");
 		_netServer.Stop();
+	}
+
+	public string GetMotd() {
+		var serverInfo = new MetaServer {
+			Version = new MetaVersion {
+				Name = PROTOCOL_NAME,
+				Protocol = PROTOCOL_ID
+			},
+			Players = new MetaPlayers {
+				Max = _config.Game.MaxPlayer,
+				Online = _netServer.Connections.Count,
+				Sample = new List<MetaSample> {
+					new MetaSample {
+						Id = Guid.NewGuid().ToString(),
+						Name = "john_doe"
+					}
+				}
+			},
+			Description = new MetaDescription {
+				Text = _config.Game.Motd
+			}
+		};
+		// if (_.FavIcon is { } favIcon) {
+		// 	var path = Path.Combine(_env.ContentRoot, favIcon);
+		// 	var favBytes = File.ReadAllBytes(path);
+		// 	message.Favicon = $"data:image/png;base64,{Convert.ToBase64String(favBytes)}";
+		// }
+		//TODO: Load favicon
+		return JsonConvert.SerializeObject(serverInfo, JsonHelper.Config);
 	}
 }

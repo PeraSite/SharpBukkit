@@ -29,7 +29,7 @@ public interface IMinecraftWriter {
 	void WriteNbtTag(CompoundTag tag);
 	void WriteNbt<T>(T data) where T : INbtSerializable;
 	void WriteMetadata(byte[] data);
-	void WriteBitField(IPacket value);
-	void WriteBitFieldArray<T>(T[] entities) where T : IPacket, new();
+	void WriteSerializable(ISerializable value);
+	void WriteSerializableArray<T>(T[] entities) where T : ISerializable, new();
 	void Write(byte[] data);
 }

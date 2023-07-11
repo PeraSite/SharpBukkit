@@ -1,25 +1,29 @@
 using System.Net;
 using System.Net.Sockets;
 using Serilog;
+using SharpBukkit.API;
 using SharpBukkit.API.Config;
 using SharpBukkit.Network.API;
 
 namespace SharpBukkit.Network;
 
 public class NetServer : INetServer {
+	// Injected
 	private readonly ServerConfig _config;
 	private readonly ILogger _logger;
+	private readonly Lazy<IServer> _server;
 
+	// States
 	public Dictionary<EndPoint, IClientConnection> Connections { get; }
-
 	private bool _running;
 	private readonly CancellationTokenSource _cancellationTokenSource;
 	private readonly TcpListener _tcpListener;
 
-	public NetServer(ServerConfig config, ILogger logger) {
+	public NetServer(ServerConfig config, ILogger logger, Lazy<IServer> server) {
 		// Dependencies
 		_config = config;
 		_logger = logger;
+		_server = server;
 
 		// States
 		_running = true;
@@ -37,7 +41,7 @@ public class NetServer : INetServer {
 			while (!_cancellationTokenSource.IsCancellationRequested) {
 				var client = _tcpListener.AcceptTcpClient();
 
-				var connection = new ClientConnection(client, _logger);
+				var connection = new ClientConnection(client, _server.Value, _logger);
 				connection.OnDisconnect += () => OnClientDisconnected(connection);
 				OnClientConnected(connection);
 
@@ -53,12 +57,12 @@ public class NetServer : INetServer {
 	}
 
 	public void OnClientConnected(IClientConnection connection) {
-		_logger.Information("Client connected: {@Endpoint}", connection.Endpoint);
+		_logger.Information("Client connected: {Endpoint}", connection.Endpoint.ToString());
 		Connections[connection.Endpoint] = connection;
 	}
 
 	public void OnClientDisconnected(IClientConnection connection) {
-		_logger.Information("Client disconnected: {@Endpoint}", connection.Endpoint);
+		_logger.Information("Client disconnected: {Endpoint}", connection.Endpoint.ToString());
 		Connections.Remove(connection.Endpoint);
 	}
 }

@@ -30,6 +30,7 @@ public interface IMinecraftReader {
 	CompoundTag? ReadOptNbtTag();
 	CompoundTag ReadNbtTag();
 	T ReadNbt<T>() where T : INbtSerializable, new();
-	T[] ReadBitFieldArray<T>() where T : IPacket, new();
+	T ReadSerializable<T>() where T : ISerializable, new();
+	T[] ReadSerializableArray<T>() where T : ISerializable, new();
 	byte[] Read(int length);
 }

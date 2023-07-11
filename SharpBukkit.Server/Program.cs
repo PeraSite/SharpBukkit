@@ -14,7 +14,7 @@ public static class Program {
 	public static void Main() {
 		var container = BuildContainer();
 		using ILifetimeScope scope = container.BeginLifetimeScope();
-		scope.Resolve<MinecraftServer>().Start();
+		scope.Resolve<IServer>().Start();
 	}
 
 	private static IContainer BuildContainer() {
@@ -25,7 +25,6 @@ public static class Program {
 			.SingleInstance();
 
 		builder.RegisterType<MinecraftServer>()
-			.AsSelf()
 			.As<IServer>()
 			.SingleInstance();
 
