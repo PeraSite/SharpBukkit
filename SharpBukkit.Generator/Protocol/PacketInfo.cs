@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 
 namespace SharpBukkit.Generator.Protocol;
@@ -15,7 +14,7 @@ internal enum PacketType {
 	Play,
 }
 
-internal record ParsedPacket {
+internal record PacketInfo {
 	public PacketType Type { get; init; }
 
 	public BoundType Bound { get; init; }
@@ -24,12 +23,12 @@ internal record ParsedPacket {
 
 	public byte Id { get; init; }
 
-	public List<PacketField> Fields { get; init; }
+	public List<FieldInfo> Fields { get; init; }
 
 	public override string ToString() => $"[{Id}] {Name}: {string.Join(", ", Fields)}";
 }
 
-internal record PacketField {
+internal record FieldInfo {
 	public string ActualType { get; init; }
 	public string NativeType { get; init; }
 	public string Name { get; init; }
