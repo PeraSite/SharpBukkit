@@ -1,4 +1,4 @@
-﻿namespace SharpBukkit.Core.Config;
+﻿namespace SharpBukkit.API.Config;
 
 public record GameConfig {
 	public string Motd { get; private set; }
