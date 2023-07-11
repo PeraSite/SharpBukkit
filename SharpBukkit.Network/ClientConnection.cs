@@ -40,12 +40,25 @@ public class ClientConnection : IClientConnection {
 		var writer = new BinaryWriter(_stream);
 		var reader = new BinaryReader(_stream);
 
-		while (!_cancellationTokenSource.IsCancellationRequested) {
-			var nickname = reader.ReadString();
-			var msg = $"Hello, {nickname}!";
-			writer.Write(msg);
+		try {
+			while (!_cancellationTokenSource.IsCancellationRequested) {
+				var nickname = reader.ReadString();
+				var msg = $"Hello, {nickname}!";
+				writer.Write(msg);
 
-			_logger.Information($"Received: {nickname} => {msg}");
+				_logger.Information($"Received: {nickname} => {msg}");
+			}
+		}
+		catch (Exception ex) {
+			if (ex is OperationCanceledException or EndOfStreamException or IOException) {
+				_logger.Debug(ex, $"Client disconnected: {_client.Client.RemoteEndPoint}");
+				return;
+			}
+
+			_logger.Error(ex, $"An unhandled exception occurred in receive task: {_client.Client.RemoteEndPoint}");
+		}
+		finally {
+			Disconnect();
 		}
 	}
 }
