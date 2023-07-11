@@ -7,10 +7,12 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="Autofac" Version="7.0.1" />
       <PackageReference Include="Tomlyn" Version="0.16.2" />
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\SharpBukkit.API\SharpBukkit.API.csproj" />
       <ProjectReference Include="..\SharpBukkit.Network\SharpBukkit.Network.csproj" />
     </ItemGroup>
 
