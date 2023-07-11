@@ -59,9 +59,62 @@ public static class ProtocolGenerator {
 				generatedCodeDict[packet] = BuildCode(packet);
 			}
 		}
+#endregion
 
+		Console.WriteLine("Writing to files...");
+		#region Writing to file
+		await Task.WhenAll(generatedCodeDict.Select(pair => {
+			var (packet, content) = pair;
 
-		return fileNameToContent;
+			var directoryName = $"{packet.Type}/{packet.Bound}";
+			var fileName = $"{packet.Name}.g.cs";
+
+			Directory.CreateDirectory(Path.Combine(outputFolder, directoryName));
+			var output = Path.Combine(outputFolder, directoryName, fileName);
+			Console.WriteLine($"* {directoryName} - {fileName}");
+
+			return File.WriteAllTextAsync(output, content);
+		}));
+  #endregion
+
+		Console.WriteLine("Generating packet factory...");
+		var factoryFilePath = Path.Combine(outputFolder, "PacketFactory.g.cs");
+		await File.WriteAllTextAsync(factoryFilePath, $$"""
+// Auto-generated
+using SharpBukkit.Network.API;
+using SharpBukkit.Network.API.Stream;
+using SharpBukkit.Network.Models;
+using SharpBukkit.Packet.Handshaking;
+using SharpBukkit.Packet.Login;
+using SharpBukkit.Packet.Play;
+using SharpBukkit.Packet.Status;
+
+namespace SharpBukkit.Network.Packets;
+
+public static class PacketFactory {
+	private static readonly Dictionary<(ConnectionState state, byte id), Func<IMinecraftReader, IPacket>> _factory;
+
+	static PacketFactory() {
+		_factory = new Dictionary<(ConnectionState state, byte id), Func<IMinecraftReader, IPacket>>();
+	}
+
+	public static void Load() {
+		{{string.Join("\n        ", generatedCodeDict.Keys.Select(packet => $"Register(ConnectionState.{packet.Type}, 0x{packet.Id:x2}, (reader) => new {packet.Type}{packet.Bound}{packet.Name}(reader));"))}}
+	}
+
+	public static IPacket Create(IMinecraftReader reader, ConnectionState state, byte id) {
+		if (!_factory.TryGetValue((state, id), out var func)) {
+			throw new Exception($"Unknown packet id {id} for state {state}");
+		}
+		return func(reader);
+	}
+
+	private static void Register(ConnectionState state, byte id, Func<IMinecraftReader, IPacket> createFunc) {
+		_factory[(state, id)] = createFunc;
+	}
+}
+
+""");
 	}
 
 	private static IEnumerable<PacketInfo> ReadPacketStructs(PacketType packetType, BoundType bound, JObject json) {
