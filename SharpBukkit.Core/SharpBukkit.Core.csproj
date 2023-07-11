@@ -10,5 +10,9 @@
       <PackageReference Include="Tomlyn" Version="0.16.2" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\SharpBukkit.Network\SharpBukkit.Network.csproj" />
+    </ItemGroup>
+
 
 </Project>
