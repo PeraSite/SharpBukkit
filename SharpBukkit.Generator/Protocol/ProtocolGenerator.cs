@@ -1,23 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using SharpBukkit.Generator.Protocol.Mapper;
 
 namespace SharpBukkit.Generator.Protocol;
 
-public static class ProtocolParser {
-	public static Dictionary<(string folder, string fileName), string> Parse(string protocolJson, bool debug = false) {
+public static class ProtocolGenerator {
+	public static async Task Generate(string outputFolder, string protocolJson) {
+		Console.WriteLine("Parsing JSON...");
+		#region Parsing JSON
 		var json = JsonConvert.DeserializeObject<JObject>(protocolJson);
 		if (json == null) {
 			throw new InvalidOperationException("Empty JSON!");
 		}
+#endregion
 
-		var fileNameToContent = new Dictionary<(string, string), string>();
+		var packetTypes = new[] {PacketType.Handshaking, PacketType.Status, PacketType.Login, PacketType.Play};
 
-		foreach (PacketType packetType in new[] {PacketType.Handshaking, PacketType.Status, PacketType.Login, PacketType.Play}) {
+		Console.WriteLine("Generating codes...");
+		#region Generating code
+		var generatedCodeDict = new Dictionary<PacketInfo, string>();
+		foreach (PacketType packetType in packetTypes) {
 			var typeName = Enum.GetName(typeof(PacketType), packetType)!;
 			var typeNameLower = typeName.ToLower();
 
@@ -28,29 +36,27 @@ public static class ProtocolParser {
 			var toClientJson = namespaceJson["toClient"]!.ToObject<JObject>();
 			var toServerJson = namespaceJson["toServer"]!.ToObject<JObject>();
 
-			IEnumerable<ParsedPacket> clientPackets = ReadPacketStructs(packetType, BoundType.Client, toClientJson).ToList();
-			IEnumerable<ParsedPacket> serverPackets = ReadPacketStructs(packetType, BoundType.Server, toServerJson).ToList();
+			IEnumerable<PacketInfo> clientPackets = ReadPacketStructs(packetType, BoundType.Client, toClientJson).ToList();
+			IEnumerable<PacketInfo> serverPackets = ReadPacketStructs(packetType, BoundType.Server, toServerJson).ToList();
 
-			if (debug) {
-				Console.WriteLine($"* {typeNameLower}");
+			Console.WriteLine($"* {typeNameLower}");
 
-				if (clientPackets.Any()) {
-					Console.WriteLine("   # toClient");
-					foreach (var item in clientPackets) {
-						Console.WriteLine($"     - {item}");
-					}
-				}
-
-				if (serverPackets.Any()) {
-					Console.WriteLine("   # toServer");
-					foreach (var item in serverPackets) {
-						Console.WriteLine($"     - {item}");
-					}
+			if (clientPackets.Any()) {
+				Console.WriteLine("   # toClient");
+				foreach (var item in clientPackets) {
+					Console.WriteLine($"     - {item}");
 				}
 			}
 
-			foreach (ParsedPacket packet in clientPackets.Concat(serverPackets)) {
-				fileNameToContent[($"{packet.Type}/{packet.Bound}", $"{packet.Name}.g.cs")] = BuildCode(packet);
+			if (serverPackets.Any()) {
+				Console.WriteLine("   # toServer");
+				foreach (var item in serverPackets) {
+					Console.WriteLine($"     - {item}");
+				}
+			}
+
+			foreach (PacketInfo packet in clientPackets.Concat(serverPackets)) {
+				generatedCodeDict[packet] = BuildCode(packet);
 			}
 		}
 
@@ -58,7 +64,7 @@ public static class ProtocolParser {
 		return fileNameToContent;
 	}
 
-	private static IEnumerable<ParsedPacket> ReadPacketStructs(PacketType packetType, BoundType bound, JObject json) {
+	private static IEnumerable<PacketInfo> ReadPacketStructs(PacketType packetType, BoundType bound, JObject json) {
 		var types = json["types"].ToObject<JObject>();
 		var meta = types["packet"]!.ToObject<JArray>();
 
@@ -83,7 +89,7 @@ public static class ProtocolParser {
 			var packetId = Convert.ToByte(packetIdStr.Replace("0x", ""), 16);
 
 			var fieldListJson = packetJson.ToObject<JArray>()[1];
-			var fieldList = new List<PacketField>();
+			var fieldList = new List<FieldInfo>();
 
 			foreach (var fieldJson in fieldListJson) {
 				var actualFieldName = fieldJson["name"]!.ToObject<string>();
@@ -94,7 +100,7 @@ public static class ProtocolParser {
 					var simpleFieldType = fieldType.ToObject<string>();
 					var nativeFieldType = FieldMapping.GetNative(simpleFieldType, actualFieldName);
 
-					fieldList.Add(new PacketField {
+					fieldList.Add(new FieldInfo {
 						ActualType = simpleFieldType,
 						NativeType = nativeFieldType,
 						Name = fieldName
@@ -104,7 +110,7 @@ public static class ProtocolParser {
 				}
 			}
 
-			yield return new ParsedPacket {
+			yield return new PacketInfo {
 				Id = packetId,
 				Type = packetType,
 				Bound = bound,
@@ -114,8 +120,8 @@ public static class ProtocolParser {
 		}
 	}
 
-	private static string BuildCode(ParsedPacket parsedPacket) {
-		var className = $"{parsedPacket.Type}{parsedPacket.Bound}{parsedPacket.Name}";
+	private static string BuildCode(PacketInfo packetInfo) {
+		var className = $"{packetInfo.Type}{packetInfo.Bound}{packetInfo.Name}";
 
 		return $$"""
 // Auto-generated
@@ -123,29 +129,33 @@ using System.Numerics;
 using SharpBukkit.Network.API;
 using SharpBukkit.Network.API.Stream;
 using SharpBukkit.Network.API.Models;
-using SharpBukkit.Network.Models;
+using SharpBukkit.Network.Models.Nbt;
 using SharpNBT;
 
-namespace SharpBukkit.Packet.{{parsedPacket.Type}};
+namespace SharpBukkit.Packet.{{packetInfo.Type}};
 
 public record {{className}} : IPacket {
 
-    public byte PacketId => {{$"0x{parsedPacket.Id:x2}"}};
+    public byte PacketId => {{$"0x{packetInfo.Id:x2}"}};
 
-    {{string.Join("\n    ", parsedPacket.Fields.Select(f => $$"""public {{f.NativeType}} {{f.Name}} { get; private set; }"""))}}
+    {{string.Join("\n    ", packetInfo.Fields.Select(f => $$"""public {{f.NativeType}} {{f.Name}} { get; private set; }"""))}}
+
+    public {{className}}(IMinecraftReader reader) {
+	    Serialize(reader);
+    }
 
 	public {{className}}(
-		{{string.Join(",\n		", parsedPacket.Fields.Select(f => $$"""{{f.NativeType}} {{ToCamelCase(f.Name)}}"""))}}
+		{{string.Join(",\n		", packetInfo.Fields.Select(f => $$"""{{f.NativeType}} {{ToCamelCase(f.Name)}}"""))}}
 		) {
-		{{string.Join("\n		", parsedPacket.Fields.Select(f => $$"""{{f.Name}} = {{ToCamelCase(f.Name)}};"""))}}
+		{{string.Join("\n		", packetInfo.Fields.Select(f => $$"""{{f.Name}} = {{ToCamelCase(f.Name)}};"""))}}
 	}
 
 	public void Serialize(IMinecraftReader reader) {
-		{{string.Join("\n        ", parsedPacket.Fields.Select(f => $"{f.Name} = reader.{MethodMapping.GetReader(f.ActualType, f.Name)};"))}}
+		{{string.Join("\n        ", packetInfo.Fields.Select(f => $"{f.Name} = reader.{MethodMapping.GetReader(f.ActualType, f.Name)};"))}}
 	}
 
 	public void Deserialize(IMinecraftWriter writer) {
-		{{string.Join("\n        ", parsedPacket.Fields.Select(f => $"writer.{MethodMapping.GetWriter(f.ActualType, f.Name)};"))}}
+		{{string.Join("\n        ", packetInfo.Fields.Select(f => $"writer.{MethodMapping.GetWriter(f.ActualType, f.Name)};"))}}
 	}
 }
 """;
