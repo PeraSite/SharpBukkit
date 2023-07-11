@@ -1,23 +1,29 @@
 using System;
-using System.IO;
-using SharpBukkit.Core.Config;
-using Tomlyn;
+using SharpBukkit.API;
+using SharpBukkit.API.Config;
+using SharpBukkit.Network.API;
+using SharpBukkit.Network.Packets;
 
 namespace SharpBukkit.Core;
 
-public class MinecraftServer {
+public class MinecraftServer : IServer {
 	private readonly ServerConfig _config;
+	private readonly INetServer _netServer;
 
-	public MinecraftServer(string configPath) {
-		_config = ReadConfig(configPath);
+	public MinecraftServer(ServerConfig config, INetServer netServer) {
+		_config = config;
+		_netServer = netServer;
 	}
 
 	public void Start() {
-		Console.WriteLine(_config);
+		Console.WriteLine($"Config: {_config}");
+
+		Console.WriteLine("Loading packets...");
+		PacketFactory.Load();
+
+		Console.WriteLine("Starting server...");
+		_netServer.Start();
 	}
 
-	private ServerConfig ReadConfig(string configPath) {
-		var text = File.ReadAllText(configPath);
-		return Toml.ToModel<ServerConfig>(text);
-	}
+	public void Stop() { }
 }

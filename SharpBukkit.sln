@@ -7,8 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpBukkit.Server", "Sharp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpBukkit.Core", "SharpBukkit.Core\SharpBukkit.Core.csproj", "{30A75018-BCAA-4E0E-8E7D-2DFD4CDC1D74}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpBukkit.Data", "SharpBukkit.Data\SharpBukkit.Data.csproj", "{CAF207C9-73C4-4868-841B-8D21ADBA525F}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpBukkit.Generator", "SharpBukkit.Generator\SharpBukkit.Generator.csproj", "{29FCBE17-6372-4B1F-9F75-D7A1DFB25246}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpBukkit.API", "SharpBukkit.API\SharpBukkit.API.csproj", "{5DE2A992-E5A1-4E92-838C-090DE9600CB7}"
@@ -31,10 +29,6 @@ Global
 		{30A75018-BCAA-4E0E-8E7D-2DFD4CDC1D74}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{30A75018-BCAA-4E0E-8E7D-2DFD4CDC1D74}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{30A75018-BCAA-4E0E-8E7D-2DFD4CDC1D74}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CAF207C9-73C4-4868-841B-8D21ADBA525F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CAF207C9-73C4-4868-841B-8D21ADBA525F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CAF207C9-73C4-4868-841B-8D21ADBA525F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CAF207C9-73C4-4868-841B-8D21ADBA525F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{29FCBE17-6372-4B1F-9F75-D7A1DFB25246}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{29FCBE17-6372-4B1F-9F75-D7A1DFB25246}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{29FCBE17-6372-4B1F-9F75-D7A1DFB25246}.Release|Any CPU.ActiveCfg = Release|Any CPU
