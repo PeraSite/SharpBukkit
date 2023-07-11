@@ -10,9 +10,10 @@ public class NetServer : INetServer {
 	private readonly ServerConfig _config;
 	private readonly ILogger _logger;
 
+	public Dictionary<EndPoint, IClientConnection> Connections { get; }
+
 	private bool _running;
-	private CancellationTokenSource _cancellationTokenSource;
-	private readonly Dictionary<EndPoint, IClientConnection> _connections;
+	private readonly CancellationTokenSource _cancellationTokenSource;
 	private readonly TcpListener _tcpListener;
 
 	public NetServer(ServerConfig config, ILogger logger) {
@@ -23,7 +24,7 @@ public class NetServer : INetServer {
 		// States
 		_running = true;
 		_cancellationTokenSource = new CancellationTokenSource();
-		_connections = new Dictionary<EndPoint, IClientConnection>();
+		Connections = new Dictionary<EndPoint, IClientConnection>();
 		var ipEndpoint = new IPEndPoint(IPAddress.Parse(_config.Network.Host), _config.Network.Port);
 		_tcpListener = new TcpListener(ipEndpoint);
 	}
@@ -53,11 +54,11 @@ public class NetServer : INetServer {
 
 	public void OnClientConnected(IClientConnection connection) {
 		_logger.Information($"Client connected: {connection.Endpoint}");
-		_connections[connection.Endpoint] = connection;
+		Connections[connection.Endpoint] = connection;
 	}
 
 	public void OnClientDisconnected(IClientConnection connection) {
 		_logger.Information($"Client disconnected: {connection.Endpoint}");
-		_connections.Remove(connection.Endpoint);
+		Connections.Remove(connection.Endpoint);
 	}
 }

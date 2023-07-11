@@ -27,13 +27,18 @@ public class MinecraftServer : IServer {
 		_logger.Information("Starting server...");
 		_netServer.Start();
 
-		while (true) {
-			var command = Console.ReadLine();
+		var running = true;
+		while (running) {
+			var command = Console.ReadLine()!;
 
-			// TODO: Command handling system
-			if (command == "stop") {
-				Stop();
-				break;
+			switch (command) {
+				case "stop":
+					Stop();
+					running = false;
+					break;
+				case "list":
+					_logger.Information($"Clients: {_netServer.Connections.Count}");
+					break;
 			}
 		}
 	}
