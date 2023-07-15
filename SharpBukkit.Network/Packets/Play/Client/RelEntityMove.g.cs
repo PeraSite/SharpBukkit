@@ -36,19 +36,19 @@ public record PlayClientRelEntityMove : IPacket {
 		OnGround = onGround;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		EntityId = reader.ReadVarInt();
-        DX = reader.ReadShort();
-        DY = reader.ReadShort();
-        DZ = reader.ReadShort();
-        OnGround = reader.ReadBool();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteVarInt(EntityId);
         writer.WriteShort(DX);
         writer.WriteShort(DY);
         writer.WriteShort(DZ);
         writer.WriteBool(OnGround);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		EntityId = reader.ReadVarInt();
+        DX = reader.ReadShort();
+        DY = reader.ReadShort();
+        DZ = reader.ReadShort();
+        OnGround = reader.ReadBool();
 	}
 }

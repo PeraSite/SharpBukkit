@@ -24,11 +24,11 @@ public record PlayClientClearTitles : IPacket {
 		Reset = reset;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		Reset = reader.ReadBool();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteBool(Reset);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		Reset = reader.ReadBool();
 	}
 }

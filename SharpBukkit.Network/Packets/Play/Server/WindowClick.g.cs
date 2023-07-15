@@ -39,15 +39,6 @@ public record PlayServerWindowClick : IPacket {
 		CursorItem = cursorItem;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		WindowId = reader.ReadByte();
-        StateId = reader.ReadVarInt();
-        Slot = reader.ReadShort();
-        MouseButton = reader.ReadSByte();
-        Mode = reader.ReadVarInt();
-        CursorItem = reader.ReadSlot();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteByte(WindowId);
         writer.WriteVarInt(StateId);
@@ -55,5 +46,14 @@ public record PlayServerWindowClick : IPacket {
         writer.WriteSByte(MouseButton);
         writer.WriteVarInt(Mode);
         writer.WriteSlot(CursorItem);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		WindowId = reader.ReadByte();
+        StateId = reader.ReadVarInt();
+        Slot = reader.ReadShort();
+        MouseButton = reader.ReadSByte();
+        Mode = reader.ReadVarInt();
+        CursorItem = reader.ReadSlot();
 	}
 }

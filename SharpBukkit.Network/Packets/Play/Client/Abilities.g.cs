@@ -30,15 +30,15 @@ public record PlayClientAbilities : IPacket {
 		WalkingSpeed = walkingSpeed;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		Flags = reader.ReadSByte();
-        FlyingSpeed = reader.ReadFloat();
-        WalkingSpeed = reader.ReadFloat();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteSByte(Flags);
         writer.WriteFloat(FlyingSpeed);
         writer.WriteFloat(WalkingSpeed);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		Flags = reader.ReadSByte();
+        FlyingSpeed = reader.ReadFloat();
+        WalkingSpeed = reader.ReadFloat();
 	}
 }

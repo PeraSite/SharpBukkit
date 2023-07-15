@@ -27,13 +27,13 @@ public record PlayServerSetCreativeSlot : IPacket {
 		Item = item;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		Slot = reader.ReadShort();
-        Item = reader.ReadSlot();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteShort(Slot);
         writer.WriteSlot(Item);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		Slot = reader.ReadShort();
+        Item = reader.ReadSlot();
 	}
 }

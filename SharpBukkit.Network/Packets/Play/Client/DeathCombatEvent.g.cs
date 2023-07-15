@@ -30,15 +30,15 @@ public record PlayClientDeathCombatEvent : IPacket {
 		Message = message;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		PlayerId = reader.ReadVarInt();
-        EntityId = reader.ReadInt();
-        Message = reader.ReadString();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteVarInt(PlayerId);
         writer.WriteInt(EntityId);
         writer.WriteString(Message);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		PlayerId = reader.ReadVarInt();
+        EntityId = reader.ReadInt();
+        Message = reader.ReadString();
 	}
 }

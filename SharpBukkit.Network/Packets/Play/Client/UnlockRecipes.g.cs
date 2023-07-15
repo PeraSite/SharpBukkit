@@ -48,18 +48,6 @@ public record PlayClientUnlockRecipes : IPacket {
 		FilteringSmoker = filteringSmoker;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		Action = reader.ReadVarInt();
-        CraftingBookOpen = reader.ReadBool();
-        FilteringCraftable = reader.ReadBool();
-        SmeltingBookOpen = reader.ReadBool();
-        FilteringSmeltable = reader.ReadBool();
-        BlastFurnaceOpen = reader.ReadBool();
-        FilteringBlastFurnace = reader.ReadBool();
-        SmokerBookOpen = reader.ReadBool();
-        FilteringSmoker = reader.ReadBool();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteVarInt(Action);
         writer.WriteBool(CraftingBookOpen);
@@ -70,5 +58,17 @@ public record PlayClientUnlockRecipes : IPacket {
         writer.WriteBool(FilteringBlastFurnace);
         writer.WriteBool(SmokerBookOpen);
         writer.WriteBool(FilteringSmoker);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		Action = reader.ReadVarInt();
+        CraftingBookOpen = reader.ReadBool();
+        FilteringCraftable = reader.ReadBool();
+        SmeltingBookOpen = reader.ReadBool();
+        FilteringSmeltable = reader.ReadBool();
+        BlastFurnaceOpen = reader.ReadBool();
+        FilteringBlastFurnace = reader.ReadBool();
+        SmokerBookOpen = reader.ReadBool();
+        FilteringSmoker = reader.ReadBool();
 	}
 }

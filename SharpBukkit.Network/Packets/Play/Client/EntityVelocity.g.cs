@@ -33,17 +33,17 @@ public record PlayClientEntityVelocity : IPacket {
 		VelocityZ = velocityZ;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		EntityId = reader.ReadVarInt();
-        VelocityX = reader.ReadShort();
-        VelocityY = reader.ReadShort();
-        VelocityZ = reader.ReadShort();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteVarInt(EntityId);
         writer.WriteShort(VelocityX);
         writer.WriteShort(VelocityY);
         writer.WriteShort(VelocityZ);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		EntityId = reader.ReadVarInt();
+        VelocityX = reader.ReadShort();
+        VelocityY = reader.ReadShort();
+        VelocityZ = reader.ReadShort();
 	}
 }

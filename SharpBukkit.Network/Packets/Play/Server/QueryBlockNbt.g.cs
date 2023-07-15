@@ -27,13 +27,13 @@ public record PlayServerQueryBlockNbt : IPacket {
 		Location = location;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		TransactionId = reader.ReadVarInt();
-        Location = reader.ReadPosition();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteVarInt(TransactionId);
         writer.WritePosition(Location);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		TransactionId = reader.ReadVarInt();
+        Location = reader.ReadPosition();
 	}
 }

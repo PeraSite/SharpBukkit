@@ -27,13 +27,13 @@ public record PlayClientEntityHeadRotation : IPacket {
 		HeadYaw = headYaw;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		EntityId = reader.ReadVarInt();
-        HeadYaw = reader.ReadSByte();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteVarInt(EntityId);
         writer.WriteSByte(HeadYaw);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		EntityId = reader.ReadVarInt();
+        HeadYaw = reader.ReadSByte();
 	}
 }

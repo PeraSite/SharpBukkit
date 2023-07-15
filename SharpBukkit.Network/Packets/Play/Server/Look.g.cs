@@ -30,15 +30,15 @@ public record PlayServerLook : IPacket {
 		OnGround = onGround;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		Yaw = reader.ReadFloat();
-        Pitch = reader.ReadFloat();
-        OnGround = reader.ReadBool();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteFloat(Yaw);
         writer.WriteFloat(Pitch);
         writer.WriteBool(OnGround);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		Yaw = reader.ReadFloat();
+        Pitch = reader.ReadFloat();
+        OnGround = reader.ReadBool();
 	}
 }

@@ -30,15 +30,15 @@ public record PlayClientExperience : IPacket {
 		TotalExperience = totalExperience;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		ExperienceBar = reader.ReadFloat();
-        Level = reader.ReadVarInt();
-        TotalExperience = reader.ReadVarInt();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteFloat(ExperienceBar);
         writer.WriteVarInt(Level);
         writer.WriteVarInt(TotalExperience);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		ExperienceBar = reader.ReadFloat();
+        Level = reader.ReadVarInt();
+        TotalExperience = reader.ReadVarInt();
 	}
 }

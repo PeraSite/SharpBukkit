@@ -30,15 +30,15 @@ public record PlayServerCraftRecipeRequest : IPacket {
 		MakeAll = makeAll;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		WindowId = reader.ReadSByte();
-        Recipe = reader.ReadString();
-        MakeAll = reader.ReadBool();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteSByte(WindowId);
         writer.WriteString(Recipe);
         writer.WriteBool(MakeAll);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		WindowId = reader.ReadSByte();
+        Recipe = reader.ReadString();
+        MakeAll = reader.ReadBool();
 	}
 }

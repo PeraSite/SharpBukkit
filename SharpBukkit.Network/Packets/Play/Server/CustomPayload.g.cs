@@ -27,13 +27,13 @@ public record PlayServerCustomPayload : IPacket {
 		Data = data;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		Channel = reader.ReadString();
-        Data = reader.ReadBuffer();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteString(Channel);
         writer.WriteBuffer(Data);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		Channel = reader.ReadString();
+        Data = reader.ReadBuffer();
 	}
 }

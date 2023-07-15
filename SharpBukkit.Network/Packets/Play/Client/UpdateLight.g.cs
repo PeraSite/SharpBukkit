@@ -30,15 +30,15 @@ public record PlayClientUpdateLight : IPacket {
 		TrustEdges = trustEdges;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		ChunkX = reader.ReadVarInt();
-        ChunkZ = reader.ReadVarInt();
-        TrustEdges = reader.ReadBool();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteVarInt(ChunkX);
         writer.WriteVarInt(ChunkZ);
         writer.WriteBool(TrustEdges);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		ChunkX = reader.ReadVarInt();
+        ChunkZ = reader.ReadVarInt();
+        TrustEdges = reader.ReadBool();
 	}
 }

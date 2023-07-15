@@ -30,15 +30,15 @@ public record PlayClientChat : IPacket {
 		Sender = sender;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		Message = reader.ReadString();
-        Position = reader.ReadSByte();
-        Sender = reader.ReadUuid();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteString(Message);
         writer.WriteSByte(Position);
         writer.WriteUuid(Sender);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		Message = reader.ReadString();
+        Position = reader.ReadSByte();
+        Sender = reader.ReadUuid();
 	}
 }

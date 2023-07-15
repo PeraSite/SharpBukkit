@@ -33,17 +33,17 @@ public record PlayClientWorldEvent : IPacket {
 		Global = global;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		EffectId = reader.ReadInt();
-        Location = reader.ReadPosition();
-        Data = reader.ReadInt();
-        Global = reader.ReadBool();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteInt(EffectId);
         writer.WritePosition(Location);
         writer.WriteInt(Data);
         writer.WriteBool(Global);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		EffectId = reader.ReadInt();
+        Location = reader.ReadPosition();
+        Data = reader.ReadInt();
+        Global = reader.ReadBool();
 	}
 }

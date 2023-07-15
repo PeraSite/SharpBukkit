@@ -27,13 +27,13 @@ public record PlayClientBlockChange : IPacket {
 		Type = type;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		Location = reader.ReadPosition();
-        Type = reader.ReadVarInt();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WritePosition(Location);
         writer.WriteVarInt(Type);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		Location = reader.ReadPosition();
+        Type = reader.ReadVarInt();
 	}
 }

@@ -24,11 +24,11 @@ public record StatusClientServerInfo : IPacket {
 		Response = response;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		Response = reader.ReadString();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteString(Response);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		Response = reader.ReadString();
 	}
 }

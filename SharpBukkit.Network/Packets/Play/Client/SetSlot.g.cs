@@ -33,17 +33,17 @@ public record PlayClientSetSlot : IPacket {
 		Item = item;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		WindowId = reader.ReadSByte();
-        StateId = reader.ReadVarInt();
-        Slot = reader.ReadShort();
-        Item = reader.ReadSlot();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteSByte(WindowId);
         writer.WriteVarInt(StateId);
         writer.WriteShort(Slot);
         writer.WriteSlot(Item);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		WindowId = reader.ReadSByte();
+        StateId = reader.ReadVarInt();
+        Slot = reader.ReadShort();
+        Item = reader.ReadSlot();
 	}
 }

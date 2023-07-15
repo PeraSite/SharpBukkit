@@ -30,15 +30,15 @@ public record PlayClientWindowItems : IPacket {
 		CarriedItem = carriedItem;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		WindowId = reader.ReadByte();
-        StateId = reader.ReadVarInt();
-        CarriedItem = reader.ReadSlot();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteByte(WindowId);
         writer.WriteVarInt(StateId);
         writer.WriteSlot(CarriedItem);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		WindowId = reader.ReadByte();
+        StateId = reader.ReadVarInt();
+        CarriedItem = reader.ReadSlot();
 	}
 }

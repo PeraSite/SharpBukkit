@@ -27,13 +27,13 @@ public record PlayClientCraftRecipeResponse : IPacket {
 		Recipe = recipe;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		WindowId = reader.ReadSByte();
-        Recipe = reader.ReadString();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteSByte(WindowId);
         writer.WriteString(Recipe);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		WindowId = reader.ReadSByte();
+        Recipe = reader.ReadString();
 	}
 }

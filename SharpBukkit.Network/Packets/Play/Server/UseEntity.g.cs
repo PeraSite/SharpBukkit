@@ -30,15 +30,15 @@ public record PlayServerUseEntity : IPacket {
 		Sneaking = sneaking;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		Target = reader.ReadVarInt();
-        Mouse = reader.ReadVarInt();
-        Sneaking = reader.ReadBool();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteVarInt(Target);
         writer.WriteVarInt(Mouse);
         writer.WriteBool(Sneaking);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		Target = reader.ReadVarInt();
+        Mouse = reader.ReadVarInt();
+        Sneaking = reader.ReadBool();
 	}
 }

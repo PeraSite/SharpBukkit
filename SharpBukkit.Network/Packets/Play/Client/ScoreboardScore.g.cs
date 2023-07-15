@@ -30,15 +30,15 @@ public record PlayClientScoreboardScore : IPacket {
 		ScoreName = scoreName;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		ItemName = reader.ReadString();
-        Action = reader.ReadVarInt();
-        ScoreName = reader.ReadString();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteString(ItemName);
         writer.WriteVarInt(Action);
         writer.WriteString(ScoreName);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		ItemName = reader.ReadString();
+        Action = reader.ReadVarInt();
+        ScoreName = reader.ReadString();
 	}
 }

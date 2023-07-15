@@ -24,11 +24,11 @@ public record PlayServerNameItem : IPacket {
 		Name = name;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		Name = reader.ReadString();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteString(Name);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		Name = reader.ReadString();
 	}
 }

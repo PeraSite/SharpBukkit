@@ -30,15 +30,15 @@ public record PlayClientOpenWindow : IPacket {
 		WindowTitle = windowTitle;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		WindowId = reader.ReadVarInt();
-        InventoryType = reader.ReadVarInt();
-        WindowTitle = reader.ReadString();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteVarInt(WindowId);
         writer.WriteVarInt(InventoryType);
         writer.WriteString(WindowTitle);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		WindowId = reader.ReadVarInt();
+        InventoryType = reader.ReadVarInt();
+        WindowTitle = reader.ReadString();
 	}
 }

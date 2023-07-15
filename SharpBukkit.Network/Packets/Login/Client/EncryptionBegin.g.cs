@@ -24,11 +24,11 @@ public record LoginClientEncryptionBegin : IPacket {
 		ServerId = serverId;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		ServerId = reader.ReadString();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteString(ServerId);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		ServerId = reader.ReadString();
 	}
 }

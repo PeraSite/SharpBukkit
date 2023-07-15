@@ -195,7 +195,7 @@ public record {{className}} : IPacket {
     {{string.Join("\n    ", packetInfo.Fields.Select(f => $$"""public {{f.NativeType}} {{f.Name}} { get; private set; }"""))}}
 
     public {{className}}(IMinecraftReader reader) {
-	    Serialize(reader);
+	    Deserialize(reader);
     }
 
 	public {{className}}(
@@ -204,12 +204,12 @@ public record {{className}} : IPacket {
 		{{string.Join("\n		", packetInfo.Fields.Select(f => $$"""{{f.Name}} = {{ToCamelCase(f.Name)}};"""))}}
 	}
 
-	public void Serialize(IMinecraftReader reader) {
-		{{string.Join("\n        ", packetInfo.Fields.Select(f => $"{f.Name} = reader.{MethodMapping.GetReader(f.ActualType, f.Name)};"))}}
+	public void Serialize(IMinecraftWriter writer) {
+		{{string.Join("\n        ", packetInfo.Fields.Select(f => $"writer.{MethodMapping.GetWriter(f.ActualType, f.Name)};"))}}
 	}
 
-	public void Deserialize(IMinecraftWriter writer) {
-		{{string.Join("\n        ", packetInfo.Fields.Select(f => $"writer.{MethodMapping.GetWriter(f.ActualType, f.Name)};"))}}
+	public void Deserialize(IMinecraftReader reader) {
+		{{string.Join("\n        ", packetInfo.Fields.Select(f => $"{f.Name} = reader.{MethodMapping.GetReader(f.ActualType, f.Name)};"))}}
 	}
 }
 """;

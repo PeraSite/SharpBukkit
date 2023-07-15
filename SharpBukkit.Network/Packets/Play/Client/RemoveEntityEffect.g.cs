@@ -27,13 +27,13 @@ public record PlayClientRemoveEntityEffect : IPacket {
 		EffectId = effectId;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		EntityId = reader.ReadVarInt();
-        EffectId = reader.ReadVarInt();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteVarInt(EntityId);
         writer.WriteVarInt(EffectId);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		EntityId = reader.ReadVarInt();
+        EffectId = reader.ReadVarInt();
 	}
 }

@@ -69,25 +69,6 @@ public record PlayServerUpdateStructureBlock : IPacket {
 		Flags = flags;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		Location = reader.ReadPosition();
-        Action = reader.ReadVarInt();
-        Mode = reader.ReadVarInt();
-        Name = reader.ReadString();
-        OffsetX = reader.ReadSByte();
-        OffsetY = reader.ReadSByte();
-        OffsetZ = reader.ReadSByte();
-        SizeX = reader.ReadSByte();
-        SizeY = reader.ReadSByte();
-        SizeZ = reader.ReadSByte();
-        Mirror = reader.ReadVarInt();
-        Rotation = reader.ReadVarInt();
-        Metadata = reader.ReadString();
-        Integrity = reader.ReadFloat();
-        Seed = reader.ReadLong();
-        Flags = reader.ReadByte();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WritePosition(Location);
         writer.WriteVarInt(Action);
@@ -105,5 +86,24 @@ public record PlayServerUpdateStructureBlock : IPacket {
         writer.WriteFloat(Integrity);
         writer.WriteLong(Seed);
         writer.WriteByte(Flags);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		Location = reader.ReadPosition();
+        Action = reader.ReadVarInt();
+        Mode = reader.ReadVarInt();
+        Name = reader.ReadString();
+        OffsetX = reader.ReadSByte();
+        OffsetY = reader.ReadSByte();
+        OffsetZ = reader.ReadSByte();
+        SizeX = reader.ReadSByte();
+        SizeY = reader.ReadSByte();
+        SizeZ = reader.ReadSByte();
+        Mirror = reader.ReadVarInt();
+        Rotation = reader.ReadVarInt();
+        Metadata = reader.ReadString();
+        Integrity = reader.ReadFloat();
+        Seed = reader.ReadLong();
+        Flags = reader.ReadByte();
 	}
 }

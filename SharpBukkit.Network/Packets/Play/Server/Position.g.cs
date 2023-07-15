@@ -33,17 +33,17 @@ public record PlayServerPosition : IPacket {
 		OnGround = onGround;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		X = reader.ReadDouble();
-        Y = reader.ReadDouble();
-        Z = reader.ReadDouble();
-        OnGround = reader.ReadBool();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteDouble(X);
         writer.WriteDouble(Y);
         writer.WriteDouble(Z);
         writer.WriteBool(OnGround);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		X = reader.ReadDouble();
+        Y = reader.ReadDouble();
+        Z = reader.ReadDouble();
+        OnGround = reader.ReadBool();
 	}
 }

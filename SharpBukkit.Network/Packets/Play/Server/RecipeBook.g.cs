@@ -30,15 +30,15 @@ public record PlayServerRecipeBook : IPacket {
 		FilterActive = filterActive;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		BookId = reader.ReadVarInt();
-        BookOpen = reader.ReadBool();
-        FilterActive = reader.ReadBool();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteVarInt(BookId);
         writer.WriteBool(BookOpen);
         writer.WriteBool(FilterActive);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		BookId = reader.ReadVarInt();
+        BookOpen = reader.ReadBool();
+        FilterActive = reader.ReadBool();
 	}
 }

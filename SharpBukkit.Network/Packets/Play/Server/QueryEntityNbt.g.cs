@@ -27,13 +27,13 @@ public record PlayServerQueryEntityNbt : IPacket {
 		EntityId = entityId;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		TransactionId = reader.ReadVarInt();
-        EntityId = reader.ReadVarInt();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteVarInt(TransactionId);
         writer.WriteVarInt(EntityId);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		TransactionId = reader.ReadVarInt();
+        EntityId = reader.ReadVarInt();
 	}
 }

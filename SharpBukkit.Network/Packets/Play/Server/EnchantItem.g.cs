@@ -27,13 +27,13 @@ public record PlayServerEnchantItem : IPacket {
 		Enchantment = enchantment;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		WindowId = reader.ReadSByte();
-        Enchantment = reader.ReadSByte();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteSByte(WindowId);
         writer.WriteSByte(Enchantment);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		WindowId = reader.ReadSByte();
+        Enchantment = reader.ReadSByte();
 	}
 }

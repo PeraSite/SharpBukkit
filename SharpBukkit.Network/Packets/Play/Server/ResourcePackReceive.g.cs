@@ -24,11 +24,11 @@ public record PlayServerResourcePackReceive : IPacket {
 		Result = result;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		Result = reader.ReadVarInt();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteVarInt(Result);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		Result = reader.ReadVarInt();
 	}
 }

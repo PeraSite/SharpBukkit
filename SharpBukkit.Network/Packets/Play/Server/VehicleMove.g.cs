@@ -36,19 +36,19 @@ public record PlayServerVehicleMove : IPacket {
 		Pitch = pitch;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		X = reader.ReadDouble();
-        Y = reader.ReadDouble();
-        Z = reader.ReadDouble();
-        Yaw = reader.ReadFloat();
-        Pitch = reader.ReadFloat();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteDouble(X);
         writer.WriteDouble(Y);
         writer.WriteDouble(Z);
         writer.WriteFloat(Yaw);
         writer.WriteFloat(Pitch);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		X = reader.ReadDouble();
+        Y = reader.ReadDouble();
+        Z = reader.ReadDouble();
+        Yaw = reader.ReadFloat();
+        Pitch = reader.ReadFloat();
 	}
 }

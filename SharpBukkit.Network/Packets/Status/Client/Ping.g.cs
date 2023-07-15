@@ -24,11 +24,11 @@ public record StatusClientPing : IPacket {
 		Time = time;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		Time = reader.ReadLong();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteLong(Time);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		Time = reader.ReadLong();
 	}
 }

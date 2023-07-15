@@ -33,17 +33,17 @@ public record PlayClientAcknowledgePlayerDigging : IPacket {
 		Successful = successful;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		Location = reader.ReadPosition();
-        Block = reader.ReadVarInt();
-        Status = reader.ReadVarInt();
-        Successful = reader.ReadBool();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WritePosition(Location);
         writer.WriteVarInt(Block);
         writer.WriteVarInt(Status);
         writer.WriteBool(Successful);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		Location = reader.ReadPosition();
+        Block = reader.ReadVarInt();
+        Status = reader.ReadVarInt();
+        Successful = reader.ReadBool();
 	}
 }

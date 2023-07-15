@@ -3,7 +3,7 @@
 namespace SharpBukkit.Network.API.Serialization;
 
 public interface ISerializable {
-	void Deserialize(IMinecraftReader reader);
-
 	void Serialize(IMinecraftWriter writer);
+
+	void Deserialize(IMinecraftReader reader);
 }

@@ -24,11 +24,11 @@ public record PlayServerEditBook : IPacket {
 		Hand = hand;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		Hand = reader.ReadVarInt();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteVarInt(Hand);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		Hand = reader.ReadVarInt();
 	}
 }

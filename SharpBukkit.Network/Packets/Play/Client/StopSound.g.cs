@@ -24,11 +24,11 @@ public record PlayClientStopSound : IPacket {
 		Flags = flags;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		Flags = reader.ReadSByte();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteSByte(Flags);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		Flags = reader.ReadSByte();
 	}
 }

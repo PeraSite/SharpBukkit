@@ -45,17 +45,6 @@ public record PlayClientRespawn : IPacket {
 		CopyMetadata = copyMetadata;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		Dimension = reader.ReadNbt<Dimension>();
-        WorldName = reader.ReadString();
-        HashedSeed = reader.ReadLong();
-        Gamemode = reader.ReadByte();
-        PreviousGamemode = reader.ReadByte();
-        IsDebug = reader.ReadBool();
-        IsFlat = reader.ReadBool();
-        CopyMetadata = reader.ReadBool();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteNbt<Dimension>(Dimension);
         writer.WriteString(WorldName);
@@ -65,5 +54,16 @@ public record PlayClientRespawn : IPacket {
         writer.WriteBool(IsDebug);
         writer.WriteBool(IsFlat);
         writer.WriteBool(CopyMetadata);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		Dimension = reader.ReadNbt<Dimension>();
+        WorldName = reader.ReadString();
+        HashedSeed = reader.ReadLong();
+        Gamemode = reader.ReadByte();
+        PreviousGamemode = reader.ReadByte();
+        IsDebug = reader.ReadBool();
+        IsFlat = reader.ReadBool();
+        CopyMetadata = reader.ReadBool();
 	}
 }

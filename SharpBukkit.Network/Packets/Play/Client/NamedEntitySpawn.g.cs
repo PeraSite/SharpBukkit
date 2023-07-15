@@ -42,16 +42,6 @@ public record PlayClientNamedEntitySpawn : IPacket {
 		Pitch = pitch;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		EntityId = reader.ReadVarInt();
-        PlayerUUID = reader.ReadUuid();
-        X = reader.ReadDouble();
-        Y = reader.ReadDouble();
-        Z = reader.ReadDouble();
-        Yaw = reader.ReadSByte();
-        Pitch = reader.ReadSByte();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteVarInt(EntityId);
         writer.WriteUuid(PlayerUUID);
@@ -60,5 +50,15 @@ public record PlayClientNamedEntitySpawn : IPacket {
         writer.WriteDouble(Z);
         writer.WriteSByte(Yaw);
         writer.WriteSByte(Pitch);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		EntityId = reader.ReadVarInt();
+        PlayerUUID = reader.ReadUuid();
+        X = reader.ReadDouble();
+        Y = reader.ReadDouble();
+        Z = reader.ReadDouble();
+        Yaw = reader.ReadSByte();
+        Pitch = reader.ReadSByte();
 	}
 }

@@ -30,15 +30,15 @@ public record PlayServerGenerateStructure : IPacket {
 		KeepJigsaws = keepJigsaws;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		Location = reader.ReadPosition();
-        Levels = reader.ReadVarInt();
-        KeepJigsaws = reader.ReadBool();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WritePosition(Location);
         writer.WriteVarInt(Levels);
         writer.WriteBool(KeepJigsaws);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		Location = reader.ReadPosition();
+        Levels = reader.ReadVarInt();
+        KeepJigsaws = reader.ReadBool();
 	}
 }

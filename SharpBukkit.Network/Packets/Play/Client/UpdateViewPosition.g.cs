@@ -27,13 +27,13 @@ public record PlayClientUpdateViewPosition : IPacket {
 		ChunkZ = chunkZ;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		ChunkX = reader.ReadVarInt();
-        ChunkZ = reader.ReadVarInt();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteVarInt(ChunkX);
         writer.WriteVarInt(ChunkZ);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		ChunkX = reader.ReadVarInt();
+        ChunkZ = reader.ReadVarInt();
 	}
 }

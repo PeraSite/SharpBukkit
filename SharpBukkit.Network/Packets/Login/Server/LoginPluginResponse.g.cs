@@ -24,11 +24,11 @@ public record LoginServerLoginPluginResponse : IPacket {
 		MessageId = messageId;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		MessageId = reader.ReadVarInt();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteVarInt(MessageId);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		MessageId = reader.ReadVarInt();
 	}
 }

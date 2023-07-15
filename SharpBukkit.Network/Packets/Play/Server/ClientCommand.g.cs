@@ -24,11 +24,11 @@ public record PlayServerClientCommand : IPacket {
 		ActionId = actionId;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		ActionId = reader.ReadVarInt();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteVarInt(ActionId);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		ActionId = reader.ReadVarInt();
 	}
 }

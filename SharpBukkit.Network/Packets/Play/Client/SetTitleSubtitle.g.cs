@@ -24,11 +24,11 @@ public record PlayClientSetTitleSubtitle : IPacket {
 		Text = text;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		Text = reader.ReadString();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteString(Text);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		Text = reader.ReadString();
 	}
 }

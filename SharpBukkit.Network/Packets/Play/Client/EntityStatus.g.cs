@@ -27,13 +27,13 @@ public record PlayClientEntityStatus : IPacket {
 		EntityStatus = entityStatus;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		EntityId = reader.ReadInt();
-        EntityStatus = reader.ReadSByte();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteInt(EntityId);
         writer.WriteSByte(EntityStatus);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		EntityId = reader.ReadInt();
+        EntityStatus = reader.ReadSByte();
 	}
 }

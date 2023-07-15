@@ -27,13 +27,13 @@ public record PlayClientUpdateTime : IPacket {
 		Time = time;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		Age = reader.ReadLong();
-        Time = reader.ReadLong();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteLong(Age);
         writer.WriteLong(Time);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		Age = reader.ReadLong();
+        Time = reader.ReadLong();
 	}
 }

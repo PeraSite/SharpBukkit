@@ -24,11 +24,11 @@ public record PlayClientOpenSignEntity : IPacket {
 		Location = location;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		Location = reader.ReadPosition();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WritePosition(Location);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		Location = reader.ReadPosition();
 	}
 }

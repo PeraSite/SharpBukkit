@@ -36,19 +36,19 @@ public record PlayClientSpawnEntityPainting : IPacket {
 		Direction = direction;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		EntityId = reader.ReadVarInt();
-        EntityUUID = reader.ReadUuid();
-        Title = reader.ReadVarInt();
-        Location = reader.ReadPosition();
-        Direction = reader.ReadByte();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteVarInt(EntityId);
         writer.WriteUuid(EntityUUID);
         writer.WriteVarInt(Title);
         writer.WritePosition(Location);
         writer.WriteByte(Direction);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		EntityId = reader.ReadVarInt();
+        EntityUUID = reader.ReadUuid();
+        Title = reader.ReadVarInt();
+        Location = reader.ReadPosition();
+        Direction = reader.ReadByte();
 	}
 }

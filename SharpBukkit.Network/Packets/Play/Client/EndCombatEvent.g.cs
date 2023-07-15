@@ -27,13 +27,13 @@ public record PlayClientEndCombatEvent : IPacket {
 		EntityId = entityId;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		Duration = reader.ReadVarInt();
-        EntityId = reader.ReadInt();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteVarInt(Duration);
         writer.WriteInt(EntityId);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		Duration = reader.ReadVarInt();
+        EntityId = reader.ReadInt();
 	}
 }

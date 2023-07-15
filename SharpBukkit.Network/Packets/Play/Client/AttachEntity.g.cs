@@ -27,13 +27,13 @@ public record PlayClientAttachEntity : IPacket {
 		VehicleId = vehicleId;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		EntityId = reader.ReadInt();
-        VehicleId = reader.ReadInt();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteInt(EntityId);
         writer.WriteInt(VehicleId);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		EntityId = reader.ReadInt();
+        VehicleId = reader.ReadInt();
 	}
 }

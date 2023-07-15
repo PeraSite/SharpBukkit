@@ -33,17 +33,17 @@ public record PlayServerUpdateCommandBlock : IPacket {
 		Flags = flags;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		Location = reader.ReadPosition();
-        Command = reader.ReadString();
-        Mode = reader.ReadVarInt();
-        Flags = reader.ReadByte();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WritePosition(Location);
         writer.WriteString(Command);
         writer.WriteVarInt(Mode);
         writer.WriteByte(Flags);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		Location = reader.ReadPosition();
+        Command = reader.ReadString();
+        Mode = reader.ReadVarInt();
+        Flags = reader.ReadByte();
 	}
 }

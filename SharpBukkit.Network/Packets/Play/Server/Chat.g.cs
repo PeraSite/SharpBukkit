@@ -24,11 +24,11 @@ public record PlayServerChat : IPacket {
 		Message = message;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		Message = reader.ReadString();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteString(Message);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		Message = reader.ReadString();
 	}
 }

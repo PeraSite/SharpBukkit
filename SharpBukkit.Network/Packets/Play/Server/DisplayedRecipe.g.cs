@@ -24,11 +24,11 @@ public record PlayServerDisplayedRecipe : IPacket {
 		RecipeId = recipeId;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		RecipeId = reader.ReadString();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteString(RecipeId);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		RecipeId = reader.ReadString();
 	}
 }

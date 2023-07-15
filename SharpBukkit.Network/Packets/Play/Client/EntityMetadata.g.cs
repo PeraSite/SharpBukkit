@@ -27,13 +27,13 @@ public record PlayClientEntityMetadata : IPacket {
 		Metadata = metadata;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		EntityId = reader.ReadVarInt();
-        Metadata = reader.ReadMetadata();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteVarInt(EntityId);
         writer.WriteMetadata(Metadata);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		EntityId = reader.ReadVarInt();
+        Metadata = reader.ReadMetadata();
 	}
 }

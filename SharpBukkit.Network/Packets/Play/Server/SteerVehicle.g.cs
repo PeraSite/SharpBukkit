@@ -30,15 +30,15 @@ public record PlayServerSteerVehicle : IPacket {
 		Jump = jump;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		Sideways = reader.ReadFloat();
-        Forward = reader.ReadFloat();
-        Jump = reader.ReadByte();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteFloat(Sideways);
         writer.WriteFloat(Forward);
         writer.WriteByte(Jump);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		Sideways = reader.ReadFloat();
+        Forward = reader.ReadFloat();
+        Jump = reader.ReadByte();
 	}
 }

@@ -30,15 +30,15 @@ public record PlayClientSculkVibrationSignal : IPacket {
 		ArrivalTicks = arrivalTicks;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		SourcePosition = reader.ReadPosition();
-        DestinationIdentifier = reader.ReadString();
-        ArrivalTicks = reader.ReadVarInt();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WritePosition(SourcePosition);
         writer.WriteString(DestinationIdentifier);
         writer.WriteVarInt(ArrivalTicks);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		SourcePosition = reader.ReadPosition();
+        DestinationIdentifier = reader.ReadString();
+        ArrivalTicks = reader.ReadVarInt();
 	}
 }

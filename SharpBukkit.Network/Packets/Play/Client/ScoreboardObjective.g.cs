@@ -27,13 +27,13 @@ public record PlayClientScoreboardObjective : IPacket {
 		Action = action;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		Name = reader.ReadString();
-        Action = reader.ReadSByte();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteString(Name);
         writer.WriteSByte(Action);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		Name = reader.ReadString();
+        Action = reader.ReadSByte();
 	}
 }

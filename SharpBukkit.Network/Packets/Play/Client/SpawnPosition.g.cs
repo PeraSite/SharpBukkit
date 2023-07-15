@@ -27,13 +27,13 @@ public record PlayClientSpawnPosition : IPacket {
 		Angle = angle;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		Location = reader.ReadPosition();
-        Angle = reader.ReadFloat();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WritePosition(Location);
         writer.WriteFloat(Angle);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		Location = reader.ReadPosition();
+        Angle = reader.ReadFloat();
 	}
 }

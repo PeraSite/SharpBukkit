@@ -42,16 +42,6 @@ public record PlayClientExplosion : IPacket {
 		PlayerMotionZ = playerMotionZ;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		X = reader.ReadFloat();
-        Y = reader.ReadFloat();
-        Z = reader.ReadFloat();
-        Radius = reader.ReadFloat();
-        PlayerMotionX = reader.ReadFloat();
-        PlayerMotionY = reader.ReadFloat();
-        PlayerMotionZ = reader.ReadFloat();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteFloat(X);
         writer.WriteFloat(Y);
@@ -60,5 +50,15 @@ public record PlayClientExplosion : IPacket {
         writer.WriteFloat(PlayerMotionX);
         writer.WriteFloat(PlayerMotionY);
         writer.WriteFloat(PlayerMotionZ);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		X = reader.ReadFloat();
+        Y = reader.ReadFloat();
+        Z = reader.ReadFloat();
+        Radius = reader.ReadFloat();
+        PlayerMotionX = reader.ReadFloat();
+        PlayerMotionY = reader.ReadFloat();
+        PlayerMotionZ = reader.ReadFloat();
 	}
 }

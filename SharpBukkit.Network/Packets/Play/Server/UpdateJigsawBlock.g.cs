@@ -39,15 +39,6 @@ public record PlayServerUpdateJigsawBlock : IPacket {
 		JointType = jointType;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		Location = reader.ReadPosition();
-        Name = reader.ReadString();
-        Target = reader.ReadString();
-        Pool = reader.ReadString();
-        FinalState = reader.ReadString();
-        JointType = reader.ReadString();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WritePosition(Location);
         writer.WriteString(Name);
@@ -55,5 +46,14 @@ public record PlayServerUpdateJigsawBlock : IPacket {
         writer.WriteString(Pool);
         writer.WriteString(FinalState);
         writer.WriteString(JointType);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		Location = reader.ReadPosition();
+        Name = reader.ReadString();
+        Target = reader.ReadString();
+        Pool = reader.ReadString();
+        FinalState = reader.ReadString();
+        JointType = reader.ReadString();
 	}
 }

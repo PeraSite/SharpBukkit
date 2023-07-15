@@ -24,11 +24,11 @@ public record PlayServerFlying : IPacket {
 		OnGround = onGround;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		OnGround = reader.ReadBool();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteBool(OnGround);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		OnGround = reader.ReadBool();
 	}
 }

@@ -27,13 +27,13 @@ public record PlayClientTeams : IPacket {
 		Mode = mode;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		Team = reader.ReadString();
-        Mode = reader.ReadSByte();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteString(Team);
         writer.WriteSByte(Mode);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		Team = reader.ReadString();
+        Mode = reader.ReadSByte();
 	}
 }

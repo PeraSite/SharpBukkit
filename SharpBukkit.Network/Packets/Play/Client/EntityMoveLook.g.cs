@@ -42,16 +42,6 @@ public record PlayClientEntityMoveLook : IPacket {
 		OnGround = onGround;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		EntityId = reader.ReadVarInt();
-        DX = reader.ReadShort();
-        DY = reader.ReadShort();
-        DZ = reader.ReadShort();
-        Yaw = reader.ReadSByte();
-        Pitch = reader.ReadSByte();
-        OnGround = reader.ReadBool();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteVarInt(EntityId);
         writer.WriteShort(DX);
@@ -60,5 +50,15 @@ public record PlayClientEntityMoveLook : IPacket {
         writer.WriteSByte(Yaw);
         writer.WriteSByte(Pitch);
         writer.WriteBool(OnGround);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		EntityId = reader.ReadVarInt();
+        DX = reader.ReadShort();
+        DY = reader.ReadShort();
+        DZ = reader.ReadShort();
+        Yaw = reader.ReadSByte();
+        Pitch = reader.ReadSByte();
+        OnGround = reader.ReadBool();
 	}
 }

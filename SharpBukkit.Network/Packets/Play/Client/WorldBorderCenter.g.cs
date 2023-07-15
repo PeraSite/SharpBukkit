@@ -27,13 +27,13 @@ public record PlayClientWorldBorderCenter : IPacket {
 		Z = z;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		X = reader.ReadDouble();
-        Z = reader.ReadDouble();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteDouble(X);
         writer.WriteDouble(Z);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		X = reader.ReadDouble();
+        Z = reader.ReadDouble();
 	}
 }

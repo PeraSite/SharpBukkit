@@ -27,13 +27,13 @@ public record PlayClientAnimation : IPacket {
 		Animation = animation;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		EntityId = reader.ReadVarInt();
-        Animation = reader.ReadByte();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteVarInt(EntityId);
         writer.WriteByte(Animation);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		EntityId = reader.ReadVarInt();
+        Animation = reader.ReadByte();
 	}
 }

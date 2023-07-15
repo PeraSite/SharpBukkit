@@ -30,15 +30,15 @@ public record PlayClientWorldBorderLerpSize : IPacket {
 		Speed = speed;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		OldDiameter = reader.ReadDouble();
-        NewDiameter = reader.ReadDouble();
-        Speed = reader.ReadLong();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteDouble(OldDiameter);
         writer.WriteDouble(NewDiameter);
         writer.WriteLong(Speed);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		OldDiameter = reader.ReadDouble();
+        NewDiameter = reader.ReadDouble();
+        Speed = reader.ReadLong();
 	}
 }

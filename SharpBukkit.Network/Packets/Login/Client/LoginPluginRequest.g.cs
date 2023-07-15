@@ -30,15 +30,15 @@ public record LoginClientLoginPluginRequest : IPacket {
 		Data = data;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		MessageId = reader.ReadVarInt();
-        Channel = reader.ReadString();
-        Data = reader.ReadBuffer();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteVarInt(MessageId);
         writer.WriteString(Channel);
         writer.WriteBuffer(Data);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		MessageId = reader.ReadVarInt();
+        Channel = reader.ReadString();
+        Data = reader.ReadBuffer();
 	}
 }

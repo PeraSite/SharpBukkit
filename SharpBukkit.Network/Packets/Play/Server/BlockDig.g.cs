@@ -30,15 +30,15 @@ public record PlayServerBlockDig : IPacket {
 		Face = face;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		Status = reader.ReadVarInt();
-        Location = reader.ReadPosition();
-        Face = reader.ReadSByte();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteVarInt(Status);
         writer.WritePosition(Location);
         writer.WriteSByte(Face);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		Status = reader.ReadVarInt();
+        Location = reader.ReadPosition();
+        Face = reader.ReadSByte();
 	}
 }

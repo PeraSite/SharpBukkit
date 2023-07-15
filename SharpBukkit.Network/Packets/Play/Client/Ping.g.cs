@@ -24,11 +24,11 @@ public record PlayClientPing : IPacket {
 		Id = id;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		Id = reader.ReadInt();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteInt(Id);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		Id = reader.ReadInt();
 	}
 }

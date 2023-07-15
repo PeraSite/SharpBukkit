@@ -30,15 +30,15 @@ public record PlayClientTabComplete : IPacket {
 		Length = length;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		TransactionId = reader.ReadVarInt();
-        Start = reader.ReadVarInt();
-        Length = reader.ReadVarInt();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteVarInt(TransactionId);
         writer.WriteVarInt(Start);
         writer.WriteVarInt(Length);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		TransactionId = reader.ReadVarInt();
+        Start = reader.ReadVarInt();
+        Length = reader.ReadVarInt();
 	}
 }

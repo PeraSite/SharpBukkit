@@ -24,11 +24,11 @@ public record PlayClientUpdateViewDistance : IPacket {
 		ViewDistance = viewDistance;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		ViewDistance = reader.ReadVarInt();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteVarInt(ViewDistance);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		ViewDistance = reader.ReadVarInt();
 	}
 }

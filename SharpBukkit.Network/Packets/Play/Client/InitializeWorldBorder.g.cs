@@ -45,17 +45,6 @@ public record PlayClientInitializeWorldBorder : IPacket {
 		WarningTime = warningTime;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		X = reader.ReadDouble();
-        Z = reader.ReadDouble();
-        OldDiameter = reader.ReadDouble();
-        NewDiameter = reader.ReadDouble();
-        Speed = reader.ReadLong();
-        PortalTeleportBoundary = reader.ReadVarInt();
-        WarningBlocks = reader.ReadVarInt();
-        WarningTime = reader.ReadVarInt();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteDouble(X);
         writer.WriteDouble(Z);
@@ -65,5 +54,16 @@ public record PlayClientInitializeWorldBorder : IPacket {
         writer.WriteVarInt(PortalTeleportBoundary);
         writer.WriteVarInt(WarningBlocks);
         writer.WriteVarInt(WarningTime);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		X = reader.ReadDouble();
+        Z = reader.ReadDouble();
+        OldDiameter = reader.ReadDouble();
+        NewDiameter = reader.ReadDouble();
+        Speed = reader.ReadLong();
+        PortalTeleportBoundary = reader.ReadVarInt();
+        WarningBlocks = reader.ReadVarInt();
+        WarningTime = reader.ReadVarInt();
 	}
 }

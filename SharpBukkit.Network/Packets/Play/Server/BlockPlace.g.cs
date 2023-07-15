@@ -42,16 +42,6 @@ public record PlayServerBlockPlace : IPacket {
 		InsideBlock = insideBlock;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		Hand = reader.ReadVarInt();
-        Location = reader.ReadPosition();
-        Direction = reader.ReadVarInt();
-        CursorX = reader.ReadFloat();
-        CursorY = reader.ReadFloat();
-        CursorZ = reader.ReadFloat();
-        InsideBlock = reader.ReadBool();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteVarInt(Hand);
         writer.WritePosition(Location);
@@ -60,5 +50,15 @@ public record PlayServerBlockPlace : IPacket {
         writer.WriteFloat(CursorY);
         writer.WriteFloat(CursorZ);
         writer.WriteBool(InsideBlock);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		Hand = reader.ReadVarInt();
+        Location = reader.ReadPosition();
+        Direction = reader.ReadVarInt();
+        CursorX = reader.ReadFloat();
+        CursorY = reader.ReadFloat();
+        CursorZ = reader.ReadFloat();
+        InsideBlock = reader.ReadBool();
 	}
 }

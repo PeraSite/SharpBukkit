@@ -33,17 +33,17 @@ public record PlayClientMap : IPacket {
 		Columns = columns;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		ItemDamage = reader.ReadVarInt();
-        Scale = reader.ReadSByte();
-        Locked = reader.ReadBool();
-        Columns = reader.ReadByte();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteVarInt(ItemDamage);
         writer.WriteSByte(Scale);
         writer.WriteBool(Locked);
         writer.WriteByte(Columns);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		ItemDamage = reader.ReadVarInt();
+        Scale = reader.ReadSByte();
+        Locked = reader.ReadBool();
+        Columns = reader.ReadByte();
 	}
 }

@@ -36,19 +36,19 @@ public record PlayClientSpawnEntityExperienceOrb : IPacket {
 		Count = count;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		EntityId = reader.ReadVarInt();
-        X = reader.ReadDouble();
-        Y = reader.ReadDouble();
-        Z = reader.ReadDouble();
-        Count = reader.ReadShort();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteVarInt(EntityId);
         writer.WriteDouble(X);
         writer.WriteDouble(Y);
         writer.WriteDouble(Z);
         writer.WriteShort(Count);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		EntityId = reader.ReadVarInt();
+        X = reader.ReadDouble();
+        Y = reader.ReadDouble();
+        Z = reader.ReadDouble();
+        Count = reader.ReadShort();
 	}
 }

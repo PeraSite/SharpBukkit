@@ -33,17 +33,17 @@ public record HandshakingServerSetProtocol : IPacket {
 		NextState = nextState;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		ProtocolVersion = reader.ReadVarInt();
-        ServerHost = reader.ReadString();
-        ServerPort = reader.ReadUShort();
-        NextState = reader.ReadVarInt();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteVarInt(ProtocolVersion);
         writer.WriteString(ServerHost);
         writer.WriteUShort(ServerPort);
         writer.WriteVarInt(NextState);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		ProtocolVersion = reader.ReadVarInt();
+        ServerHost = reader.ReadString();
+        ServerPort = reader.ReadUShort();
+        NextState = reader.ReadVarInt();
 	}
 }

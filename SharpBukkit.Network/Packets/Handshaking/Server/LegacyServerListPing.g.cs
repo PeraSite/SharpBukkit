@@ -24,11 +24,11 @@ public record HandshakingServerLegacyServerListPing : IPacket {
 		Payload = payload;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		Payload = reader.ReadByte();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteByte(Payload);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		Payload = reader.ReadByte();
 	}
 }

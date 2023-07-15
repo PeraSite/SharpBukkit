@@ -66,24 +66,6 @@ public record PlayClientLogin : IPacket {
 		IsFlat = isFlat;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		EntityId = reader.ReadInt();
-        IsHardcore = reader.ReadBool();
-        GameMode = reader.ReadByte();
-        PreviousGameMode = reader.ReadSByte();
-        DimensionCodec = reader.ReadNbt<DimensionCodec>();
-        Dimension = reader.ReadNbt<Dimension>();
-        WorldName = reader.ReadString();
-        HashedSeed = reader.ReadLong();
-        MaxPlayers = reader.ReadVarInt();
-        ViewDistance = reader.ReadVarInt();
-        SimulationDistance = reader.ReadVarInt();
-        ReducedDebugInfo = reader.ReadBool();
-        EnableRespawnScreen = reader.ReadBool();
-        IsDebug = reader.ReadBool();
-        IsFlat = reader.ReadBool();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteInt(EntityId);
         writer.WriteBool(IsHardcore);
@@ -100,5 +82,23 @@ public record PlayClientLogin : IPacket {
         writer.WriteBool(EnableRespawnScreen);
         writer.WriteBool(IsDebug);
         writer.WriteBool(IsFlat);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		EntityId = reader.ReadInt();
+        IsHardcore = reader.ReadBool();
+        GameMode = reader.ReadByte();
+        PreviousGameMode = reader.ReadSByte();
+        DimensionCodec = reader.ReadNbt<DimensionCodec>();
+        Dimension = reader.ReadNbt<Dimension>();
+        WorldName = reader.ReadString();
+        HashedSeed = reader.ReadLong();
+        MaxPlayers = reader.ReadVarInt();
+        ViewDistance = reader.ReadVarInt();
+        SimulationDistance = reader.ReadVarInt();
+        ReducedDebugInfo = reader.ReadBool();
+        EnableRespawnScreen = reader.ReadBool();
+        IsDebug = reader.ReadBool();
+        IsFlat = reader.ReadBool();
 	}
 }

@@ -24,11 +24,11 @@ public record PlayClientCamera : IPacket {
 		CameraId = cameraId;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		CameraId = reader.ReadVarInt();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteVarInt(CameraId);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		CameraId = reader.ReadVarInt();
 	}
 }

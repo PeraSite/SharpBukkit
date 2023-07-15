@@ -24,11 +24,11 @@ public record PlayServerLockDifficulty : IPacket {
 		Locked = locked;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		Locked = reader.ReadBool();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteBool(Locked);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		Locked = reader.ReadBool();
 	}
 }

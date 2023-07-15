@@ -27,13 +27,13 @@ public record PlayClientSetCooldown : IPacket {
 		CooldownTicks = cooldownTicks;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		ItemID = reader.ReadVarInt();
-        CooldownTicks = reader.ReadVarInt();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteVarInt(ItemID);
         writer.WriteVarInt(CooldownTicks);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		ItemID = reader.ReadVarInt();
+        CooldownTicks = reader.ReadVarInt();
 	}
 }

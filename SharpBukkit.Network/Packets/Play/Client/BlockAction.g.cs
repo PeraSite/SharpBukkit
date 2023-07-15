@@ -33,17 +33,17 @@ public record PlayClientBlockAction : IPacket {
 		BlockId = blockId;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		Location = reader.ReadPosition();
-        Byte1 = reader.ReadByte();
-        Byte2 = reader.ReadByte();
-        BlockId = reader.ReadVarInt();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WritePosition(Location);
         writer.WriteByte(Byte1);
         writer.WriteByte(Byte2);
         writer.WriteVarInt(BlockId);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		Location = reader.ReadPosition();
+        Byte1 = reader.ReadByte();
+        Byte2 = reader.ReadByte();
+        BlockId = reader.ReadVarInt();
 	}
 }

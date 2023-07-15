@@ -57,21 +57,6 @@ public record PlayClientSpawnEntityLiving : IPacket {
 		VelocityZ = velocityZ;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		EntityId = reader.ReadVarInt();
-        EntityUUID = reader.ReadUuid();
-        Type = reader.ReadVarInt();
-        X = reader.ReadDouble();
-        Y = reader.ReadDouble();
-        Z = reader.ReadDouble();
-        Yaw = reader.ReadSByte();
-        Pitch = reader.ReadSByte();
-        HeadPitch = reader.ReadSByte();
-        VelocityX = reader.ReadShort();
-        VelocityY = reader.ReadShort();
-        VelocityZ = reader.ReadShort();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteVarInt(EntityId);
         writer.WriteUuid(EntityUUID);
@@ -85,5 +70,20 @@ public record PlayClientSpawnEntityLiving : IPacket {
         writer.WriteShort(VelocityX);
         writer.WriteShort(VelocityY);
         writer.WriteShort(VelocityZ);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		EntityId = reader.ReadVarInt();
+        EntityUUID = reader.ReadUuid();
+        Type = reader.ReadVarInt();
+        X = reader.ReadDouble();
+        Y = reader.ReadDouble();
+        Z = reader.ReadDouble();
+        Yaw = reader.ReadSByte();
+        Pitch = reader.ReadSByte();
+        HeadPitch = reader.ReadSByte();
+        VelocityX = reader.ReadShort();
+        VelocityY = reader.ReadShort();
+        VelocityZ = reader.ReadShort();
 	}
 }

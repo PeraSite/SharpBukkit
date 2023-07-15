@@ -30,15 +30,15 @@ public record PlayClientSetTitleTime : IPacket {
 		FadeOut = fadeOut;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		FadeIn = reader.ReadInt();
-        Stay = reader.ReadInt();
-        FadeOut = reader.ReadInt();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteInt(FadeIn);
         writer.WriteInt(Stay);
         writer.WriteInt(FadeOut);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		FadeIn = reader.ReadInt();
+        Stay = reader.ReadInt();
+        FadeOut = reader.ReadInt();
 	}
 }

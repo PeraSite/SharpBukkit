@@ -24,11 +24,11 @@ public record PlayClientSimulationDistance : IPacket {
 		Distance = distance;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		Distance = reader.ReadVarInt();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteVarInt(Distance);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		Distance = reader.ReadVarInt();
 	}
 }

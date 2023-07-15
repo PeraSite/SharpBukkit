@@ -39,15 +39,6 @@ public record PlayServerPositionLook : IPacket {
 		OnGround = onGround;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		X = reader.ReadDouble();
-        Y = reader.ReadDouble();
-        Z = reader.ReadDouble();
-        Yaw = reader.ReadFloat();
-        Pitch = reader.ReadFloat();
-        OnGround = reader.ReadBool();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteDouble(X);
         writer.WriteDouble(Y);
@@ -55,5 +46,14 @@ public record PlayServerPositionLook : IPacket {
         writer.WriteFloat(Yaw);
         writer.WriteFloat(Pitch);
         writer.WriteBool(OnGround);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		X = reader.ReadDouble();
+        Y = reader.ReadDouble();
+        Z = reader.ReadDouble();
+        Yaw = reader.ReadFloat();
+        Pitch = reader.ReadFloat();
+        OnGround = reader.ReadBool();
 	}
 }

@@ -24,11 +24,11 @@ public record PlayServerTeleportConfirm : IPacket {
 		TeleportId = teleportId;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		TeleportId = reader.ReadVarInt();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteVarInt(TeleportId);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		TeleportId = reader.ReadVarInt();
 	}
 }

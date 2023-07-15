@@ -30,15 +30,15 @@ public record PlayClientResourcePackSend : IPacket {
 		Forced = forced;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		Url = reader.ReadString();
-        Hash = reader.ReadString();
-        Forced = reader.ReadBool();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteString(Url);
         writer.WriteString(Hash);
         writer.WriteBool(Forced);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		Url = reader.ReadString();
+        Hash = reader.ReadString();
+        Forced = reader.ReadBool();
 	}
 }

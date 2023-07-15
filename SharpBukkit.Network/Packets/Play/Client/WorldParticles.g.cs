@@ -51,19 +51,6 @@ public record PlayClientWorldParticles : IPacket {
 		Particles = particles;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		ParticleId = reader.ReadInt();
-        LongDistance = reader.ReadBool();
-        X = reader.ReadDouble();
-        Y = reader.ReadDouble();
-        Z = reader.ReadDouble();
-        OffsetX = reader.ReadFloat();
-        OffsetY = reader.ReadFloat();
-        OffsetZ = reader.ReadFloat();
-        ParticleData = reader.ReadFloat();
-        Particles = reader.ReadInt();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteInt(ParticleId);
         writer.WriteBool(LongDistance);
@@ -75,5 +62,18 @@ public record PlayClientWorldParticles : IPacket {
         writer.WriteFloat(OffsetZ);
         writer.WriteFloat(ParticleData);
         writer.WriteInt(Particles);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		ParticleId = reader.ReadInt();
+        LongDistance = reader.ReadBool();
+        X = reader.ReadDouble();
+        Y = reader.ReadDouble();
+        Z = reader.ReadDouble();
+        OffsetX = reader.ReadFloat();
+        OffsetY = reader.ReadFloat();
+        OffsetZ = reader.ReadFloat();
+        ParticleData = reader.ReadFloat();
+        Particles = reader.ReadInt();
 	}
 }

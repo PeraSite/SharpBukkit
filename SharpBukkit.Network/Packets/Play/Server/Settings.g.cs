@@ -45,17 +45,6 @@ public record PlayServerSettings : IPacket {
 		EnableServerListing = enableServerListing;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		Locale = reader.ReadString();
-        ViewDistance = reader.ReadSByte();
-        ChatFlags = reader.ReadVarInt();
-        ChatColors = reader.ReadBool();
-        SkinParts = reader.ReadByte();
-        MainHand = reader.ReadVarInt();
-        EnableTextFiltering = reader.ReadBool();
-        EnableServerListing = reader.ReadBool();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteString(Locale);
         writer.WriteSByte(ViewDistance);
@@ -65,5 +54,16 @@ public record PlayServerSettings : IPacket {
         writer.WriteVarInt(MainHand);
         writer.WriteBool(EnableTextFiltering);
         writer.WriteBool(EnableServerListing);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		Locale = reader.ReadString();
+        ViewDistance = reader.ReadSByte();
+        ChatFlags = reader.ReadVarInt();
+        ChatColors = reader.ReadBool();
+        SkinParts = reader.ReadByte();
+        MainHand = reader.ReadVarInt();
+        EnableTextFiltering = reader.ReadBool();
+        EnableServerListing = reader.ReadBool();
 	}
 }

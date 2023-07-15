@@ -27,13 +27,13 @@ public record PlayClientPlayerlistHeader : IPacket {
 		Footer = footer;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		Header = reader.ReadString();
-        Footer = reader.ReadString();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteString(Header);
         writer.WriteString(Footer);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		Header = reader.ReadString();
+        Footer = reader.ReadString();
 	}
 }

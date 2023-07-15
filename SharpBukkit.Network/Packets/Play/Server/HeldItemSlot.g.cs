@@ -24,11 +24,11 @@ public record PlayServerHeldItemSlot : IPacket {
 		SlotId = slotId;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		SlotId = reader.ReadShort();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteShort(SlotId);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		SlotId = reader.ReadShort();
 	}
 }

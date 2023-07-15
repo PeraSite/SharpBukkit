@@ -27,13 +27,13 @@ public record PlayClientNbtQueryResponse : IPacket {
 		Nbt = nbt;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		TransactionId = reader.ReadVarInt();
-        Nbt = reader.ReadOptNbtTag();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteVarInt(TransactionId);
         writer.WriteOptNbtTag(Nbt);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		TransactionId = reader.ReadVarInt();
+        Nbt = reader.ReadOptNbtTag();
 	}
 }

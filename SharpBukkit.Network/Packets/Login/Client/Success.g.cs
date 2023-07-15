@@ -27,13 +27,13 @@ public record LoginClientSuccess : IPacket {
 		Username = username;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		Uuid = reader.ReadUuid();
-        Username = reader.ReadString();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteUuid(Uuid);
         writer.WriteString(Username);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		Uuid = reader.ReadUuid();
+        Username = reader.ReadString();
 	}
 }

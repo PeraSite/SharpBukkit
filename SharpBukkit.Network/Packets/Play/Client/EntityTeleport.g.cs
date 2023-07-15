@@ -42,16 +42,6 @@ public record PlayClientEntityTeleport : IPacket {
 		OnGround = onGround;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		EntityId = reader.ReadVarInt();
-        X = reader.ReadDouble();
-        Y = reader.ReadDouble();
-        Z = reader.ReadDouble();
-        Yaw = reader.ReadSByte();
-        Pitch = reader.ReadSByte();
-        OnGround = reader.ReadBool();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteVarInt(EntityId);
         writer.WriteDouble(X);
@@ -60,5 +50,15 @@ public record PlayClientEntityTeleport : IPacket {
         writer.WriteSByte(Yaw);
         writer.WriteSByte(Pitch);
         writer.WriteBool(OnGround);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		EntityId = reader.ReadVarInt();
+        X = reader.ReadDouble();
+        Y = reader.ReadDouble();
+        Z = reader.ReadDouble();
+        Yaw = reader.ReadSByte();
+        Pitch = reader.ReadSByte();
+        OnGround = reader.ReadBool();
 	}
 }

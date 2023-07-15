@@ -30,15 +30,15 @@ public record PlayClientCollect : IPacket {
 		PickupItemCount = pickupItemCount;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		CollectedEntityId = reader.ReadVarInt();
-        CollectorEntityId = reader.ReadVarInt();
-        PickupItemCount = reader.ReadVarInt();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteVarInt(CollectedEntityId);
         writer.WriteVarInt(CollectorEntityId);
         writer.WriteVarInt(PickupItemCount);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		CollectedEntityId = reader.ReadVarInt();
+        CollectorEntityId = reader.ReadVarInt();
+        PickupItemCount = reader.ReadVarInt();
 	}
 }

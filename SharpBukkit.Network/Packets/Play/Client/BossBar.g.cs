@@ -27,13 +27,13 @@ public record PlayClientBossBar : IPacket {
 		Action = action;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		EntityUUID = reader.ReadUuid();
-        Action = reader.ReadVarInt();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteUuid(EntityUUID);
         writer.WriteVarInt(Action);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		EntityUUID = reader.ReadUuid();
+        Action = reader.ReadVarInt();
 	}
 }

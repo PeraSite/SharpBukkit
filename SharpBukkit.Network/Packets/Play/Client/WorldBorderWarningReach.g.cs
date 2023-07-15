@@ -24,11 +24,11 @@ public record PlayClientWorldBorderWarningReach : IPacket {
 		WarningBlocks = warningBlocks;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		WarningBlocks = reader.ReadVarInt();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteVarInt(WarningBlocks);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		WarningBlocks = reader.ReadVarInt();
 	}
 }

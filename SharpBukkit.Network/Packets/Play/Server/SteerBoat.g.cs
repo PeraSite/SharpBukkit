@@ -27,13 +27,13 @@ public record PlayServerSteerBoat : IPacket {
 		RightPaddle = rightPaddle;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		LeftPaddle = reader.ReadBool();
-        RightPaddle = reader.ReadBool();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteBool(LeftPaddle);
         writer.WriteBool(RightPaddle);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		LeftPaddle = reader.ReadBool();
+        RightPaddle = reader.ReadBool();
 	}
 }

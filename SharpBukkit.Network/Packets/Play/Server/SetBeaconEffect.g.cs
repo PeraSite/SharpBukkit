@@ -27,13 +27,13 @@ public record PlayServerSetBeaconEffect : IPacket {
 		SecondaryEffect = secondaryEffect;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		PrimaryEffect = reader.ReadVarInt();
-        SecondaryEffect = reader.ReadVarInt();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteVarInt(PrimaryEffect);
         writer.WriteVarInt(SecondaryEffect);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		PrimaryEffect = reader.ReadVarInt();
+        SecondaryEffect = reader.ReadVarInt();
 	}
 }

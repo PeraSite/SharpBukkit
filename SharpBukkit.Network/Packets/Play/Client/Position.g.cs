@@ -45,17 +45,6 @@ public record PlayClientPosition : IPacket {
 		DismountVehicle = dismountVehicle;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		X = reader.ReadDouble();
-        Y = reader.ReadDouble();
-        Z = reader.ReadDouble();
-        Yaw = reader.ReadFloat();
-        Pitch = reader.ReadFloat();
-        Flags = reader.ReadSByte();
-        TeleportId = reader.ReadVarInt();
-        DismountVehicle = reader.ReadBool();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteDouble(X);
         writer.WriteDouble(Y);
@@ -65,5 +54,16 @@ public record PlayClientPosition : IPacket {
         writer.WriteSByte(Flags);
         writer.WriteVarInt(TeleportId);
         writer.WriteBool(DismountVehicle);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		X = reader.ReadDouble();
+        Y = reader.ReadDouble();
+        Z = reader.ReadDouble();
+        Yaw = reader.ReadFloat();
+        Pitch = reader.ReadFloat();
+        Flags = reader.ReadSByte();
+        TeleportId = reader.ReadVarInt();
+        DismountVehicle = reader.ReadBool();
 	}
 }

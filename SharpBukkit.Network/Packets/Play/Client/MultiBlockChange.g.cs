@@ -24,11 +24,11 @@ public record PlayClientMultiBlockChange : IPacket {
 		NotTrustEdges = notTrustEdges;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		NotTrustEdges = reader.ReadBool();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteBool(NotTrustEdges);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		NotTrustEdges = reader.ReadBool();
 	}
 }

@@ -30,15 +30,15 @@ public record PlayClientTileEntityData : IPacket {
 		NbtData = nbtData;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		Location = reader.ReadPosition();
-        Action = reader.ReadVarInt();
-        NbtData = reader.ReadOptNbtTag();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WritePosition(Location);
         writer.WriteVarInt(Action);
         writer.WriteOptNbtTag(NbtData);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		Location = reader.ReadPosition();
+        Action = reader.ReadVarInt();
+        NbtData = reader.ReadOptNbtTag();
 	}
 }

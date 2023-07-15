@@ -24,11 +24,11 @@ public record LoginServerLoginStart : IPacket {
 		Username = username;
 	}
 
-	public void Deserialize(IMinecraftReader reader) {
-		Username = reader.ReadString();
-	}
-
 	public void Serialize(IMinecraftWriter writer) {
 		writer.WriteString(Username);
+	}
+
+	public void Deserialize(IMinecraftReader reader) {
+		Username = reader.ReadString();
 	}
 }
