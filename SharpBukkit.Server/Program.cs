@@ -6,6 +6,7 @@ using SharpBukkit.API.Config;
 using SharpBukkit.Core;
 using SharpBukkit.Network;
 using SharpBukkit.Network.API;
+using SharpBukkit.Network.Packets;
 using Tomlyn;
 
 namespace SharpBukkit.Server;
@@ -38,6 +39,14 @@ public static class Program {
 
 		builder.RegisterInstance(logger)
 			.As<ILogger>()
+			.SingleInstance();
+
+		builder.RegisterType<ClientConnection>()
+			.As<IClientConnection>()
+			.InstancePerDependency();
+
+		builder.RegisterType<PacketRegistry>()
+			.As<IPacketRegistry>()
 			.SingleInstance();
 
 		return builder.Build();

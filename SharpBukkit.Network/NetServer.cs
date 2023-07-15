@@ -1,7 +1,6 @@
 using System.Net;
 using System.Net.Sockets;
 using Serilog;
-using SharpBukkit.API;
 using SharpBukkit.API.Config;
 using SharpBukkit.Network.API;
 
@@ -11,7 +10,7 @@ public class NetServer : INetServer {
 	// Injected
 	private readonly ServerConfig _config;
 	private readonly ILogger _logger;
-	private readonly Lazy<IServer> _server;
+	private readonly Func<TcpClient, IClientConnection> _connectionFactory;
 
 	// States
 	public Dictionary<EndPoint, IClientConnection> Connections { get; }
@@ -19,11 +18,15 @@ public class NetServer : INetServer {
 	private readonly CancellationTokenSource _cancellationTokenSource;
 	private readonly TcpListener _tcpListener;
 
-	public NetServer(ServerConfig config, ILogger logger, Lazy<IServer> server) {
+	public NetServer(
+		ServerConfig config,
+		ILogger logger,
+		Func<TcpClient, IClientConnection> connectionFactory
+	) {
 		// Dependencies
 		_config = config;
 		_logger = logger;
-		_server = server;
+		_connectionFactory = connectionFactory;
 
 		// States
 		_running = true;
@@ -41,7 +44,7 @@ public class NetServer : INetServer {
 			while (!_cancellationTokenSource.IsCancellationRequested) {
 				var client = _tcpListener.AcceptTcpClient();
 
-				var connection = new ClientConnection(client, _server.Value, _logger);
+				var connection = _connectionFactory(client);
 				connection.OnDisconnect += () => OnClientDisconnected(connection);
 				OnClientConnected(connection);
 

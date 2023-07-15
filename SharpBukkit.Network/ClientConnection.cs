@@ -4,8 +4,6 @@ using System.Net.Sockets;
 using Serilog;
 using SharpBukkit.API;
 using SharpBukkit.Network.API;
-using SharpBukkit.Network.Models;
-using SharpBukkit.Network.Packets;
 using SharpBukkit.Packet.Handshaking;
 using SharpBukkit.Packet.Status;
 
@@ -19,6 +17,7 @@ public class ClientConnection : IClientConnection {
 	private readonly IServer _server;
 	private readonly TcpClient _client;
 	private readonly ILogger _logger;
+	private readonly IPacketRegistry _packetRegistry;
 
 	// Networking
 	private readonly CancellationTokenSource _cancellationTokenSource;
@@ -27,12 +26,13 @@ public class ClientConnection : IClientConnection {
 	// States
 	private bool _isConnected;
 	private ConnectionState _connectionState;
-	private BlockingCollection<byte[]> _packetWriteQueue { get; }
+	private readonly BlockingCollection<byte[]> _packetWriteQueue;
 
-	public ClientConnection(TcpClient client, IServer server, ILogger logger) {
+	public ClientConnection(TcpClient client, IServer server, ILogger logger, IPacketRegistry packetRegistry) {
 		_client = client;
 		_server = server;
 		_logger = logger;
+		_packetRegistry = packetRegistry;
 
 		Endpoint = client.Client.RemoteEndPoint!;
 
@@ -106,7 +106,7 @@ public class ClientConnection : IClientConnection {
 				var packetLength = ms.ReadVarInt();
 				var packetId = (byte)ms.ReadVarInt();
 
-				var packet = PacketFactory.Create(ms, _connectionState, packetId);
+				var packet = _packetRegistry.Create(ms, _connectionState, packetId);
 				HandlePacket(packet);
 			}
 		}

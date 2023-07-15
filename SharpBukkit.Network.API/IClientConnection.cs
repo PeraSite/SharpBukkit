@@ -3,6 +3,9 @@ using System.Net;
 namespace SharpBukkit.Network.API;
 
 public interface IClientConnection {
-	public EndPoint Endpoint { get; }
-	public event Action OnDisconnect;
+	EndPoint Endpoint { get; }
+	event Action OnDisconnect;
+
+	void Init();
+	void Disconnect();
 }
