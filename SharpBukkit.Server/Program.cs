@@ -33,20 +33,21 @@ public static class Program {
 			.As<INetServer>()
 			.SingleInstance();
 
-		using var logger = new LoggerConfiguration()
-			.WriteTo.Console()
-			.CreateLogger();
-
-		builder.RegisterInstance(logger)
-			.As<ILogger>()
-			.SingleInstance();
-
 		builder.RegisterType<ClientConnection>()
 			.As<IClientConnection>()
 			.InstancePerDependency();
 
 		builder.RegisterType<PacketRegistry>()
 			.As<IPacketRegistry>()
+			.SingleInstance();
+
+		var logger = new LoggerConfiguration()
+			.Enrich.With(new RemoveTypeTagEnricher())
+			.WriteTo.Console()
+			.CreateLogger();
+
+		builder.RegisterInstance(logger)
+			.As<ILogger>()
 			.SingleInstance();
 
 		return builder.Build();
