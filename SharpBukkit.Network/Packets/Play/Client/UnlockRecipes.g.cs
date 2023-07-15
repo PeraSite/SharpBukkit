@@ -21,6 +21,7 @@ public record PlayClientUnlockRecipes : IPacket {
     public bool FilteringBlastFurnace { get; private set; }
     public bool SmokerBookOpen { get; private set; }
     public bool FilteringSmoker { get; private set; }
+    public string[] Recipes1 { get; private set; }
 
     public PlayClientUnlockRecipes(IMinecraftReader reader) {
 	    Deserialize(reader);
@@ -35,7 +36,8 @@ public record PlayClientUnlockRecipes : IPacket {
 		bool blastFurnaceOpen,
 		bool filteringBlastFurnace,
 		bool smokerBookOpen,
-		bool filteringSmoker
+		bool filteringSmoker,
+		string[] recipes1
 		) {
 		Action = action;
 		CraftingBookOpen = craftingBookOpen;
@@ -46,6 +48,7 @@ public record PlayClientUnlockRecipes : IPacket {
 		FilteringBlastFurnace = filteringBlastFurnace;
 		SmokerBookOpen = smokerBookOpen;
 		FilteringSmoker = filteringSmoker;
+		Recipes1 = recipes1;
 	}
 
 	public void Serialize(IMinecraftWriter writer) {
@@ -58,6 +61,7 @@ public record PlayClientUnlockRecipes : IPacket {
         writer.WriteBool(FilteringBlastFurnace);
         writer.WriteBool(SmokerBookOpen);
         writer.WriteBool(FilteringSmoker);
+        writer.WriteStringArray(Recipes1);
 	}
 
 	public void Deserialize(IMinecraftReader reader) {
@@ -70,5 +74,6 @@ public record PlayClientUnlockRecipes : IPacket {
         FilteringBlastFurnace = reader.ReadBool();
         SmokerBookOpen = reader.ReadBool();
         FilteringSmoker = reader.ReadBool();
+        Recipes1 = reader.ReadStringArray();
 	}
 }

@@ -16,6 +16,7 @@ public record PlayClientLogin : IPacket {
     public bool IsHardcore { get; private set; }
     public byte GameMode { get; private set; }
     public sbyte PreviousGameMode { get; private set; }
+    public string[] WorldNames { get; private set; }
     public DimensionCodec DimensionCodec { get; private set; }
     public Dimension Dimension { get; private set; }
     public string WorldName { get; private set; }
@@ -37,6 +38,7 @@ public record PlayClientLogin : IPacket {
 		bool isHardcore,
 		byte gameMode,
 		sbyte previousGameMode,
+		string[] worldNames,
 		DimensionCodec dimensionCodec,
 		Dimension dimension,
 		string worldName,
@@ -53,6 +55,7 @@ public record PlayClientLogin : IPacket {
 		IsHardcore = isHardcore;
 		GameMode = gameMode;
 		PreviousGameMode = previousGameMode;
+		WorldNames = worldNames;
 		DimensionCodec = dimensionCodec;
 		Dimension = dimension;
 		WorldName = worldName;
@@ -71,6 +74,7 @@ public record PlayClientLogin : IPacket {
         writer.WriteBool(IsHardcore);
         writer.WriteByte(GameMode);
         writer.WriteSByte(PreviousGameMode);
+        writer.WriteStringArray(WorldNames);
         writer.WriteNbt<DimensionCodec>(DimensionCodec);
         writer.WriteNbt<Dimension>(Dimension);
         writer.WriteString(WorldName);
@@ -89,6 +93,7 @@ public record PlayClientLogin : IPacket {
         IsHardcore = reader.ReadBool();
         GameMode = reader.ReadByte();
         PreviousGameMode = reader.ReadSByte();
+        WorldNames = reader.ReadStringArray();
         DimensionCodec = reader.ReadNbt<DimensionCodec>();
         Dimension = reader.ReadNbt<Dimension>();
         WorldName = reader.ReadString();
