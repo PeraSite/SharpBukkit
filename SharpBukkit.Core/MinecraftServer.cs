@@ -35,7 +35,8 @@ public class MinecraftServer : IServer {
 	}
 
 	public void Start() {
-		_logger.Information("Config : {Config}", _config);
+		_logger.Information("Game Config : \n{@Config}", _config.Game);
+		_logger.Information("Network Config : \n{@Config}", _config.Network);
 
 		_logger.Information("Loading packets...");
 		_packetRegistry.Load();
