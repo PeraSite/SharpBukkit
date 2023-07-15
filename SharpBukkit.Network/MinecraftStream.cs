@@ -227,8 +227,7 @@ namespace SharpBukkit.Network {
 		}
 
 		public int ReadVarInt() {
-			var read = 0;
-			return ReadVarInt(out read);
+			return ReadVarInt(out _);
 		}
 
 		public int ReadVarInt(out int bytesRead) {

@@ -7,8 +7,11 @@ using SharpBukkit.API;
 using SharpBukkit.API.Config;
 using SharpBukkit.Network.API;
 using SharpBukkit.Network.API.Crypto;
+using SharpBukkit.Network.Models.Nbt;
+using SharpBukkit.Network.Utils;
 using SharpBukkit.Packet.Handshaking;
 using SharpBukkit.Packet.Login;
+using SharpBukkit.Packet.Play;
 using SharpBukkit.Packet.Status;
 
 namespace SharpBukkit.Network;
@@ -35,7 +38,7 @@ public class ClientConnection : IClientConnection {
 	// States
 	private bool _isConnected;
 	private ConnectionState _connectionState;
-	private readonly BlockingCollection<IPacket> _packetWriteQueue;
+	private readonly BlockingCollection<(byte[], Action?)> _packetWriteQueue;
 	private byte[]? _verifyToken;
 
 	private bool _isEncrypted;
@@ -66,7 +69,7 @@ public class ClientConnection : IClientConnection {
 
 		_isConnected = true;
 		_connectionState = ConnectionState.Handshaking;
-		_packetWriteQueue = new BlockingCollection<IPacket>();
+		_packetWriteQueue = new BlockingCollection<(byte[], Action?)>();
 	}
 
 	public void Init() {
@@ -90,26 +93,15 @@ public class ClientConnection : IClientConnection {
 
 	#region Send Handler
 	private void SendTask() {
-		// Temporary stream
-		using var ms = new MemoryStream();
-		using var mc = new MinecraftStream(ms);
-
 		while (!_cancellationTokenSource.IsCancellationRequested) {
 			try {
-				var packet = _packetWriteQueue.Take(_cancellationTokenSource.Token);
+				var (packetData, onComplete) = _packetWriteQueue.Take(_cancellationTokenSource.Token);
 
-				// Serialize packet to byte[]
-				mc.WriteVarInt(packet.PacketId);
-				packet.Serialize(mc);
-				var data = ms.ToArray();
+				_writeStream.WriteVarInt(packetData.Length);
+				_writeStream.Write(packetData);
 
-				// Write to actual stream
-				_writeStream.WriteVarInt(data.Length);
-				_writeStream.Write(data);
-
-				// Reset stream
-				mc.Position = 0;
-				mc.SetLength(0);
+				// Invoke callback function
+				onComplete?.Invoke();
 			}
 			catch (OperationCanceledException) {
 				break;
@@ -117,9 +109,39 @@ public class ClientConnection : IClientConnection {
 		}
 	}
 
-	public void SendPacket(IPacket packet) {
+	public void SendPacket(IPacket packet, Action? onSendComplete = null) {
 		_logger.Information("[SEND] >> {@Packet}", packet);
-		_packetWriteQueue.Add(packet);
+
+		byte[] encodedPacket;
+
+		using (var ms = new MemoryStream()) {
+			using var mc = new MinecraftStream(ms);
+			// Write packet id, data
+			mc.WriteVarInt(packet.PacketId);
+			packet.Serialize(mc);
+
+			// Get uncompressed packet data
+			encodedPacket = ms.ToArray();
+
+			// Reset stream
+			mc.Position = 0;
+			mc.SetLength(0);
+
+			if (_isCompressed) {
+				if (encodedPacket.Length >= _config.Network.CompressionThreshold) {
+					var compressed = CompressUtil.CompressData(encodedPacket);
+					mc.WriteVarInt(encodedPacket.Length);
+					mc.Write(compressed);
+				} else {
+					// Uncompressed
+					mc.WriteVarInt(0);
+					mc.Write(encodedPacket);
+				}
+				encodedPacket = ms.ToArray();
+			}
+		}
+
+		_packetWriteQueue.Add((encodedPacket, onSendComplete));
 	}
 	  #endregion
 
@@ -127,10 +149,35 @@ public class ClientConnection : IClientConnection {
 	private void ReceiveTask() {
 		try {
 			while (!_cancellationTokenSource.IsCancellationRequested) {
-				var packetLength = _readStream.ReadVarInt();
-				var packetId = (byte)_readStream.ReadVarInt();
+				byte packetId;
+				byte[] packetData;
 
-				var packet = _packetRegistry.Create(_readStream, _connectionState, packetId);
+				if (_isCompressed) {
+					var length = _readStream.ReadVarInt();
+					var dataLength = _readStream.ReadVarInt(out var dataLengthLength);
+
+					// Data is not compressed if data length is 0
+					if (dataLength == 0) {
+						packetId = (byte)_readStream.ReadVarInt(out var idLength);
+						packetData = _readStream.Read(length - (dataLengthLength + idLength));
+					} else {
+						// Data is compressed
+						var data = _readStream.Read(length - dataLengthLength);
+						var decompressed = CompressUtil.DecompressData(data);
+						using var ms = new MemoryStream(decompressed);
+						using var mc = new MinecraftStream(ms);
+
+						packetId = (byte)mc.ReadVarInt(out var l);
+						packetData = mc.Read(dataLength - l);
+					}
+				} else {
+					var length = _readStream.ReadVarInt();
+					packetId = (byte)_readStream.ReadVarInt(out var idLength);
+					packetData = _readStream.Read(length - idLength);
+				}
+
+				var dataStream = new MinecraftStream(new MemoryStream(packetData));
+				var packet = _packetRegistry.Create(dataStream, _connectionState, packetId);
 				HandlePacket(packet);
 			}
 		}
@@ -199,6 +246,12 @@ public class ClientConnection : IClientConnection {
 	private void HandleLoginStart(LoginServerLoginStart packet) {
 		_logger.Information("User {Username} is trying to login", packet.Username);
 
+		// If it's offline mode, just login
+		if (!_config.Game.OnlineMode) {
+			ChangeToPlay();
+			return;
+		}
+
 		// Get RSA public key from crypto service
 		var publicKey = _cryptoService.GetRsaPublicKey();
 
@@ -228,15 +281,47 @@ public class ClientConnection : IClientConnection {
 		_readStream.InitEncryption(decryptedSharedSecret);
 		_writeStream.InitEncryption(decryptedSharedSecret);
 
+		// TODO: Check online-mode, connect to Mojang server
+		
 		ChangeToPlay();
 	}
 
 	private void ChangeToPlay() {
 		_connectionState = ConnectionState.Play;
-		_isCompressed = true;
 
-		SendPacket(new LoginClientCompress(_config.Network.Compression));
-		SendPacket(new LoginClientSuccess(Guid.NewGuid(), "Test"));
+		var threshold = _config.Network.CompressionThreshold;
+		if (threshold > 0) {
+			SendPacket(new LoginClientCompress(threshold));
+			_isCompressed = true;
+		}
+		SendPacket(new LoginClientSuccess(Guid.NewGuid(), "PeraSite"));
+
+		// TODO: Do this in player class
+		SendPacket(new PlayClientLogin(
+			167,
+			false,
+			1, // Creative,
+			-1,
+			new[] {"minecraft:overworld", "minecraft:the_nether", "minecraft:the_end"},
+			new DimensionCodec {
+				Realms = Defaults.Realms,
+				Biomes = Defaults.Biomes,
+			},
+			Defaults.CurrentDim,
+			Defaults.WorldName,
+			-660566458,
+			20,
+			10,
+			10,
+			false,
+			true,
+			false,
+			false
+		));
+		SendPacket(new PlayClientDifficulty(1, false));
+		SendPacket(new PlayClientAbilities(0, 0.05000000074505806f, 0.10000000149011612f));
+		SendPacket(new PlayClientHeldItemSlot(0));
+		SendPacket(new PlayClientCustomPayload("minecraft:brand", new byte[] {7, 118, 97, 110, 105, 108, 108, 97}));
 	}
 
 	private void HandlePlay(IPacket packet) {
