@@ -31,6 +31,7 @@ internal static class MethodMapping {
 					_ => $"WriteNbtTag({fieldName})",
 				};
 			}
+			case "buffer": return $"WriteByteArray({fieldName})";
 			default: throw new InvalidOperationException(type);
 		}
 	}
@@ -63,6 +64,7 @@ internal static class MethodMapping {
 					_ => throw new InvalidOperationException(type)
 				};
 			}
+			case "buffer": return "ReadByteArray()";
 			default: throw new InvalidOperationException(type);
 		}
 	}

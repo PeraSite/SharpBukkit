@@ -143,26 +143,7 @@ public class PacketRegistry : IPacketRegistry {
 			var packetId = Convert.ToByte(packetIdStr.Replace("0x", ""), 16);
 
 			var fieldListJson = packetJson.ToObject<JArray>()[1];
-			var fieldList = new List<FieldInfo>();
-
-			foreach (var fieldJson in fieldListJson) {
-				var actualFieldName = fieldJson["name"]!.ToObject<string>();
-				var fieldName = ToTitleCase(actualFieldName);
-				var fieldType = fieldJson["type"];
-
-				if (fieldType is JValue) {
-					var simpleFieldType = fieldType.ToObject<string>();
-					var nativeFieldType = FieldMapping.GetNative(simpleFieldType, actualFieldName);
-
-					fieldList.Add(new FieldInfo {
-						ActualType = simpleFieldType,
-						NativeType = nativeFieldType,
-						Name = fieldName
-					});
-				} else if (fieldType is JArray) {
-					//TODO: Handle switch, option etc...
-				}
-			}
+			List<FieldInfo> fieldList = ParsePacketFields(fieldListJson);
 
 			yield return new PacketInfo {
 				Id = packetId,
@@ -172,6 +153,50 @@ public class PacketRegistry : IPacketRegistry {
 				Fields = fieldList
 			};
 		}
+	}
+
+	private static List<FieldInfo> ParsePacketFields(JToken fieldListJson) {
+		var fieldList = new List<FieldInfo>();
+
+		foreach (var fieldJson in fieldListJson) {
+			var actualFieldName = fieldJson["name"]!.ToObject<string>();
+			var fieldName = ToTitleCase(actualFieldName);
+			var fieldType = fieldJson["type"];
+
+			switch (fieldType) {
+				case JValue: {
+					var simpleFieldType = fieldType.ToObject<string>();
+					var nativeFieldType = FieldMapping.GetNative(simpleFieldType, actualFieldName);
+
+					fieldList.Add(new FieldInfo {
+						ActualType = simpleFieldType,
+						NativeType = nativeFieldType,
+						Name = fieldName
+					});
+					break;
+				}
+				case JArray typeArray: {
+					var typeName = typeArray[0].ToObject<string>();
+					switch (typeName) {
+						case "buffer":
+							const string actualElementType = "buffer";
+							var nativeElementType = FieldMapping.GetNative(actualElementType, actualFieldName);
+
+							fieldList.Add(new FieldInfo {
+								ActualType = actualElementType,
+								NativeType = nativeElementType,
+								Name = fieldName
+							});
+							break;
+						default:
+							Console.WriteLine($"[ERROR] Unhandled type: {fieldType}");
+							break;
+					}
+					break;
+				}
+			}
+		}
+		return fieldList;
 	}
 
 	private static string BuildCode(PacketInfo packetInfo) {
