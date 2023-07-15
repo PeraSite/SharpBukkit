@@ -1,15 +1,21 @@
 using System.Collections.Concurrent;
 using System.Net;
 using System.Net.Sockets;
+using System.Security.Cryptography;
 using Serilog;
 using SharpBukkit.API;
+using SharpBukkit.API.Config;
 using SharpBukkit.Network.API;
+using SharpBukkit.Network.API.Crypto;
 using SharpBukkit.Packet.Handshaking;
+using SharpBukkit.Packet.Login;
 using SharpBukkit.Packet.Status;
 
 namespace SharpBukkit.Network;
 
 public class ClientConnection : IClientConnection {
+	public delegate IClientConnection Factory(TcpClient client);
+
 	public EndPoint Endpoint { get; }
 	public event Action? OnDisconnect;
 
@@ -18,30 +24,49 @@ public class ClientConnection : IClientConnection {
 	private readonly TcpClient _client;
 	private readonly ILogger _logger;
 	private readonly IPacketRegistry _packetRegistry;
+	private readonly ICryptoService _cryptoService;
+	private readonly ServerConfig _config;
 
 	// Networking
 	private readonly CancellationTokenSource _cancellationTokenSource;
-	private readonly NetworkStream _stream;
+	private readonly MinecraftStream _readStream;
+	private readonly MinecraftStream _writeStream;
 
 	// States
 	private bool _isConnected;
 	private ConnectionState _connectionState;
-	private readonly BlockingCollection<byte[]> _packetWriteQueue;
+	private readonly BlockingCollection<IPacket> _packetWriteQueue;
+	private byte[]? _verifyToken;
 
-	public ClientConnection(TcpClient client, IServer server, ILogger logger, IPacketRegistry packetRegistry) {
+	private bool _isEncrypted;
+	private bool _isCompressed;
+
+	public ClientConnection(
+		TcpClient client,
+		IServer server,
+		ILogger logger,
+		IPacketRegistry packetRegistry,
+		ICryptoService cryptoService,
+		ServerConfig config) {
+
 		_client = client;
 		_server = server;
 		_logger = logger;
 		_packetRegistry = packetRegistry;
+		_cryptoService = cryptoService;
+		_config = config;
 
 		Endpoint = client.Client.RemoteEndPoint!;
 
 		_cancellationTokenSource = new CancellationTokenSource();
-		_stream = _client.GetStream();
+
+		var baseStream = _client.GetStream();
+		_readStream = new MinecraftStream(baseStream);
+		_writeStream = new MinecraftStream(baseStream);
 
 		_isConnected = true;
 		_connectionState = ConnectionState.Handshaking;
-		_packetWriteQueue = new BlockingCollection<byte[]>();
+		_packetWriteQueue = new BlockingCollection<IPacket>();
 	}
 
 	public void Init() {
@@ -65,13 +90,26 @@ public class ClientConnection : IClientConnection {
 
 	#region Send Handler
 	private void SendTask() {
-		using var ms = new MinecraftStream(_stream);
+		// Temporary stream
+		using var ms = new MemoryStream();
+		using var mc = new MinecraftStream(ms);
 
 		while (!_cancellationTokenSource.IsCancellationRequested) {
 			try {
-				var data = _packetWriteQueue.Take(_cancellationTokenSource.Token);
-				ms.WriteVarInt(data.Length);
-				ms.Write(data);
+				var packet = _packetWriteQueue.Take(_cancellationTokenSource.Token);
+
+				// Serialize packet to byte[]
+				mc.WriteVarInt(packet.PacketId);
+				packet.Serialize(mc);
+				var data = ms.ToArray();
+
+				// Write to actual stream
+				_writeStream.WriteVarInt(data.Length);
+				_writeStream.Write(data);
+
+				// Reset stream
+				mc.Position = 0;
+				mc.SetLength(0);
 			}
 			catch (OperationCanceledException) {
 				break;
@@ -81,32 +119,18 @@ public class ClientConnection : IClientConnection {
 
 	public void SendPacket(IPacket packet) {
 		_logger.Information("[SEND] >> {@Packet}", packet);
-
-		byte[] encodedPacket;
-		using (var memoryStream = new MemoryStream()) {
-			using (var mc = new MinecraftStream(memoryStream)) {
-				mc.WriteVarInt(packet.PacketId);
-				packet.Serialize(mc);
-
-				encodedPacket = memoryStream.ToArray();
-				mc.Position = 0;
-				mc.SetLength(0);
-			}
-		}
-		_packetWriteQueue.Add(encodedPacket);
+		_packetWriteQueue.Add(packet);
 	}
 	  #endregion
 
 	#region Receive handler
 	private void ReceiveTask() {
 		try {
-			using var ms = new MinecraftStream(_stream);
-
 			while (!_cancellationTokenSource.IsCancellationRequested) {
-				var packetLength = ms.ReadVarInt();
-				var packetId = (byte)ms.ReadVarInt();
+				var packetLength = _readStream.ReadVarInt();
+				var packetId = (byte)_readStream.ReadVarInt();
 
-				var packet = _packetRegistry.Create(ms, _connectionState, packetId);
+				var packet = _packetRegistry.Create(_readStream, _connectionState, packetId);
 				HandlePacket(packet);
 			}
 		}
@@ -133,7 +157,11 @@ public class ClientConnection : IClientConnection {
 				HandleStatus(packet);
 				break;
 			case ConnectionState.Login:
+				HandleLogin(packet);
+				break;
 			case ConnectionState.Play:
+				HandlePlay(packet);
+				break;
 			default:
 				throw new ArgumentOutOfRangeException();
 		}
@@ -146,12 +174,73 @@ public class ClientConnection : IClientConnection {
 	}
 
 	private void HandleStatus(IPacket packet) {
-		if (packet is StatusServerPingStart) {
-			SendPacket(new StatusClientServerInfo(_server.GetMotd()));
-		} else if (packet is StatusServerPing) {
-			SendPacket(packet);
-			Disconnect();
+		switch (packet) {
+			case StatusServerPingStart:
+				SendPacket(new StatusClientServerInfo(_server.GetMotd()));
+				break;
+			case StatusServerPing:
+				SendPacket(packet);
+				Disconnect();
+				break;
 		}
+	}
+
+	private void HandleLogin(IPacket packet) {
+		switch (packet) {
+			case LoginServerLoginStart loginStart:
+				HandleLoginStart(loginStart);
+				break;
+			case LoginServerEncryptionBegin encryptionBegin:
+				HandleEncryptionBegin(encryptionBegin);
+				break;
+		}
+	}
+
+	private void HandleLoginStart(LoginServerLoginStart packet) {
+		_logger.Information("User {Username} is trying to login", packet.Username);
+
+		// Get RSA public key from crypto service
+		var publicKey = _cryptoService.GetRsaPublicKey();
+
+		// Generate 16-bytes random
+		_verifyToken = RandomNumberGenerator.GetBytes(16);
+
+		SendPacket(new LoginClientEncryptionBegin("", publicKey, _verifyToken));
+	}
+
+	private void HandleEncryptionBegin(LoginServerEncryptionBegin packet) {
+		var decryptedVerifyToken = _cryptoService.DecryptRsa(packet.VerifyToken);
+		var decryptedSharedSecret = _cryptoService.DecryptRsa(packet.SharedSecret);
+
+		if (_verifyToken == null) {
+			_logger.Error("Verify token is not generated for user");
+			Disconnect();
+			return;
+		}
+
+		if (!decryptedVerifyToken.SequenceEqual(_verifyToken)) {
+			_logger.Error("Verify token mismatch: {Expected} != {Actual}", _verifyToken, decryptedVerifyToken);
+			Disconnect();
+			return;
+		}
+
+		_isEncrypted = true;
+		_readStream.InitEncryption(decryptedSharedSecret);
+		_writeStream.InitEncryption(decryptedSharedSecret);
+
+		ChangeToPlay();
+	}
+
+	private void ChangeToPlay() {
+		_connectionState = ConnectionState.Play;
+		_isCompressed = true;
+
+		SendPacket(new LoginClientCompress(_config.Network.Compression));
+		SendPacket(new LoginClientSuccess(Guid.NewGuid(), "Test"));
+	}
+
+	private void HandlePlay(IPacket packet) {
+		throw new NotImplementedException();
 	}
 	  #endregion
 }

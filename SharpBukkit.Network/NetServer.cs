@@ -10,7 +10,7 @@ public class NetServer : INetServer {
 	// Injected
 	private readonly ServerConfig _config;
 	private readonly ILogger _logger;
-	private readonly Func<TcpClient, IClientConnection> _connectionFactory;
+	private readonly ClientConnection.Factory _connectionFactory;
 
 	// States
 	public Dictionary<EndPoint, IClientConnection> Connections { get; }
@@ -21,7 +21,7 @@ public class NetServer : INetServer {
 	public NetServer(
 		ServerConfig config,
 		ILogger logger,
-		Func<TcpClient, IClientConnection> connectionFactory
+		ClientConnection.Factory connectionFactory
 	) {
 		// Dependencies
 		_config = config;
@@ -40,14 +40,20 @@ public class NetServer : INetServer {
 		_tcpListener.Start(_config.Network.Backlog);
 
 		Task.Run(() => {
-			while (!_cancellationTokenSource.IsCancellationRequested) {
-				var client = _tcpListener.AcceptTcpClient();
+			try {
+				while (!_cancellationTokenSource.IsCancellationRequested) {
+					var client = _tcpListener.AcceptTcpClient();
 
-				var connection = _connectionFactory(client);
-				connection.OnDisconnect += () => OnClientDisconnected(connection);
-				OnClientConnected(connection);
+					var connection = _connectionFactory(client);
+					connection.OnDisconnect += () => OnClientDisconnected(connection);
+					OnClientConnected(connection);
 
-				connection.Init();
+					connection.Init();
+				}
+			}
+			catch (Exception e) {
+				_logger.Error(e, "Error while listening for connections");
+				throw;
 			}
 		}, _cancellationTokenSource.Token);
 	}

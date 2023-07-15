@@ -6,6 +6,8 @@ using SharpBukkit.API.Config;
 using SharpBukkit.Core;
 using SharpBukkit.Network;
 using SharpBukkit.Network.API;
+using SharpBukkit.Network.API.Crypto;
+using SharpBukkit.Network.Crypto;
 using SharpBukkit.Network.Packets;
 using Tomlyn;
 
@@ -39,6 +41,10 @@ public static class Program {
 
 		builder.RegisterType<PacketRegistry>()
 			.As<IPacketRegistry>()
+			.SingleInstance();
+
+		builder.RegisterType<CryptoService>()
+			.As<ICryptoService>()
 			.SingleInstance();
 
 		var logger = new LoggerConfiguration()
