@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using SharpBukkit.Generator.Protocol;
 using SharpBukkit.Generator.Utils;
 
@@ -9,4 +10,10 @@ async Task GenerateProtocol() {
 	await ProtocolGenerator.Generate(outputFolder, protocolJson);
 }
 
-await GenerateProtocol();
+try {
+	await GenerateProtocol();
+}
+catch (Exception e) {
+	Console.WriteLine(e);
+	throw;
+}
