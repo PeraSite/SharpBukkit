@@ -1,11 +1,11 @@
 [game]
 motd = "SharpBukkit - C# Minecraft server from scratch"
 max_player = 1337
-online_mode = true
+online_mode = false
 favicon = "favicon.png"
 
 [network]
 host = "127.0.0.1"
 port = 25565
 backlog = 10
-compression = 256
+compression_threshold = 256
