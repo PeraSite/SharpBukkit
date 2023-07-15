@@ -94,7 +94,7 @@ namespace SharpBukkit.Network {
 			return obj;
 		}
 
-		public T ReadSerializable<T>() where T : ISerializable, new() {
+		public T ReadSerializable<T>() where T : IMinecraftSerializable, new() {
 			var bits = new T();
 			bits.Serialize(this);
 			return bits;
@@ -186,7 +186,7 @@ namespace SharpBukkit.Network {
 			return result;
 		}
 
-		public T[] ReadSerializableArray<T>() where T : ISerializable, new() {
+		public T[] ReadSerializableArray<T>() where T : IMinecraftSerializable, new() {
 			var length = ReadVarInt(out _);
 			var result = new T[length];
 			for (var i = 0; i < length; i++) {
@@ -411,7 +411,7 @@ namespace SharpBukkit.Network {
 			throw new NotImplementedException();
 		}
 
-		public void WriteSerializable(ISerializable value) {
+		public void WriteSerializable(IMinecraftSerializable value) {
 			value.Serialize(this);
 		}
 
@@ -437,7 +437,7 @@ namespace SharpBukkit.Network {
 				WriteString(text);
 		}
 
-		public void WriteSerializableArray<T>(T[] values) where T : ISerializable, new() {
+		public void WriteSerializableArray<T>(T[] values) where T : IMinecraftSerializable, new() {
 			if (values.Length == 0) {
 				WriteVarInt(0);
 				return;

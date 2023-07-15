@@ -1,9 +1,7 @@
-﻿using SharpBukkit.Network.API.Stream;
+﻿namespace SharpBukkit.Network.API.Serialization;
 
-namespace SharpBukkit.Network.API.Serialization;
+public interface ISerializable<in TWriter, in TReader> {
+	void Serialize(TWriter writer);
 
-public interface ISerializable {
-	void Serialize(IMinecraftWriter writer);
-
-	void Deserialize(IMinecraftReader reader);
+	void Deserialize(TReader reader);
 }
