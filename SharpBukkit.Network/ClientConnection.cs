@@ -132,6 +132,8 @@ public class ClientConnection : IClientConnection {
 			case ConnectionState.Status:
 				HandleStatus(packet);
 				break;
+			case ConnectionState.Login:
+			case ConnectionState.Play:
 			default:
 				throw new ArgumentOutOfRangeException();
 		}

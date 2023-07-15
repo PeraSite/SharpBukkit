@@ -32,8 +32,7 @@ public class NetServer : INetServer {
 		_running = true;
 		_cancellationTokenSource = new CancellationTokenSource();
 		Connections = new Dictionary<EndPoint, IClientConnection>();
-		var ipEndpoint = new IPEndPoint(IPAddress.Parse(_config.Network.Host), _config.Network.Port);
-		_tcpListener = new TcpListener(ipEndpoint);
+		_tcpListener = new TcpListener(IPAddress.Parse(_config.Network.Host), _config.Network.Port);
 	}
 
 	public void Start() {
