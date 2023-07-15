@@ -77,13 +77,13 @@ public static class ProtocolGenerator {
 		}));
   #endregion
 
-		Console.WriteLine("Generating packet factory...");
-		var factoryFilePath = Path.Combine(outputFolder, "PacketFactory.g.cs");
-		await File.WriteAllTextAsync(factoryFilePath, $$"""
+		Console.WriteLine("Generating packet registry...");
+		#region Generating packet registry
+		var registryFilePath = Path.Combine(outputFolder, "PacketRegistry.g.cs");
+		await File.WriteAllTextAsync(registryFilePath, $$"""
 // Auto-generated
 using SharpBukkit.Network.API;
 using SharpBukkit.Network.API.Stream;
-using SharpBukkit.Network.Models;
 using SharpBukkit.Packet.Handshaking;
 using SharpBukkit.Packet.Login;
 using SharpBukkit.Packet.Play;
@@ -91,30 +91,31 @@ using SharpBukkit.Packet.Status;
 
 namespace SharpBukkit.Network.Packets;
 
-public static class PacketFactory {
-	private static readonly Dictionary<(ConnectionState state, byte id), Func<IMinecraftReader, IPacket>> _factory;
+public class PacketRegistry : IPacketRegistry {
+	private readonly Dictionary<(ConnectionState state, byte id), Func<IMinecraftReader, IPacket>> _factory;
 
-	static PacketFactory() {
+	public PacketRegistry() {
 		_factory = new Dictionary<(ConnectionState state, byte id), Func<IMinecraftReader, IPacket>>();
 	}
 
-	public static void Load() {
+	public void Load() {
 		{{string.Join("\n        ", generatedCodeDict.Keys.Select(packet => $"Register(ConnectionState.{packet.Type}, 0x{packet.Id:x2}, (reader) => new {packet.Type}{packet.Bound}{packet.Name}(reader));"))}}
 	}
 
-	public static IPacket Create(IMinecraftReader reader, ConnectionState state, byte id) {
-		if (!_factory.TryGetValue((state, id), out var func)) {
+	public IPacket Create(IMinecraftReader reader, ConnectionState state, byte id) {
+		if (!_factory.TryGetValue((state, id), out Func<IMinecraftReader, IPacket> func)) {
 			throw new Exception($"Unknown packet id {id} for state {state}");
 		}
 		return func(reader);
 	}
 
-	private static void Register(ConnectionState state, byte id, Func<IMinecraftReader, IPacket> createFunc) {
+	private void Register(ConnectionState state, byte id, Func<IMinecraftReader, IPacket> createFunc) {
 		_factory[(state, id)] = createFunc;
 	}
 }
 
 """);
+  #endregion
 	}
 
 	private static IEnumerable<PacketInfo> ReadPacketStructs(PacketType packetType, BoundType bound, JObject json) {

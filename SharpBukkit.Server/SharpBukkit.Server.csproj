@@ -9,6 +9,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\SharpBukkit.Core\SharpBukkit.Core.csproj" />
+        <ProjectReference Include="..\SharpBukkit.Network\SharpBukkit.Network.csproj" />
     </ItemGroup>
 
     <ItemGroup>

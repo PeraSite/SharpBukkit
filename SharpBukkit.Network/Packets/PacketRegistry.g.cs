@@ -1,7 +1,6 @@
 // Auto-generated
 using SharpBukkit.Network.API;
 using SharpBukkit.Network.API.Stream;
-using SharpBukkit.Network.Models;
 using SharpBukkit.Packet.Handshaking;
 using SharpBukkit.Packet.Login;
 using SharpBukkit.Packet.Play;
@@ -9,14 +8,14 @@ using SharpBukkit.Packet.Status;
 
 namespace SharpBukkit.Network.Packets;
 
-public static class PacketFactory {
-	private static readonly Dictionary<(ConnectionState state, byte id), Func<IMinecraftReader, IPacket>> _factory;
+public class PacketRegistry : IPacketRegistry {
+	private readonly Dictionary<(ConnectionState state, byte id), Func<IMinecraftReader, IPacket>> _factory;
 
-	static PacketFactory() {
+	public PacketRegistry() {
 		_factory = new Dictionary<(ConnectionState state, byte id), Func<IMinecraftReader, IPacket>>();
 	}
 
-	public static void Load() {
+	public void Load() {
 		Register(ConnectionState.Handshaking, 0x00, (reader) => new HandshakingServerSetProtocol(reader));
         Register(ConnectionState.Handshaking, 0xfe, (reader) => new HandshakingServerLegacyServerListPing(reader));
         Register(ConnectionState.Status, 0x00, (reader) => new StatusClientServerInfo(reader));
@@ -185,14 +184,14 @@ public static class PacketFactory {
         Register(ConnectionState.Play, 0x1d, (reader) => new PlayServerPong(reader));
 	}
 
-	public static IPacket Create(IMinecraftReader reader, ConnectionState state, byte id) {
-		if (!_factory.TryGetValue((state, id), out var func)) {
+	public IPacket Create(IMinecraftReader reader, ConnectionState state, byte id) {
+		if (!_factory.TryGetValue((state, id), out Func<IMinecraftReader, IPacket> func)) {
 			throw new Exception($"Unknown packet id {id} for state {state}");
 		}
 		return func(reader);
 	}
 
-	private static void Register(ConnectionState state, byte id, Func<IMinecraftReader, IPacket> createFunc) {
+	private void Register(ConnectionState state, byte id, Func<IMinecraftReader, IPacket> createFunc) {
 		_factory[(state, id)] = createFunc;
 	}
 }

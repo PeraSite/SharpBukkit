@@ -16,7 +16,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\SharpBukkit.API\SharpBukkit.API.csproj" />
-      <ProjectReference Include="..\SharpBukkit.Network\SharpBukkit.Network.csproj" />
+      <ProjectReference Include="..\SharpBukkit.Network.API\SharpBukkit.Network.API.csproj" />
     </ItemGroup>
 
 

@@ -8,7 +8,6 @@ using SharpBukkit.API.Config;
 using SharpBukkit.API.Meta;
 using SharpBukkit.Core.Utils;
 using SharpBukkit.Network.API;
-using SharpBukkit.Network.Packets;
 
 namespace SharpBukkit.Core;
 
@@ -20,11 +19,18 @@ public class MinecraftServer : IServer {
 
 	private readonly ServerConfig _config;
 	private readonly INetServer _netServer;
+	private readonly IPacketRegistry _packetRegistry;
 	private readonly ILogger _logger;
 
-	public MinecraftServer(ServerConfig config, INetServer netServer, ILogger logger) {
+	public MinecraftServer(
+		ServerConfig config,
+		INetServer netServer,
+		IPacketRegistry packetRegistry,
+		ILogger logger
+	) {
 		_config = config;
 		_netServer = netServer;
+		_packetRegistry = packetRegistry;
 		_logger = logger;
 	}
 
@@ -32,7 +38,7 @@ public class MinecraftServer : IServer {
 		_logger.Information("Config : {Config}", _config);
 
 		_logger.Information("Loading packets...");
-		PacketFactory.Load();
+		_packetRegistry.Load();
 
 		_logger.Information("Starting server...");
 		_netServer.Start();

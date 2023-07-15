@@ -1,4 +1,4 @@
-﻿namespace SharpBukkit.Network.Models;
+﻿namespace SharpBukkit.Network.API;
 
 public enum ConnectionState {
 	Handshaking = 0,
