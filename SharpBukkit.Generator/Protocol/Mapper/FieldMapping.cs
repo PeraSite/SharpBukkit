@@ -3,10 +3,11 @@ using System;
 namespace SharpBukkit.Generator.Protocol.Mapper;
 
 internal static class FieldMapping {
-	public static string GetNative(string type, string fieldName) {
+	public static string? GetNative(string type, string fieldName) {
 		switch (type) {
 			case "varint": return "int";
 			case "string": return "string";
+			case "string[]": return "string[]";
 			case "bool": return "bool";
 			case "u8": return "byte";
 			case "i8": return "sbyte";
@@ -32,7 +33,8 @@ internal static class FieldMapping {
 				};
 			}
 			case "position": return "Vector3";
-			default: throw new InvalidOperationException(type);
+			default:
+				return null;
 		}
 	}
 }

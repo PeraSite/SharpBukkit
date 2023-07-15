@@ -32,6 +32,7 @@ internal static class MethodMapping {
 				};
 			}
 			case "buffer": return $"WriteByteArray({fieldName})";
+			case "string[]": return $"WriteStringArray({fieldName})";
 			default: throw new InvalidOperationException(type);
 		}
 	}
@@ -65,6 +66,7 @@ internal static class MethodMapping {
 				};
 			}
 			case "buffer": return "ReadByteArray()";
+			case "string[]": return "ReadStringArray()";
 			default: throw new InvalidOperationException(type);
 		}
 	}
