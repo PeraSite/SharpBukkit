@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Newtonsoft.Json;
 using Serilog;
 using SharpBukkit.API;
@@ -55,6 +56,8 @@ public class MinecraftServer : IServer {
 					break;
 				case "list":
 					_logger.Information("Clients: {Count}", _netServer.Connections.Count);
+					_logger.Information("Players: [{Players}]",
+						string.Join(", ", _netServer.Connections.Values.Select(c => c.Player.Name)));
 					break;
 			}
 		}
