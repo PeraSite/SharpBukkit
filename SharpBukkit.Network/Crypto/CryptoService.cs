@@ -6,17 +6,17 @@ namespace SharpBukkit.Network.Crypto;
 
 public class CryptoService : ICryptoService {
 	private readonly RSACryptoServiceProvider _rsa;
+	private readonly byte[] _rsaPublicKey;
 
 	public CryptoService() {
 		_rsa = new RSACryptoServiceProvider();
+		var publicKey = _rsa.ExportParameters(false);
+		_rsaPublicKey = AsnKeyBuilder.PublicKeyToX509(publicKey).GetBytes();
 	}
 
 	public byte[] GetRsaPublicKey() {
-		var publicKey = _rsa.ExportParameters(false);
-		return AsnKeyBuilder.PublicKeyToX509(publicKey).GetBytes();
+		return _rsaPublicKey;
 	}
-
-	public void InitializeAesKey(byte[] key) { }
 
 	public byte[] EncryptRsa(byte[] input) {
 		return _rsa.Encrypt(input, false);
