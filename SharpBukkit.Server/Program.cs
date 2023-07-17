@@ -3,7 +3,9 @@ using Autofac;
 using Serilog;
 using SharpBukkit.API;
 using SharpBukkit.API.Config;
+using SharpBukkit.API.Entity;
 using SharpBukkit.Core;
+using SharpBukkit.Core.Entity;
 using SharpBukkit.Network;
 using SharpBukkit.Network.API;
 using SharpBukkit.Network.API.Crypto;
@@ -47,6 +49,8 @@ public static class Program {
 			.As<ICryptoService>()
 			.SingleInstance();
 
+		RegisterEntityTypes(builder);
+
 		var logger = new LoggerConfiguration()
 			.Enrich.With(new RemoveTypeTagEnricher())
 			.WriteTo.Console()
@@ -57,6 +61,12 @@ public static class Program {
 			.SingleInstance();
 
 		return builder.Build();
+	}
+
+	private static void RegisterEntityTypes(ContainerBuilder builder) {
+		// TODO: Register entity type automatically by scanning assembly
+		builder.RegisterType<Player>()
+			.As<IPlayer>();
 	}
 
 	private static ServerConfig ReadConfig() {

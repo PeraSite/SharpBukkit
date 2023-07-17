@@ -1,7 +1,7 @@
 [game]
 motd = "SharpBukkit - C# Minecraft server from scratch"
 max_player = 1337
-online_mode = false
+online_mode = true
 favicon = "favicon.png"
 
 [network]

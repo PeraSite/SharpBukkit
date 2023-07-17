@@ -1,25 +1,28 @@
 using System.Collections.Concurrent;
 using System.Net;
 using System.Net.Sockets;
+using System.Numerics;
 using System.Security.Cryptography;
+using System.Text;
+using Newtonsoft.Json;
 using Serilog;
 using SharpBukkit.API;
+using SharpBukkit.API.Auth;
 using SharpBukkit.API.Config;
+using SharpBukkit.API.Entity;
 using SharpBukkit.Network.API;
 using SharpBukkit.Network.API.Crypto;
-using SharpBukkit.Network.Models.Nbt;
 using SharpBukkit.Network.Utils;
 using SharpBukkit.Packet.Handshaking;
 using SharpBukkit.Packet.Login;
-using SharpBukkit.Packet.Play;
 using SharpBukkit.Packet.Status;
 
 namespace SharpBukkit.Network;
 
 public class ClientConnection : IClientConnection {
-	public delegate IClientConnection Factory(TcpClient client);
-
 	public EndPoint Endpoint { get; }
+	public IPlayer Player { get; set; }
+
 	public event Action? OnDisconnect;
 
 	// Injected
@@ -29,6 +32,7 @@ public class ClientConnection : IClientConnection {
 	private readonly IPacketRegistry _packetRegistry;
 	private readonly ICryptoService _cryptoService;
 	private readonly ServerConfig _config;
+	private readonly IPlayer.Factory _playerFactory;
 
 	// Networking
 	private readonly CancellationTokenSource _cancellationTokenSource;
@@ -50,7 +54,7 @@ public class ClientConnection : IClientConnection {
 		ILogger logger,
 		IPacketRegistry packetRegistry,
 		ICryptoService cryptoService,
-		ServerConfig config) {
+		ServerConfig config, IPlayer.Factory playerFactory) {
 
 		_client = client;
 		_server = server;
@@ -58,6 +62,7 @@ public class ClientConnection : IClientConnection {
 		_packetRegistry = packetRegistry;
 		_cryptoService = cryptoService;
 		_config = config;
+		_playerFactory = playerFactory;
 
 		Endpoint = client.Client.RemoteEndPoint!;
 
@@ -246,6 +251,9 @@ public class ClientConnection : IClientConnection {
 	private void HandleLoginStart(LoginServerLoginStart packet) {
 		_logger.Information("User {Username} is trying to login", packet.Username);
 
+		Player = _playerFactory(Guid.NewGuid(), packet.Username);
+		_logger.Information("User {@Player} logged in", Player);
+
 		// If it's offline mode, just login
 		if (!_config.Game.OnlineMode) {
 			ChangeToPlay();
@@ -281,9 +289,57 @@ public class ClientConnection : IClientConnection {
 		_readStream.InitEncryption(decryptedSharedSecret);
 		_writeStream.InitEncryption(decryptedSharedSecret);
 
-		// TODO: Check online-mode, connect to Mojang server
-		
-		ChangeToPlay();
+		Task.Run(async () => {
+			try {
+				var result = await AuthMojang(decryptedSharedSecret);
+
+				if (!result) {
+					_logger.Error("Failed to authenticate user");
+					Disconnect();
+					return;
+				}
+
+				ChangeToPlay();
+			}
+			catch (Exception e) {
+				_logger.Error(e, "Failed to authenticate user");
+				throw;
+			}
+		});
+	}
+
+	private async Task<bool> AuthMojang(byte[] sharedSecret) {
+		string serverHash;
+		using (var ms = new MemoryStream()) {
+			var ascii = Encoding.ASCII.GetBytes("");
+			ms.Write(ascii, 0, ascii.Length);
+			ms.Write(sharedSecret, 0, 16);
+			ms.Write(_cryptoService.GetRsaPublicKey(), 0, _cryptoService.GetRsaPublicKey().Length);
+			serverHash = MinecraftShaDigest(ms.ToArray());
+		}
+
+		using var httpClient = new HttpClient();
+
+		var url = $"https://sessionserver.mojang.com/session/minecraft/hasJoined?username={Player.Name}&serverId={serverHash}";
+
+		_logger.Information("Authenticating user {Username} with url {Url}", Player.Name, url);
+
+		var res = await httpClient.GetAsync(url, _cancellationTokenSource.Token);
+		var text = await res.Content.ReadAsStringAsync(_cancellationTokenSource.Token);
+
+		var auth = JsonConvert.DeserializeObject<AuthResponse>(text);
+
+		// Can't parse to auth object
+		if (auth == null) {
+			return false;
+		}
+
+		_logger.Information("User {Username} authenticated successfully: {Auth}", auth.Name, auth);
+		Player.Name = auth.Name;
+		Player.DisplayName = auth.Name;
+		Player.Id = new Guid(auth.Id);
+		Player.AuthResponse = auth;
+		return true;
 	}
 
 	private void ChangeToPlay() {
@@ -294,38 +350,56 @@ public class ClientConnection : IClientConnection {
 			SendPacket(new LoginClientCompress(threshold));
 			_isCompressed = true;
 		}
-		SendPacket(new LoginClientSuccess(Guid.NewGuid(), "PeraSite"));
+		SendPacket(new LoginClientSuccess(Player.Id, Player.Name));
 
 		// TODO: Do this in player class
-		SendPacket(new PlayClientLogin(
-			167,
-			false,
-			1, // Creative,
-			-1,
-			new[] {"minecraft:overworld", "minecraft:the_nether", "minecraft:the_end"},
-			new DimensionCodec {
-				Realms = Defaults.Realms,
-				Biomes = Defaults.Biomes,
-			},
-			Defaults.CurrentDim,
-			Defaults.WorldName,
-			-660566458,
-			20,
-			10,
-			10,
-			false,
-			true,
-			false,
-			false
-		));
-		SendPacket(new PlayClientDifficulty(1, false));
-		SendPacket(new PlayClientAbilities(0, 0.05000000074505806f, 0.10000000149011612f));
-		SendPacket(new PlayClientHeldItemSlot(0));
-		SendPacket(new PlayClientCustomPayload("minecraft:brand", new byte[] {7, 118, 97, 110, 105, 108, 108, 97}));
+		// SendPacket(new PlayClientLogin(
+		// 	167,
+		// 	false,
+		// 	1, // Creative,
+		// 	-1,
+		// 	new[] {"minecraft:overworld", "minecraft:the_nether", "minecraft:the_end"},
+		// 	new DimensionCodec {
+		// 		Realms = Defaults.Realms,
+		// 		Biomes = Defaults.Biomes,
+		// 	},
+		// 	Defaults.CurrentDim,
+		// 	Defaults.WorldName,
+		// 	-660566458,
+		// 	20,
+		// 	10,
+		// 	10,
+		// 	false,
+		// 	true,
+		// 	false,
+		// 	false
+		// ));
+		// SendPacket(new PlayClientDifficulty(1, false));
+		// SendPacket(new PlayClientAbilities(0, 0.05000000074505806f, 0.10000000149011612f));
+		// SendPacket(new PlayClientHeldItemSlot(0));
+		// SendPacket(new PlayClientCustomPayload("minecraft:brand", new byte[] {7, 118, 97, 110, 105, 108, 108, 97}));
 	}
 
 	private void HandlePlay(IPacket packet) {
 		throw new NotImplementedException();
 	}
 	  #endregion
+
+	// Reference: https://git.io/fhjp6
+	private static string MinecraftShaDigest(byte[] input) {
+		var hash = SHA1.HashData(input);
+		// Reverse the bytes since BigInteger uses little endian
+		Array.Reverse(hash);
+
+		BigInteger b = new BigInteger(hash);
+		// very annoyingly, BigInteger in C# tries to be smart and puts in
+		// a leading 0 when formatting as a hex number to allow roundtripping
+		// of negative numbers, thus we have to trim it off.
+		if (b < 0) {
+			// toss in a negative sign if the interpreted number is negative
+			return "-" + (-b).ToString("x").TrimStart('0');
+		} else {
+			return b.ToString("x").TrimStart('0');
+		}
+	}
 }

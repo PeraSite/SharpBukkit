@@ -10,7 +10,7 @@ public class NetServer : INetServer {
 	// Injected
 	private readonly ServerConfig _config;
 	private readonly ILogger _logger;
-	private readonly ClientConnection.Factory _connectionFactory;
+	private readonly IClientConnection.Factory _connectionFactory;
 
 	// States
 	public Dictionary<EndPoint, IClientConnection> Connections { get; }
@@ -21,7 +21,7 @@ public class NetServer : INetServer {
 	public NetServer(
 		ServerConfig config,
 		ILogger logger,
-		ClientConnection.Factory connectionFactory
+		IClientConnection.Factory connectionFactory
 	) {
 		// Dependencies
 		_config = config;
