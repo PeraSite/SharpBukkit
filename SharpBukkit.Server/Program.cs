@@ -1,5 +1,10 @@
 ﻿using System.IO;
+using System.Threading.Tasks;
 using Autofac;
+using Autofac.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Hosting;
 using Serilog;
 using SharpBukkit.API;
 using SharpBukkit.API.Config;
@@ -15,15 +20,17 @@ using Tomlyn;
 namespace SharpBukkit.Server;
 
 public static class Program {
-	public static void Main() {
-		var container = BuildContainer();
-		using ILifetimeScope scope = container.BeginLifetimeScope();
-		scope.Resolve<IServer>().Start();
+	public static async Task Main() {
+		var host = Host.CreateDefaultBuilder()
+			.UseServiceProviderFactory(new AutofacServiceProviderFactory())
+			.ConfigureServices(services => services.AddHostedService<HostService>())
+			.ConfigureContainer<ContainerBuilder>(RegisterCore)
+			.Build();
+
+		await host.RunAsync();
 	}
 
-	private static IContainer BuildContainer() {
-		var builder = new ContainerBuilder();
-
+	private static void RegisterCore(ContainerBuilder builder) {
 		ServerConfig config = ReadConfig();
 		builder.RegisterInstance(config)
 			.SingleInstance();
@@ -57,8 +64,6 @@ public static class Program {
 		builder.RegisterInstance(logger)
 			.As<ILogger>()
 			.SingleInstance();
-
-		return builder.Build();
 	}
 
 	private static void RegisterEntityTypes(ContainerBuilder builder) {
