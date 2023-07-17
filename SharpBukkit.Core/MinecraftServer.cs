@@ -42,30 +42,18 @@ public class MinecraftServer : IServer {
 		_logger.Information("Loading packets...");
 		_packetRegistry.Load();
 
-		_logger.Information("Starting server...");
-		_netServer.Start();
-
-		var running = true;
-		while (running) {
-			var command = Console.ReadLine()!;
-
-			switch (command) {
-				case "stop":
-					Stop();
-					running = false;
-					break;
-				case "list":
-					_logger.Information("Clients: {Count}", _netServer.Connections.Count);
-					_logger.Information("Players: [{Players}]",
-						string.Join(", ", _netServer.Connections.Values.Select(c => c.Player.Name)));
-					break;
-			}
+		_logger.LogInformation("Starting server...");
+		try {
+			await _netServer.Start();
+		}
+		finally {
+			await Stop();
 		}
 	}
 
-	public void Stop() {
-		_logger.Information("Stopping server...");
-		_netServer.Stop();
+	public async Task Stop() {
+		_logger.LogInformation("Stopping server...");
+		await _netServer.Stop();
 	}
 
 	public string GetMotd() {

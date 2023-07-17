@@ -5,9 +5,9 @@ namespace SharpBukkit.Network.API;
 public interface INetServer {
 	Dictionary<EndPoint, IClientConnection> Connections { get; }
 
-	void Start();
+	Task Start();
 
-	void Stop();
+	Task Stop();
 
 	void OnClientConnected(IClientConnection connection);
 

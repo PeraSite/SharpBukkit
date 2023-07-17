@@ -1,8 +1,8 @@
 namespace SharpBukkit.API;
 
 public interface IServer {
-	void Start();
-	void Stop();
+	Task Start();
+	Task Stop();
 
 	string GetMotd();
 }

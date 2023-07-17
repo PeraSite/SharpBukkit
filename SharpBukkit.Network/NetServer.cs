@@ -14,11 +14,11 @@ public class NetServer : INetServer {
 
 	// States
 	public Dictionary<EndPoint, IClientConnection> Connections { get; }
-	private bool _running;
 	private readonly CancellationTokenSource _cancellationTokenSource;
 	private readonly TcpListener _tcpListener;
 
 	public NetServer(
+		IHostApplicationLifetime lifetime,
 		ServerConfig config,
 		ILogger logger,
 		IClientConnection.Factory connectionFactory
@@ -29,39 +29,29 @@ public class NetServer : INetServer {
 		_connectionFactory = connectionFactory;
 
 		// States
-		_running = true;
-		_cancellationTokenSource = new CancellationTokenSource();
+		_cancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(lifetime.ApplicationStopping);
 		Connections = new Dictionary<EndPoint, IClientConnection>();
 		_tcpListener = new TcpListener(IPAddress.Parse(_config.Network.Host), _config.Network.Port);
 	}
 
-	public void Start() {
-		_logger.Information("Listening on {Host}:{Port}", _config.Network.Host, _config.Network.Port);
+	public async Task Start() {
+		_logger.LogInformation("Listening on {Host}:{Port}", _config.Network.Host, _config.Network.Port);
 		_tcpListener.Start(_config.Network.Backlog);
 
-		Task.Run(() => {
-			try {
-				while (!_cancellationTokenSource.IsCancellationRequested) {
-					var client = _tcpListener.AcceptTcpClient();
+		while (!_cancellationTokenSource.IsCancellationRequested) {
+			var client = await _tcpListener.AcceptTcpClientAsync(_cancellationTokenSource.Token);
 
-					var connection = _connectionFactory(client);
-					connection.OnDisconnect += () => OnClientDisconnected(connection);
-					OnClientConnected(connection);
+			var connection = _connectionFactory(client);
+			connection.OnDisconnect += () => OnClientDisconnected(connection);
+			OnClientConnected(connection);
 
-					connection.Init();
-				}
-			}
-			catch (Exception e) {
-				_logger.Error(e, "Error while listening for connections");
-				throw;
-			}
-		}, _cancellationTokenSource.Token);
+			connection.Init();
+		}
 	}
 
-	public void Stop() {
-		_running = false;
-		_cancellationTokenSource.Cancel();
+	public Task Stop() {
 		_tcpListener.Stop();
+		return Task.CompletedTask;
 	}
 
 	public void OnClientConnected(IClientConnection connection) {
