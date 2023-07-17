@@ -231,16 +231,21 @@ namespace SharpBukkit.Network {
 		}
 
 		public int ReadVarInt(out int bytesRead) {
-			var numRead = 0;
-			var result = 0;
-			byte read;
+			int numRead = 0;
+			int result = 0;
+			int read;
 			do {
-				read = (byte)ReadByte();
-				var value = read & 0x7f;
-				result |= value << (7 * numRead);
+				read = ReadByte();
+				if (read == -1) {
+					throw new EndOfStreamException();
+				}
+
+				int value = read & 0x7f;
+				result |= value << 7 * numRead;
+
 				numRead++;
 				if (numRead > 5) {
-					throw new Exception("VarInt is too big");
+					throw new Exception($"VarInt is too big: {value} {result}");
 				}
 			} while ((read & 0x80) != 0);
 			bytesRead = numRead;
