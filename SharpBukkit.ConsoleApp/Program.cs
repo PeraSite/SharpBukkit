@@ -22,18 +22,17 @@ namespace SharpBukkit.ConsoleApp;
 
 public static class Program {
 	public static async Task Main() {
-		Log.Logger = new LoggerConfiguration()
-			.MinimumLevel.Debug()
-			.MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
-			.Enrich.FromLogContext()
-			.WriteTo.Console()
-			.CreateLogger();
-
 		var host = Host.CreateDefaultBuilder()
 			.UseServiceProviderFactory(new AutofacServiceProviderFactory())
-			.ConfigureServices(services => services.AddHostedService<HostService>())
+			.ConfigureServices(services => services.AddHostedService<ServerHostService>())
 			.ConfigureContainer<ContainerBuilder>(RegisterCore)
-			.UseSerilog()
+			.UseSerilog((_, configuration) => {
+				configuration.MinimumLevel.Debug()
+					.MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+					.Enrich.FromLogContext()
+					.Enrich.With<RemoveTypeTagEnricher>()
+					.WriteTo.Console();
+			})
 			.Build();
 
 		await host.RunAsync();

@@ -6,12 +6,12 @@ using SharpBukkit.API;
 
 namespace SharpBukkit.ConsoleApp;
 
-public class HostService : BackgroundService {
+public class ServerHostService : BackgroundService {
 	private readonly IServer _server;
 	private readonly IHostApplicationLifetime _lifetime;
-	private readonly ILogger<HostService> _logger;
+	private readonly ILogger<ServerHostService> _logger;
 
-	public HostService(IServer server, IHostApplicationLifetime lifetime, ILogger<HostService> logger) {
+	public ServerHostService(IServer server, IHostApplicationLifetime lifetime, ILogger<ServerHostService> logger) {
 		_server = server;
 		_lifetime = lifetime;
 		_logger = logger;
