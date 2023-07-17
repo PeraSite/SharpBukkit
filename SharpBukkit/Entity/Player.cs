@@ -3,7 +3,7 @@ using System.Numerics;
 using SharpBukkit.API.Auth;
 using SharpBukkit.API.Entity;
 
-namespace SharpBukkit.Core.Entity;
+namespace SharpBukkit.Entity;
 
 public class Player : IPlayer {
 	public Guid Id { get; set; }

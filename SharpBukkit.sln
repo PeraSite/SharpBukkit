@@ -5,7 +5,7 @@ VisualStudioVersion = 17.4.33213.308
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpBukkit.ConsoleApp", "SharpBukkit.ConsoleApp\SharpBukkit.ConsoleApp.csproj", "{320CF569-1DB3-4E3D-9AAB-235AD6A78F3F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpBukkit.Core", "SharpBukkit.Core\SharpBukkit.Core.csproj", "{30A75018-BCAA-4E0E-8E7D-2DFD4CDC1D74}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpBukkit", "SharpBukkit\SharpBukkit.csproj", "{30A75018-BCAA-4E0E-8E7D-2DFD4CDC1D74}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpBukkit.Generator", "SharpBukkit.Generator\SharpBukkit.Generator.csproj", "{29FCBE17-6372-4B1F-9F75-D7A1DFB25246}"
 EndProject

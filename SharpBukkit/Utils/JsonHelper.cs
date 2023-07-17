@@ -1,7 +1,7 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
-namespace SharpBukkit.Core.Utils;
+namespace SharpBukkit.Utils;
 
 internal static class JsonHelper {
 	public static readonly JsonSerializerSettings Config = new JsonSerializerSettings {

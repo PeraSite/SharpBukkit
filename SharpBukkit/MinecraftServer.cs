@@ -7,10 +7,10 @@ using Newtonsoft.Json;
 using SharpBukkit.API;
 using SharpBukkit.API.Config;
 using SharpBukkit.API.Meta;
-using SharpBukkit.Core.Utils;
 using SharpBukkit.Network.API;
+using SharpBukkit.Utils;
 
-namespace SharpBukkit.Core;
+namespace SharpBukkit;
 
 public class MinecraftServer : IServer {
 	#region Constants
