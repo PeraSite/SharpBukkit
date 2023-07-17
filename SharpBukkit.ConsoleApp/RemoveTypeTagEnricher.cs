@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Serilog.Core;
 using Serilog.Events;
 
-namespace SharpBukkit.Server;
+namespace SharpBukkit.ConsoleApp;
 
 public class RemoveTypeTagEnricher : ILogEventEnricher {
 	public void Enrich(LogEvent le, ILogEventPropertyFactory lepf) {

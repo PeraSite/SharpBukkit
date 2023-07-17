@@ -18,7 +18,7 @@ using SharpBukkit.Network.Crypto;
 using SharpBukkit.Network.Packets;
 using Tomlyn;
 
-namespace SharpBukkit.Server;
+namespace SharpBukkit.ConsoleApp;
 
 public static class Program {
 	public static async Task Main() {

@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33213.308
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpBukkit.Server", "SharpBukkit.Server\SharpBukkit.Server.csproj", "{320CF569-1DB3-4E3D-9AAB-235AD6A78F3F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpBukkit.ConsoleApp", "SharpBukkit.ConsoleApp\SharpBukkit.ConsoleApp.csproj", "{320CF569-1DB3-4E3D-9AAB-235AD6A78F3F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpBukkit.Core", "SharpBukkit.Core\SharpBukkit.Core.csproj", "{30A75018-BCAA-4E0E-8E7D-2DFD4CDC1D74}"
 EndProject

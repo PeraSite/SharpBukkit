@@ -4,7 +4,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using SharpBukkit.API;
 
-namespace SharpBukkit.Server;
+namespace SharpBukkit.ConsoleApp;
 
 public class HostService : BackgroundService {
 	private readonly IServer _server;
