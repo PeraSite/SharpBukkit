@@ -61,7 +61,7 @@ public static class Program {
 			.SingleInstance();
 
 		builder.RegisterType<CryptoService>()
-			.SingleInstance();
+			.InstancePerDependency();
 
 		RegisterEntityTypes(builder);
 	}
