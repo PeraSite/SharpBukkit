@@ -115,7 +115,7 @@ public class ClientConnection : IClientConnection {
 	}
 
 	public void SendPacket(IPacket packet, Action? onSendComplete = null) {
-		_logger.LogInformation("[SEND] >> {@Packet}", packet);
+		_logger.LogDebug("[SEND] >> {@Packet}", packet);
 
 		byte[] encodedPacket;
 
@@ -199,7 +199,7 @@ public class ClientConnection : IClientConnection {
 	}
 
 	private void HandlePacket(IPacket packet) {
-		_logger.LogInformation("[RECV] << {@Packet}", packet);
+		_logger.LogDebug("[RECV] << {@Packet}", packet);
 
 		switch (_connectionState) {
 			case ConnectionState.Handshaking:
@@ -322,8 +322,6 @@ public class ClientConnection : IClientConnection {
 
 		var url = $"https://sessionserver.mojang.com/session/minecraft/hasJoined?username={Player.Name}&serverId={serverHash}";
 
-		_logger.LogInformation("Authenticating user {Username} with url {Url}", Player.Name, url);
-
 		var res = await httpClient.GetAsync(url, _cancellationTokenSource.Token);
 		var text = await res.Content.ReadAsStringAsync(_cancellationTokenSource.Token);
 
@@ -334,7 +332,6 @@ public class ClientConnection : IClientConnection {
 			return false;
 		}
 
-		_logger.LogInformation("User {Username} authenticated successfully: {Auth}", auth.Name, auth);
 		Player.Name = auth.Name;
 		Player.DisplayName = auth.Name;
 		Player.Id = new Guid(auth.Id);
