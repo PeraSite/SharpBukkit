@@ -1,7 +1,7 @@
 using System.Security.Cryptography;
 using System.Diagnostics;
 using System.Globalization;
-using Serilog;
+using Microsoft.Extensions.Logging;
 
 namespace SharpMC.Util.Encryption
 {
@@ -489,7 +489,7 @@ namespace SharpMC.Util.Encryption
                         rd.ReadInt16();
                         break;
                     default:
-                        _log.Warning($"PublicKey Decode Returning null!");
+                        _log.LogWarning($"PublicKey Decode Returning null!");
                         return null;
                 }
 
@@ -502,14 +502,14 @@ namespace SharpMC.Util.Encryption
                     rd.ReadInt16();
                 else
                 {
-                    _log.Warning($"PublicKey Decode Returning null! (shortvalue 1)");
+                    _log.LogWarning($"PublicKey Decode Returning null! (shortvalue 1)");
                     return null;
                 }
 
                 byteValue = rd.ReadByte();
                 if (byteValue != 0x00)
                 {
-                    _log.Warning($"PublicKey Decode Returning null! (bytevalue)");
+                    _log.LogWarning($"PublicKey Decode Returning null! (bytevalue)");
                     return null;
                 }
 
@@ -519,7 +519,7 @@ namespace SharpMC.Util.Encryption
                     rd.ReadInt16();
                 else
                 {
-                    _log.Warning($"PublicKey Decode Returning null! (Shortvalue 2)");
+                    _log.LogWarning($"PublicKey Decode Returning null! (Shortvalue 2)");
                     return null;
                 }
 
@@ -548,7 +548,7 @@ namespace SharpMC.Util.Encryption
             }
             catch (Exception e)
             {
-                _log.Warning($"PublicKey Decode Exception: {e}");
+                _log.LogWarning($"PublicKey Decode Exception: {e}");
                 return null;
             }
             finally

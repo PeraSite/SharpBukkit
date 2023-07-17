@@ -4,8 +4,8 @@ using System.Net.Sockets;
 using System.Numerics;
 using System.Security.Cryptography;
 using System.Text;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using Serilog;
 using SharpBukkit.API;
 using SharpBukkit.API.Auth;
 using SharpBukkit.API.Config;
@@ -28,7 +28,7 @@ public class ClientConnection : IClientConnection {
 	// Injected
 	private readonly IServer _server;
 	private readonly TcpClient _client;
-	private readonly ILogger _logger;
+	private readonly ILogger<ClientConnection> _logger;
 	private readonly IPacketRegistry _packetRegistry;
 	private readonly CryptoService _cryptoService;
 	private readonly ServerConfig _config;
@@ -51,7 +51,7 @@ public class ClientConnection : IClientConnection {
 	public ClientConnection(
 		TcpClient client,
 		IServer server,
-		ILogger logger,
+		ILogger<ClientConnection> logger,
 		IPacketRegistry packetRegistry,
 		CryptoService cryptoService,
 		ServerConfig config, IPlayer.Factory playerFactory) {
@@ -115,7 +115,7 @@ public class ClientConnection : IClientConnection {
 	}
 
 	public void SendPacket(IPacket packet, Action? onSendComplete = null) {
-		_logger.Information("[SEND] >> {@Packet}", packet);
+		_logger.LogInformation("[SEND] >> {@Packet}", packet);
 
 		byte[] encodedPacket;
 
@@ -191,7 +191,7 @@ public class ClientConnection : IClientConnection {
 				return;
 			}
 
-			_logger.Error(ex, "An unhandled exception occurred in receive task from client: {EndPoint}", _client.Client.RemoteEndPoint!.ToString());
+			_logger.LogError(ex, "An unhandled exception occurred in receive task from client: {EndPoint}", _client.Client.RemoteEndPoint!.ToString());
 		}
 		finally {
 			Disconnect();
@@ -199,7 +199,7 @@ public class ClientConnection : IClientConnection {
 	}
 
 	private void HandlePacket(IPacket packet) {
-		_logger.Information("[RECV] << {@Packet}", packet);
+		_logger.LogInformation("[RECV] << {@Packet}", packet);
 
 		switch (_connectionState) {
 			case ConnectionState.Handshaking:
@@ -249,10 +249,10 @@ public class ClientConnection : IClientConnection {
 	}
 
 	private void HandleLoginStart(LoginServerLoginStart packet) {
-		_logger.Information("User {Username} is trying to login", packet.Username);
+		_logger.LogInformation("User {Username} is trying to login", packet.Username);
 
 		Player = _playerFactory(Guid.NewGuid(), packet.Username);
-		_logger.Information("User {@Player} logged in", Player);
+		_logger.LogInformation("User {@Player} logged in", Player);
 
 		// If it's offline mode, just login
 		if (!_config.Game.OnlineMode) {
@@ -274,13 +274,13 @@ public class ClientConnection : IClientConnection {
 		var decryptedSharedSecret = _cryptoService.DecryptRsa(packet.SharedSecret);
 
 		if (_verifyToken == null) {
-			_logger.Error("Verify token is not generated for user");
+			_logger.LogError("Verify token is not generated for user");
 			Disconnect();
 			return;
 		}
 
 		if (!decryptedVerifyToken.SequenceEqual(_verifyToken)) {
-			_logger.Error("Verify token mismatch: {Expected} != {Actual}", _verifyToken, decryptedVerifyToken);
+			_logger.LogError("Verify token mismatch: {Expected} != {Actual}", _verifyToken, decryptedVerifyToken);
 			Disconnect();
 			return;
 		}
@@ -294,7 +294,7 @@ public class ClientConnection : IClientConnection {
 				var result = await AuthMojang(decryptedSharedSecret);
 
 				if (!result) {
-					_logger.Error("Failed to authenticate user");
+					_logger.LogError("Failed to authenticate user");
 					Disconnect();
 					return;
 				}
@@ -302,7 +302,7 @@ public class ClientConnection : IClientConnection {
 				ChangeToPlay();
 			}
 			catch (Exception e) {
-				_logger.Error(e, "Failed to authenticate user");
+				_logger.LogError(e, "Failed to authenticate user");
 				throw;
 			}
 		});
@@ -322,7 +322,7 @@ public class ClientConnection : IClientConnection {
 
 		var url = $"https://sessionserver.mojang.com/session/minecraft/hasJoined?username={Player.Name}&serverId={serverHash}";
 
-		_logger.Information("Authenticating user {Username} with url {Url}", Player.Name, url);
+		_logger.LogInformation("Authenticating user {Username} with url {Url}", Player.Name, url);
 
 		var res = await httpClient.GetAsync(url, _cancellationTokenSource.Token);
 		var text = await res.Content.ReadAsStringAsync(_cancellationTokenSource.Token);
@@ -334,7 +334,7 @@ public class ClientConnection : IClientConnection {
 			return false;
 		}
 
-		_logger.Information("User {Username} authenticated successfully: {Auth}", auth.Name, auth);
+		_logger.LogInformation("User {Username} authenticated successfully: {Auth}", auth.Name, auth);
 		Player.Name = auth.Name;
 		Player.DisplayName = auth.Name;
 		Player.Id = new Guid(auth.Id);

@@ -1,6 +1,7 @@
 using System.Net;
 using System.Net.Sockets;
-using Serilog;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using SharpBukkit.API.Config;
 using SharpBukkit.Network.API;
 
@@ -9,7 +10,7 @@ namespace SharpBukkit.Network;
 public class NetServer : INetServer {
 	// Injected
 	private readonly ServerConfig _config;
-	private readonly ILogger _logger;
+	private readonly ILogger<NetServer> _logger;
 	private readonly IClientConnection.Factory _connectionFactory;
 
 	// States
@@ -20,7 +21,7 @@ public class NetServer : INetServer {
 	public NetServer(
 		IHostApplicationLifetime lifetime,
 		ServerConfig config,
-		ILogger logger,
+		ILogger<NetServer> logger,
 		IClientConnection.Factory connectionFactory
 	) {
 		// Dependencies
@@ -55,12 +56,12 @@ public class NetServer : INetServer {
 	}
 
 	public void OnClientConnected(IClientConnection connection) {
-		_logger.Information("Client connected: {Endpoint}", connection.Endpoint.ToString());
+		_logger.LogInformation("Client connected: {Endpoint}", connection.Endpoint.ToString());
 		Connections[connection.Endpoint] = connection;
 	}
 
 	public void OnClientDisconnected(IClientConnection connection) {
-		_logger.Information("Client disconnected: {Endpoint}", connection.Endpoint.ToString());
+		_logger.LogInformation("Client disconnected: {Endpoint}", connection.Endpoint.ToString());
 		Connections.Remove(connection.Endpoint);
 	}
 }

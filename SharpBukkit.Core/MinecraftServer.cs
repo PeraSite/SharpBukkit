@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using Serilog;
 using SharpBukkit.API;
 using SharpBukkit.API.Config;
 using SharpBukkit.API.Meta;
@@ -21,13 +21,13 @@ public class MinecraftServer : IServer {
 	private readonly ServerConfig _config;
 	private readonly INetServer _netServer;
 	private readonly IPacketRegistry _packetRegistry;
-	private readonly ILogger _logger;
+	private readonly ILogger<MinecraftServer> _logger;
 
 	public MinecraftServer(
 		ServerConfig config,
 		INetServer netServer,
 		IPacketRegistry packetRegistry,
-		ILogger logger
+		ILogger<MinecraftServer> logger
 	) {
 		_config = config;
 		_netServer = netServer;
@@ -35,11 +35,11 @@ public class MinecraftServer : IServer {
 		_logger = logger;
 	}
 
-	public void Start() {
-		_logger.Information("Game Config : \n{@Config}", _config.Game);
-		_logger.Information("Network Config : \n{@Config}", _config.Network);
+	public async Task Start() {
+		_logger.LogInformation("Game Config : \n{@Config}", _config.Game);
+		_logger.LogInformation("Network Config : \n{@Config}", _config.Network);
 
-		_logger.Information("Loading packets...");
+		_logger.LogInformation("Loading packets...");
 		_packetRegistry.Load();
 
 		_logger.LogInformation("Starting server...");
@@ -49,6 +49,23 @@ public class MinecraftServer : IServer {
 		finally {
 			await Stop();
 		}
+
+		// var running = true;
+		// while (running) {
+		// 	var command = Console.ReadLine()!;
+		//
+		// 	switch (command) {
+		// 		case "stop":
+		// 			await Stop();
+		// 			running = false;
+		// 			break;
+		// 		case "list":
+		// 			_logger.LogInformation("Clients: {Count}", _netServer.Connections.Count);
+		// 			_logger.LogInformation("Players: [{Players}]",
+		// 				string.Join(", ", _netServer.Connections.Values.Select(c => c.Player.Name)));
+		// 			break;
+		// 	}
+		// }
 	}
 
 	public async Task Stop() {

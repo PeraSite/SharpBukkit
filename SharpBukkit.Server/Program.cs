@@ -1,11 +1,12 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Threading.Tasks;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Serilog;
+using Serilog.Events;
 using SharpBukkit.API;
 using SharpBukkit.API.Config;
 using SharpBukkit.API.Entity;
@@ -21,10 +22,18 @@ namespace SharpBukkit.Server;
 
 public static class Program {
 	public static async Task Main() {
+		Log.Logger = new LoggerConfiguration()
+			.MinimumLevel.Debug()
+			.MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+			.Enrich.FromLogContext()
+			.WriteTo.Console()
+			.CreateLogger();
+
 		var host = Host.CreateDefaultBuilder()
 			.UseServiceProviderFactory(new AutofacServiceProviderFactory())
 			.ConfigureServices(services => services.AddHostedService<HostService>())
 			.ConfigureContainer<ContainerBuilder>(RegisterCore)
+			.UseSerilog()
 			.Build();
 
 		await host.RunAsync();
@@ -55,15 +64,6 @@ public static class Program {
 			.SingleInstance();
 
 		RegisterEntityTypes(builder);
-
-		var logger = new LoggerConfiguration()
-			.Enrich.With(new RemoveTypeTagEnricher())
-			.WriteTo.Console()
-			.CreateLogger();
-
-		builder.RegisterInstance(logger)
-			.As<ILogger>()
-			.SingleInstance();
 	}
 
 	private static void RegisterEntityTypes(ContainerBuilder builder) {
