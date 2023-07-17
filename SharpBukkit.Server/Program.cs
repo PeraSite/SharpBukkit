@@ -8,7 +8,6 @@ using SharpBukkit.Core;
 using SharpBukkit.Core.Entity;
 using SharpBukkit.Network;
 using SharpBukkit.Network.API;
-using SharpBukkit.Network.API.Crypto;
 using SharpBukkit.Network.Crypto;
 using SharpBukkit.Network.Packets;
 using Tomlyn;
@@ -46,7 +45,6 @@ public static class Program {
 			.SingleInstance();
 
 		builder.RegisterType<CryptoService>()
-			.As<ICryptoService>()
 			.SingleInstance();
 
 		RegisterEntityTypes(builder);

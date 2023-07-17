@@ -11,7 +11,7 @@ using SharpBukkit.API.Auth;
 using SharpBukkit.API.Config;
 using SharpBukkit.API.Entity;
 using SharpBukkit.Network.API;
-using SharpBukkit.Network.API.Crypto;
+using SharpBukkit.Network.Crypto;
 using SharpBukkit.Network.Utils;
 using SharpBukkit.Packet.Handshaking;
 using SharpBukkit.Packet.Login;
@@ -30,7 +30,7 @@ public class ClientConnection : IClientConnection {
 	private readonly TcpClient _client;
 	private readonly ILogger _logger;
 	private readonly IPacketRegistry _packetRegistry;
-	private readonly ICryptoService _cryptoService;
+	private readonly CryptoService _cryptoService;
 	private readonly ServerConfig _config;
 	private readonly IPlayer.Factory _playerFactory;
 
@@ -53,7 +53,7 @@ public class ClientConnection : IClientConnection {
 		IServer server,
 		ILogger logger,
 		IPacketRegistry packetRegistry,
-		ICryptoService cryptoService,
+		CryptoService cryptoService,
 		ServerConfig config, IPlayer.Factory playerFactory) {
 
 		_client = client;

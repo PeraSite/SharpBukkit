@@ -1,10 +1,9 @@
 using System.Security.Cryptography;
-using SharpBukkit.Network.API.Crypto;
 using SharpMC.Util.Encryption;
 
 namespace SharpBukkit.Network.Crypto;
 
-public class CryptoService : ICryptoService {
+public class CryptoService {
 	private readonly RSACryptoServiceProvider _rsa;
 	private readonly byte[] _rsaPublicKey;
 
