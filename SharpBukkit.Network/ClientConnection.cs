@@ -13,6 +13,7 @@ using SharpBukkit.API.Config;
 using SharpBukkit.API.Entity;
 using SharpBukkit.Network.API;
 using SharpBukkit.Network.Crypto;
+using SharpBukkit.Network.Models;
 using SharpBukkit.Network.Utils;
 using SharpBukkit.Packet.Handshaking;
 using SharpBukkit.Packet.Login;
@@ -332,7 +333,8 @@ public class ClientConnection : IClientConnection {
 		Player.Name = auth.Name;
 		Player.DisplayName = auth.Name;
 		Player.Id = new Guid(auth.Id);
-		Player.AuthResponse = auth;
+		Player.SkinProperties = auth.Properties;
+
 		return true;
 	}
 
@@ -377,7 +379,6 @@ public class ClientConnection : IClientConnection {
 	private Task HandlePlay(IPacket packet) {
 		throw new NotImplementedException();
 	}
-
 	  #endregion
 
 	// Reference: https://git.io/fhjp6
