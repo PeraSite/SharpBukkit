@@ -4,6 +4,7 @@ using System.Net.Sockets;
 using System.Numerics;
 using System.Security.Cryptography;
 using System.Text;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using SharpBukkit.API;
@@ -40,21 +41,21 @@ public class ClientConnection : IClientConnection {
 	private readonly MinecraftStream _writeStream;
 
 	// States
-	private bool _isConnected;
 	private ConnectionState _connectionState;
 	private readonly BlockingCollection<(byte[], Action?)> _packetWriteQueue;
 	private byte[]? _verifyToken;
 
-	private bool _isEncrypted;
 	private bool _isCompressed;
 
 	public ClientConnection(
+		IHostApplicationLifetime lifetime,
 		TcpClient client,
 		IServer server,
 		ILogger<ClientConnection> logger,
 		IPacketRegistry packetRegistry,
 		CryptoService cryptoService,
-		ServerConfig config, IPlayer.Factory playerFactory) {
+		ServerConfig config,
+		IPlayer.Factory playerFactory) {
 
 		_client = client;
 		_server = server;
@@ -66,13 +67,12 @@ public class ClientConnection : IClientConnection {
 
 		Endpoint = client.Client.RemoteEndPoint!;
 
-		_cancellationTokenSource = new CancellationTokenSource();
+		_cancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(lifetime.ApplicationStopping);
 
 		var baseStream = _client.GetStream();
 		_readStream = new MinecraftStream(baseStream);
 		_writeStream = new MinecraftStream(baseStream);
 
-		_isConnected = true;
 		_connectionState = ConnectionState.Handshaking;
 		_packetWriteQueue = new BlockingCollection<(byte[], Action?)>();
 	}
@@ -83,7 +83,7 @@ public class ClientConnection : IClientConnection {
 	}
 
 	public void Disconnect() {
-		if (_cancellationTokenSource.IsCancellationRequested || !_isConnected) {
+		if (!_client.Connected) {
 			return;
 		}
 
@@ -93,7 +93,6 @@ public class ClientConnection : IClientConnection {
 		_client.Close();
 
 		OnDisconnect?.Invoke();
-		_isConnected = false;
 	}
 
 	#region Send Handler
@@ -151,7 +150,7 @@ public class ClientConnection : IClientConnection {
 	  #endregion
 
 	#region Receive handler
-	private void ReceiveTask() {
+	private async Task ReceiveTask() {
 		try {
 			while (!_cancellationTokenSource.IsCancellationRequested) {
 				byte packetId;
@@ -170,7 +169,7 @@ public class ClientConnection : IClientConnection {
 						var data = _readStream.Read(length - dataLengthLength);
 						var decompressed = CompressUtil.DecompressData(data);
 						using var ms = new MemoryStream(decompressed);
-						using var mc = new MinecraftStream(ms);
+						await using var mc = new MinecraftStream(ms);
 
 						packetId = (byte)mc.ReadVarInt(out var l);
 						packetData = mc.Read(dataLength - l);
@@ -183,7 +182,7 @@ public class ClientConnection : IClientConnection {
 
 				var dataStream = new MinecraftStream(new MemoryStream(packetData));
 				var packet = _packetRegistry.Create(dataStream, _connectionState, packetId);
-				HandlePacket(packet);
+				await HandlePacket(packet);
 			}
 		}
 		catch (Exception ex) {
@@ -198,34 +197,35 @@ public class ClientConnection : IClientConnection {
 		}
 	}
 
-	private void HandlePacket(IPacket packet) {
+	private async Task HandlePacket(IPacket packet) {
 		_logger.LogDebug("[RECV] << {@Packet}", packet);
 
 		switch (_connectionState) {
 			case ConnectionState.Handshaking:
-				HandleHandshake(packet);
+				await HandleHandshake(packet);
 				break;
 			case ConnectionState.Status:
-				HandleStatus(packet);
+				await HandleStatus(packet);
 				break;
 			case ConnectionState.Login:
-				HandleLogin(packet);
+				await HandleLogin(packet);
 				break;
 			case ConnectionState.Play:
-				HandlePlay(packet);
+				await HandlePlay(packet);
 				break;
 			default:
 				throw new ArgumentOutOfRangeException();
 		}
 	}
 
-	private void HandleHandshake(IPacket packet) {
+	private Task HandleHandshake(IPacket packet) {
 		if (packet is HandshakingServerSetProtocol handshake) {
 			_connectionState = (ConnectionState)handshake.NextState;
 		}
+		return Task.CompletedTask;
 	}
 
-	private void HandleStatus(IPacket packet) {
+	private Task HandleStatus(IPacket packet) {
 		switch (packet) {
 			case StatusServerPingStart:
 				SendPacket(new StatusClientServerInfo(_server.GetMotd()));
@@ -235,15 +235,16 @@ public class ClientConnection : IClientConnection {
 				Disconnect();
 				break;
 		}
+		return Task.CompletedTask;
 	}
 
-	private void HandleLogin(IPacket packet) {
+	private async Task HandleLogin(IPacket packet) {
 		switch (packet) {
 			case LoginServerLoginStart loginStart:
 				HandleLoginStart(loginStart);
 				break;
 			case LoginServerEncryptionBegin encryptionBegin:
-				HandleEncryptionBegin(encryptionBegin);
+				await HandleEncryptionBegin(encryptionBegin);
 				break;
 		}
 	}
@@ -252,7 +253,6 @@ public class ClientConnection : IClientConnection {
 		_logger.LogInformation("User {Username} is trying to login", packet.Username);
 
 		Player = _playerFactory(Guid.NewGuid(), packet.Username);
-		_logger.LogInformation("User {@Player} logged in", Player);
 
 		// If it's offline mode, just login
 		if (!_config.Game.OnlineMode) {
@@ -269,7 +269,7 @@ public class ClientConnection : IClientConnection {
 		SendPacket(new LoginClientEncryptionBegin("", publicKey, _verifyToken));
 	}
 
-	private void HandleEncryptionBegin(LoginServerEncryptionBegin packet) {
+	private async Task HandleEncryptionBegin(LoginServerEncryptionBegin packet) {
 		var decryptedVerifyToken = _cryptoService.DecryptRsa(packet.VerifyToken);
 		var decryptedSharedSecret = _cryptoService.DecryptRsa(packet.SharedSecret);
 
@@ -285,27 +285,24 @@ public class ClientConnection : IClientConnection {
 			return;
 		}
 
-		_isEncrypted = true;
 		_readStream.InitEncryption(decryptedSharedSecret);
 		_writeStream.InitEncryption(decryptedSharedSecret);
 
-		Task.Run(async () => {
-			try {
-				var result = await AuthMojang(decryptedSharedSecret);
+		try {
+			var result = await AuthMojang(decryptedSharedSecret);
 
-				if (!result) {
-					_logger.LogError("Failed to authenticate user");
-					Disconnect();
-					return;
-				}
+			if (!result) {
+				_logger.LogError("Failed to authenticate user");
+				Disconnect();
+				return;
+			}
 
-				ChangeToPlay();
-			}
-			catch (Exception e) {
-				_logger.LogError(e, "Failed to authenticate user");
-				throw;
-			}
-		});
+			ChangeToPlay();
+		}
+		catch (Exception e) {
+			_logger.LogError(e, "Failed to authenticate user");
+			throw;
+		}
 	}
 
 	private async Task<bool> AuthMojang(byte[] sharedSecret) {
@@ -377,9 +374,10 @@ public class ClientConnection : IClientConnection {
 		// SendPacket(new PlayClientCustomPayload("minecraft:brand", new byte[] {7, 118, 97, 110, 105, 108, 108, 97}));
 	}
 
-	private void HandlePlay(IPacket packet) {
+	private Task HandlePlay(IPacket packet) {
 		throw new NotImplementedException();
 	}
+
 	  #endregion
 
 	// Reference: https://git.io/fhjp6
