@@ -7,7 +7,7 @@ using SharpBukkit.Net.Utils;
 
 namespace SharpBukkit.Net.Packets;
 
-public class PacketRegistry : IPacketRegistry {
+public class PacketRegistry {
 	private readonly Dictionary<(ConnectionState state, byte id), Func<IMinecraftReader, IPacket>> _factory;
 
 	public PacketRegistry() {

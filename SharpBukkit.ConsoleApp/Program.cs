@@ -45,15 +45,12 @@ public static class Program {
 			.SingleInstance();
 
 		builder.RegisterType<NetServer>()
-			.As<INetServer>()
 			.SingleInstance();
 
 		builder.RegisterType<ClientConnection>()
-			.As<IClientConnection>()
 			.InstancePerDependency();
 
 		builder.RegisterType<PacketRegistry>()
-			.As<IPacketRegistry>()
 			.SingleInstance();
 
 		builder.RegisterType<CryptoService>()

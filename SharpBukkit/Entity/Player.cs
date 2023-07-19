@@ -5,6 +5,8 @@ using SharpBukkit.API.Entity;
 namespace SharpBukkit.Entity;
 
 public class Player : IPlayer {
+	public delegate IPlayer Factory(Guid id, string name);
+
 	public Guid Id { get; set; }
 	public string Name { get; set; }
 	public string DisplayName { get; set; }

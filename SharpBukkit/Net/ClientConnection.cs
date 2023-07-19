@@ -16,6 +16,7 @@ using Newtonsoft.Json;
 using SharpBukkit.API;
 using SharpBukkit.API.Config;
 using SharpBukkit.API.Entity;
+using SharpBukkit.Entity;
 using SharpBukkit.Net.Crypto;
 using SharpBukkit.Net.Models;
 using SharpBukkit.Net.Packets;
@@ -23,9 +24,11 @@ using SharpBukkit.Net.Utils;
 
 namespace SharpBukkit.Net;
 
-public class ClientConnection : IClientConnection {
+public class ClientConnection {
+	public delegate ClientConnection Factory(TcpClient client);
+
 	public EndPoint Endpoint { get; }
-	public IPlayer Player { get; set; }
+	public IPlayer? Player { get; set; }
 
 	public event Action? OnDisconnect;
 
@@ -33,10 +36,10 @@ public class ClientConnection : IClientConnection {
 	private readonly IServer _server;
 	private readonly TcpClient _client;
 	private readonly ILogger<ClientConnection> _logger;
-	private readonly IPacketRegistry _packetRegistry;
+	private readonly PacketRegistry _packetRegistry;
 	private readonly CryptoService _cryptoService;
 	private readonly ServerConfig _config;
-	private readonly IPlayer.Factory _playerFactory;
+	private readonly Player.Factory _playerFactory;
 
 	// Networking
 	private readonly CancellationTokenSource _cancellationTokenSource;
@@ -55,10 +58,10 @@ public class ClientConnection : IClientConnection {
 		TcpClient client,
 		IServer server,
 		ILogger<ClientConnection> logger,
-		IPacketRegistry packetRegistry,
+		PacketRegistry packetRegistry,
 		CryptoService cryptoService,
 		ServerConfig config,
-		IPlayer.Factory playerFactory) {
+		Player.Factory playerFactory) {
 
 		_client = client;
 		_server = server;
@@ -309,6 +312,8 @@ public class ClientConnection : IClientConnection {
 	}
 
 	private async Task<bool> AuthMojang(byte[] sharedSecret) {
+		if (Player is null) throw new InvalidOperationException("Player is null");
+
 		string serverHash;
 		using (var ms = new MemoryStream()) {
 			var ascii = Encoding.ASCII.GetBytes("");
@@ -341,6 +346,8 @@ public class ClientConnection : IClientConnection {
 	}
 
 	private void ChangeToPlay() {
+		if (Player is null) throw new InvalidOperationException("Player is null");
+
 		_connectionState = ConnectionState.Play;
 
 		var threshold = _config.Network.CompressionThreshold;

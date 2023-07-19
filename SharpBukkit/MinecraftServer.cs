@@ -8,6 +8,7 @@ using SharpBukkit.API;
 using SharpBukkit.API.Config;
 using SharpBukkit.API.Meta;
 using SharpBukkit.Net;
+using SharpBukkit.Net.Packets;
 using SharpBukkit.Utils;
 
 namespace SharpBukkit;
@@ -19,14 +20,14 @@ public class MinecraftServer : IServer {
 #endregion
 
 	private readonly ServerConfig _config;
-	private readonly INetServer _netServer;
-	private readonly IPacketRegistry _packetRegistry;
+	private readonly NetServer _netServer;
+	private readonly PacketRegistry _packetRegistry;
 	private readonly ILogger<MinecraftServer> _logger;
 
 	public MinecraftServer(
 		ServerConfig config,
-		INetServer netServer,
-		IPacketRegistry packetRegistry,
+		NetServer netServer,
+		PacketRegistry packetRegistry,
 		ILogger<MinecraftServer> logger
 	) {
 		_config = config;

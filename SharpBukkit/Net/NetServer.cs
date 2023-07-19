@@ -9,14 +9,14 @@ using SharpBukkit.API.Config;
 
 namespace SharpBukkit.Net;
 
-public class NetServer : INetServer {
+public class NetServer {
 	// Injected
 	private readonly ServerConfig _config;
 	private readonly ILogger<NetServer> _logger;
-	private readonly IClientConnection.Factory _connectionFactory;
+	private readonly ClientConnection.Factory _connectionFactory;
 
 	// States
-	public Dictionary<EndPoint, IClientConnection> Connections { get; }
+	public Dictionary<EndPoint, ClientConnection> Connections { get; }
 	private readonly CancellationTokenSource _cancellationTokenSource;
 	private readonly TcpListener _tcpListener;
 
@@ -24,7 +24,7 @@ public class NetServer : INetServer {
 		IHostApplicationLifetime lifetime,
 		ServerConfig config,
 		ILogger<NetServer> logger,
-		IClientConnection.Factory connectionFactory
+		ClientConnection.Factory connectionFactory
 	) {
 		// Dependencies
 		_config = config;
@@ -33,7 +33,7 @@ public class NetServer : INetServer {
 
 		// States
 		_cancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(lifetime.ApplicationStopping);
-		Connections = new Dictionary<EndPoint, IClientConnection>();
+		Connections = new Dictionary<EndPoint, ClientConnection>();
 		_tcpListener = new TcpListener(IPAddress.Parse(_config.Network.Host), _config.Network.Port);
 	}
 
@@ -57,12 +57,12 @@ public class NetServer : INetServer {
 		return Task.CompletedTask;
 	}
 
-	public void OnClientConnected(IClientConnection connection) {
+	private void OnClientConnected(ClientConnection connection) {
 		_logger.LogInformation("Client connected: {Endpoint}", connection.Endpoint.ToString());
 		Connections[connection.Endpoint] = connection;
 	}
 
-	public void OnClientDisconnected(IClientConnection connection) {
+	private void OnClientDisconnected(ClientConnection connection) {
 		_logger.LogInformation("Client disconnected: {Endpoint}", connection.Endpoint.ToString());
 		Connections.Remove(connection.Endpoint);
 	}
