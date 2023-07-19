@@ -34,7 +34,6 @@ public class ClientConnection {
 
 	// Injected
 	private readonly IServer _server;
-	private readonly TcpClient _client;
 	private readonly ILogger<ClientConnection> _logger;
 	private readonly PacketRegistry _packetRegistry;
 	private readonly CryptoService _cryptoService;
@@ -42,6 +41,7 @@ public class ClientConnection {
 	private readonly Player.Factory _playerFactory;
 
 	// Networking
+	private readonly TcpClient _client;
 	private readonly CancellationTokenSource _cancellationTokenSource;
 	private readonly MinecraftStream _readStream;
 	private readonly MinecraftStream _writeStream;
@@ -62,8 +62,10 @@ public class ClientConnection {
 		CryptoService cryptoService,
 		ServerConfig config,
 		Player.Factory playerFactory) {
-
+		// Actual parameter
 		_client = client;
+
+		// Injected
 		_server = server;
 		_logger = logger;
 		_packetRegistry = packetRegistry;
@@ -71,6 +73,7 @@ public class ClientConnection {
 		_config = config;
 		_playerFactory = playerFactory;
 
+		// Initialization logic
 		Endpoint = client.Client.RemoteEndPoint!;
 
 		_cancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(lifetime.ApplicationStopping);
@@ -119,8 +122,8 @@ public class ClientConnection {
 		}
 	}
 
-	public void SendPacket(IPacket packet, Action? onSendComplete = null) {
-		_logger.LogDebug("[SEND] >> {@Packet}", packet);
+	private void SendPacket(IPacket packet, Action? onSendComplete = null) {
+		_logger.LogDebug("[SEND] >> {Name} {@Packet}", packet.GetType().Name, packet);
 
 		byte[] encodedPacket;
 
@@ -204,7 +207,7 @@ public class ClientConnection {
 	}
 
 	private async Task HandlePacket(IPacket packet) {
-		_logger.LogDebug("[RECV] << {@Packet}", packet);
+		_logger.LogDebug("[RECV] << {Name} {@Packet}", packet.GetType().Name, packet);
 
 		switch (_connectionState) {
 			case ConnectionState.Handshaking:
@@ -297,11 +300,13 @@ public class ClientConnection {
 		try {
 			var result = await AuthMojang(decryptedSharedSecret);
 
-			if (!result) {
+			if (!result || Player is null) {
 				_logger.LogError("Failed to authenticate user");
 				Disconnect();
 				return;
 			}
+
+			_logger.LogInformation("User {Username} logged in", Player.Name);
 
 			ChangeToPlay();
 		}
