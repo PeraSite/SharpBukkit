@@ -18,12 +18,7 @@ public class ServerHostService : BackgroundService {
 	}
 
 	protected override async Task ExecuteAsync(CancellationToken stoppingToken) {
-		try {
-			_logger.LogInformation("Starting server...");
-			await _server.Start();
-		}
-		finally {
-			_lifetime.StopApplication();
-		}
+		_logger.LogInformation("Starting server...");
+		await _server.Start();
 	}
 }
