@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 using SharpBukkit.API;
 using SharpBukkit.API.Config;
 using SharpBukkit.API.Meta;
-using SharpBukkit.Network.API;
+using SharpBukkit.Net;
 using SharpBukkit.Utils;
 
 namespace SharpBukkit;

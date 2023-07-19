@@ -83,14 +83,12 @@ public static class ProtocolGenerator {
 		var registryFilePath = Path.Combine(outputFolder, "PacketRegistry.g.cs");
 		await File.WriteAllTextAsync(registryFilePath, $$"""
 // Auto-generated
-using SharpBukkit.Network.API;
-using SharpBukkit.Network.API.Stream;
-using SharpBukkit.Packet.Handshaking;
-using SharpBukkit.Packet.Login;
-using SharpBukkit.Packet.Play;
-using SharpBukkit.Packet.Status;
+using System;
+using System.Collections.Generic;
+using SharpBukkit.Net;
+using SharpBukkit.Net.Utils;
 
-namespace SharpBukkit.Network.Packets;
+namespace SharpBukkit.Net.Packets;
 
 public class PacketRegistry : IPacketRegistry {
 	private readonly Dictionary<(ConnectionState state, byte id), Func<IMinecraftReader, IPacket>> _factory;
@@ -244,14 +242,13 @@ public class PacketRegistry : IPacketRegistry {
 
 		return $$"""
 // Auto-generated
+using System;
 using System.Numerics;
-using SharpBukkit.Network.API;
-using SharpBukkit.Network.API.Stream;
-using SharpBukkit.Network.API.Models;
-using SharpBukkit.Network.Models.Nbt;
+using SharpBukkit.Net.Models;
+using SharpBukkit.Net.Utils;
 using SharpNBT;
 
-namespace SharpBukkit.Packet.{{packetInfo.Type}};
+namespace SharpBukkit.Net.Packets;
 
 public record {{className}} : IPacket {
 

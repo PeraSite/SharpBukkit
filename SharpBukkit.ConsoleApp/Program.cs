@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Threading.Tasks;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
@@ -11,10 +10,9 @@ using SharpBukkit.API;
 using SharpBukkit.API.Config;
 using SharpBukkit.API.Entity;
 using SharpBukkit.Entity;
-using SharpBukkit.Network;
-using SharpBukkit.Network.API;
-using SharpBukkit.Network.Crypto;
-using SharpBukkit.Network.Packets;
+using SharpBukkit.Net;
+using SharpBukkit.Net.Crypto;
+using SharpBukkit.Net.Packets;
 using Tomlyn;
 
 namespace SharpBukkit.ConsoleApp;

@@ -19,7 +19,7 @@ internal static class FieldMapping {
 			case "f32": return "float";
 			case "f64": return "double";
 			case "UUID": return "Guid";
-			case "slot": return "ISlotData";
+			case "slot": return "SlotData";
 			case "buffer": return "byte[]";
 			case "restBuffer": return "byte[]";
 			case "optionalNbt": return "CompoundTag?";
